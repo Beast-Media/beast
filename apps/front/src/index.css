@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: ValeraRound;
+  src: url(/VarelaRound-Regular.ttf);
+}
+
+body {
+  font-family: ValeraRound, sans-serif;
+}
+
+html,
+body {
+  overscroll-behavior-x: none;
+}

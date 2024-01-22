@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LibraryType {
+  MOVIES
+  TV_SHOWS
+}
+
+model Library {
+  id        String      @id @unique @default(uuid())
+  type      LibraryType
+  name      String      @unique
+  path      String      @unique
+  medias    Media[]
+  createdAt DateTime    @default(now())
+
+  shows  Show[]
+  movies Movie[]
+}
+
+model AudioTrack {
+  id      String  @id @unique @default(uuid())
+  name    String
+  
+  media   Media?  @relation(fields: [mediaId], references: [id])
+  mediaId String?
+}
+
+model SubtitleTrack {
+  id      String  @id @unique @default(uuid())
+  name    String
+  
+  media   Media?  @relation(fields: [mediaId], references: [id])
+  mediaId String?
+}
+
+model Media {
+  id          String          @id @unique @default(uuid())
+  path        String          @unique
+  library     Library         @relation(fields: [libraryId], references: [id])
+  libraryId   String
+  createdAt   DateTime        @default(now())
+  audioTracks AudioTrack[]
+  subtitles   SubtitleTrack[]
+  
+  duration    Float
+
+  episode Episode?
+  movie   Movie?
+}
+
+model Episode {
+  id String @id @unique @default(uuid())
+
+  media   Media  @relation(fields: [mediaId], references: [id])
+  mediaId String @unique
+
+  season   Season? @relation(fields: [seasonId], references: [id])
+  seasonId String?
+
+  overview       String?
+  name           String
+  episode_number Int
+  image          String?
+
+  @@unique([seasonId, episode_number])
+}
+
+model Season {
+  id            String @id @unique @default(uuid())
+  name          String
+  season_number Int
+
+  overview String?
+  episodes Episode[]
+  show     Show      @relation(fields: [showId], references: [id])
+  showId   String
+  image    String?
+
+  @@unique([showId, season_number])
+}
+
+model Show {
+  id       String   @id @unique @default(uuid())
+  tvmazeId Int      @unique
+  name     String
+  overview String?
+  seasons  Season[]
+  image    String?
+
+  library   Library @relation(fields: [libraryId], references: [id])
+  libraryId String
+}
+
+model Movie {
+  id       String  @id @unique @default(uuid())
+  name     String
+  overview String?
+  media    Media   @relation(fields: [mediaId], references: [id])
+  mediaId  String  @unique
+
+  library   Library @relation(fields: [libraryId], references: [id])
+  libraryId String
+}
+
+model User {
+  id String @id @unique @default(uuid())
+
+  username String @unique
+  password String
+}

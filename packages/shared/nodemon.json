@@ -1,0 +1,11 @@
+{
+    "restartable": "rs",
+    "ext": "json,ts",
+    "execMap": {
+        "ts": "tsx"
+    },
+    "ignore": [
+        ".git",
+        "node_modules/**"
+    ]
+}

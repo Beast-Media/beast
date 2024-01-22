@@ -1,0 +1,46 @@
+version: '3'
+services:
+  beast-database:
+    image: "postgres"
+    restart: always
+    environment:
+      POSTGRES_USER: beast
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: beast
+    ports:
+      - 1111:5432
+    volumes:
+      - database-volume:/var/lib/postgresql/data
+  # beast:
+  #   # deploy:
+  #   #   resources:
+  #   #     limits:
+  #   #       cpus: '4'
+  #   #       memory: 600M
+  #   build:
+  #     context: .
+    
+  #   command: npm run dev
+  #   restart: always  
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "50m"
+  #   ports:
+  #     - 3000:3000
+  #     - 3001:3001
+  #   depends_on:
+  #     - beast-database
+  #   volumes:
+  #     - ./packages/src:/app/packages
+  #     - ./apps/src:/app/apps
+  #     - ./volumes/metadatas:/metadatas
+  #     - "/mnt/g/Videos:/media"
+  #   environment:
+  #     METADATAS_PATH: /metadatas
+  #     DATABASE_URL: ${DATABASE_URL}
+  #     AUTH_JWT_SECRET: ${AUTH_JWT_SECRET}
+
+volumes:
+  database-volume:
+

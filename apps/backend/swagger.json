@@ -1,0 +1,1017 @@
+{
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "url": "https://github.com/samchon/nestia",
+      "description": "insert your server url"
+    }
+  ],
+  "info": {
+    "version": "0.0.1",
+    "title": "@beast/backend",
+    "description": "",
+    "license": {
+      "name": "UNLICENSED"
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "postAuthLogin",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokens"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "postAuthRefresh",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokens"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "postAuthRegister",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/all": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "getLibraryAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "$ref": "#/components/schemas/LibraryType"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    },
+                    "nullable": false,
+                    "required": [
+                      "id",
+                      "type",
+                      "name",
+                      "path",
+                      "createdAt"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "List all libraries",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/library/new": {
+      "post": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "postLibraryNew",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLibraryDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a new library and start scanning it",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/library/scan": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "getLibraryScan",
+        "parameters": [
+          {
+            "name": "libraryId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "description": "Scan library, check and update missing metadatas or medias",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/library": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "getLibrary",
+        "parameters": [
+          {
+            "name": "libraryId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryDTO"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the Library data from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/library/content": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "getLibraryContent",
+        "parameters": [
+          {
+            "name": "libraryId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryContent"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the Library data from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/media": {
+      "get": {
+        "tags": [
+          "media"
+        ],
+        "operationId": "getMedia",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaDTO"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a media informations",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/media/play": {
+      "get": {
+        "tags": [
+          "media"
+        ],
+        "operationId": "getMediaPlay",
+        "parameters": [
+          {
+            "name": "seek",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "media",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/show": {
+      "get": {
+        "tags": [
+          "show"
+        ],
+        "operationId": "getShow",
+        "parameters": [
+          {
+            "name": "showId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowWithSeasons"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the informations of a show",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/show/season": {
+      "get": {
+        "tags": [
+          "show"
+        ],
+        "operationId": "getShowSeason",
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonWithEpisodes"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the informations of a season",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/show/episode": {
+      "get": {
+        "tags": [
+          "show"
+        ],
+        "operationId": "getShowEpisode",
+        "parameters": [
+          {
+            "name": "episodeId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeDTO"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the informations of a episode",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoginBody": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "AuthTokens": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "access_token",
+          "refresh_token"
+        ]
+      },
+      "RefreshBody": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "refresh_token"
+        ]
+      },
+      "RegisterBody": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 8
+          }
+        },
+        "nullable": false,
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "LibraryType": {
+        "type": "string",
+        "enum": [
+          "MOVIES",
+          "TV_SHOWS"
+        ]
+      },
+      "CreateLibraryDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOVIES",
+              "TV_SHOWS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "name",
+          "path"
+        ]
+      },
+      "QueryLibrary": {
+        "type": "object",
+        "properties": {
+          "libraryId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "libraryId"
+        ]
+      },
+      "LibraryDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/LibraryType"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "type",
+          "name",
+          "path",
+          "createdAt"
+        ]
+      },
+      "LibraryContent": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LibraryContentShow"
+            }
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LibraryContentMovie"
+            }
+          }
+        ]
+      },
+      "LibraryContentShow": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TV_SHOWS"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "tvmazeId": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              },
+              "overview": {
+                "type": "string",
+                "nullable": true
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "libraryId": {
+                "type": "string"
+              }
+            },
+            "nullable": false,
+            "required": [
+              "id",
+              "tvmazeId",
+              "name",
+              "overview",
+              "image",
+              "libraryId"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "data"
+        ]
+      },
+      "LibraryContentMovie": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOVIES"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "overview": {
+                "type": "string",
+                "nullable": true
+              },
+              "mediaId": {
+                "type": "string"
+              },
+              "libraryId": {
+                "type": "string"
+              }
+            },
+            "nullable": false,
+            "required": [
+              "id",
+              "name",
+              "overview",
+              "mediaId",
+              "libraryId"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "data"
+        ]
+      },
+      "QueryMedia": {
+        "type": "object",
+        "properties": {
+          "mediaId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "mediaId"
+        ]
+      },
+      "MediaDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "libraryId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "path",
+          "libraryId",
+          "createdAt",
+          "duration"
+        ]
+      },
+      "QueryShow": {
+        "type": "object",
+        "properties": {
+          "showId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "showId"
+        ]
+      },
+      "ShowWithSeasons": {
+        "type": "object",
+        "properties": {
+          "seasons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "season_number": {
+                  "type": "number"
+                },
+                "overview": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "showId": {
+                  "type": "string"
+                },
+                "image": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "nullable": false,
+              "required": [
+                "id",
+                "name",
+                "season_number",
+                "overview",
+                "showId",
+                "image"
+              ]
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "tvmazeId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "libraryId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "seasons",
+          "id",
+          "tvmazeId",
+          "name",
+          "overview",
+          "image",
+          "libraryId"
+        ]
+      },
+      "QuerySeason": {
+        "type": "object",
+        "properties": {
+          "seasonId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "seasonId"
+        ]
+      },
+      "SeasonWithEpisodes": {
+        "type": "object",
+        "properties": {
+          "episodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "mediaId": {
+                  "type": "string"
+                },
+                "seasonId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "overview": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "episode_number": {
+                  "type": "number"
+                },
+                "image": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "nullable": false,
+              "required": [
+                "id",
+                "mediaId",
+                "seasonId",
+                "overview",
+                "name",
+                "episode_number",
+                "image"
+              ]
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "season_number": {
+            "type": "number"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "showId": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": false,
+        "required": [
+          "episodes",
+          "id",
+          "name",
+          "season_number",
+          "overview",
+          "showId",
+          "image"
+        ]
+      },
+      "QueryEpisode": {
+        "type": "object",
+        "properties": {
+          "episodeId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "episodeId"
+        ]
+      },
+      "EpisodeDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "mediaId": {
+            "type": "string"
+          },
+          "seasonId": {
+            "type": "string",
+            "nullable": true
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "episode_number": {
+            "type": "number"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "mediaId",
+          "seasonId",
+          "overview",
+          "name",
+          "episode_number",
+          "image"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}
