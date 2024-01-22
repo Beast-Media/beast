@@ -78,14 +78,14 @@ export function Player({ mediaId }: { mediaId: string }) {
 
   onMount(() => {
     if (!video) return;
-    send({ data: { type: 'client/player/start', mediaId } })
+    send({ type: 'client/player/start', mediaId })
 
     createPlayer();
     video.src = createMediaStream();
   });
 
   onCleanup(() => {
-    send({ data: { type: 'client/player/end' } })
+    send({ type: 'client/player/end' })
   })
 
   // const onSeek = (pos: number) => {
