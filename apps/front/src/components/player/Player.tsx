@@ -70,19 +70,11 @@ export function Player({ mediaId }: { mediaId: string }) {
     await postPlayerEnd({ id: player.id })
   }
 
-  // const initDash = () => {
-    // const source = `http://localhost:3000/public/transcodes/${playerId}/video.mpd`;
-    // dash = dashjs.MediaPlayer().create();
-
-    // dash.initialize(video, source, true);
-  // }  
-  
   const initHls = () => {
     console.log('init')
-    hls = new Hls({
-    });
-    const source = `http://localhost:3000/public/transcodes/${player.id}/video.m3u8`;
-    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+    hls = new Hls();
+    const source = `http://localhost:3000/public/transcodes/${player.id}/master.m3u8`;
+    hls.on(Hls.Events.MEDIA_ATTACHED, function (a, ab) {
       console.log('video and hls.js are now bound together !');
     });
     hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
@@ -114,6 +106,13 @@ export function Player({ mediaId }: { mediaId: string }) {
     hls.loadSource(source);
     hls.attachMedia(video);
     video.autoplay = true;
+  }
+
+  if (import.meta.hot) {
+    import.meta.hot.dispose(async (data) => {
+      // cleanup side effect
+      await closePlayer()
+    })
   }
 
   onMount(async () => {

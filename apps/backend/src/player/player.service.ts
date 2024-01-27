@@ -6,7 +6,7 @@ import {
 import { Player, PlayerId, PlayerSettings } from './dto/player.dto';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import { MediaService } from 'src/media/media.service';
-import { dirname, join } from 'path';
+import { join } from 'path';
 import { ConfigService } from 'src/config/config.service';
 import { mkdir, rm, readdir } from 'fs/promises';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
@@ -28,7 +28,6 @@ export class PlayerService
 
   async onApplicationBootstrap() {
     const folders = await readdir(this.configService.getTranscodePath());
-    console.log('Cleaning old transcoded buffers');
     for (const folder of folders) {
       console.log(folder);
       await rm(folder, {
@@ -57,22 +56,34 @@ export class PlayerService
       //   -f dash "${join(dest, 'video.mpd')}"
       // `,
       this.ffmpegService.args`
+        -hide_banner
         -ss ${seek} 
         -i "${source}" -preset ultrafast
+        -movflags frag_keyframe+empty_moov
         -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1
         -c:a aac -ac 2 
-        -map 0:1 -map 0:0 
+        -c:s webvtt -muxdelay 0
+        -map 0:1 -map 0:0 -map 0:3 
+        -master_pl_name "master.m3u8"
+        -var_stream_map "v:0,a:0,s:0,sgroup:subtitle"
         -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
-        "${join(dest, 'video.m3u8')}"
+        "${join(dest, 'out_%v.m3u8')}"
       `,
     );
 
-    ffpmegProcess.stderr.on('data', (data) => {});
+    ffpmegProcess.stderr.on('data', (data) => {
+      console.log(data.toString());
+    });
 
-    return new Promise<ChildProcessWithoutNullStreams>((resolve) => {
+    return new Promise<ChildProcessWithoutNullStreams>((resolve, reject) => {
       const watcher = watch(dest, (event, filename) => {
-        if (filename === 'video.m3u8') {
+        const timeoutId = setTimeout(() => {
           watcher.close();
+          reject(new Error('timeout'));
+        }, 10_000);
+        if (filename === 'master.m3u8') {
+          watcher.close();
+          clearTimeout(timeoutId);
           // setTimeout(() => {
           resolve(ffpmegProcess);
           // }, 1000);
