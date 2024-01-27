@@ -8,36 +8,20 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { ShowModule } from './show/show.module';
 import { MediaModule } from './media/media.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { ConfigService } from './config/config.service';
-import { join, resolve } from 'path';
 import { WebsocketModule } from './websockets/websockets.module';
+import { PlayerModule } from './player/player.module';
 
 @Module({
   imports: [
     ConfigModule,
     RequestContextModule,
     AppLoggerModule,
+    PlayerModule,
     WebsocketModule,
     LibraryModule,
     AuthModule,
     ShowModule,
     MediaModule,
-    ServeStaticModule.forRootAsync({
-      useFactory: async (config: ConfigService) => {
-        return [
-          {
-            rootPath: resolve(join(config.getMetadatasPath(), 'images')),
-            serveRoot: '/public/images',
-            serveStaticOptions: {
-              immutable: true,
-            },
-          },
-        ];
-      },
-      imports: [ConfigModule],
-      inject: [ConfigService],
-    }),
   ],
   controllers: [],
   providers: [

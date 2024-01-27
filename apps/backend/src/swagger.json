@@ -331,7 +331,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MediaDTO"
+                  "$ref": "#/components/schemas/MediaAndWatchToken"
                 }
               }
             }
@@ -369,10 +369,78 @@
             },
             "description": "",
             "required": true
+          },
+          {
+            "name": "watchToken",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "",
+            "required": true
           }
         ],
         "responses": {
           "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/player/start": {
+      "post": {
+        "tags": [
+          "player"
+        ],
+        "operationId": "postPlayerStart",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayerSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartPlayerResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/player/end": {
+      "post": {
+        "tags": [
+          "player"
+        ],
+        "operationId": "postPlayerEnd",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
             "description": ""
           }
         },
@@ -752,6 +820,22 @@
           "mediaId"
         ]
       },
+      "MediaAndWatchToken": {
+        "type": "object",
+        "properties": {
+          "media": {
+            "$ref": "#/components/schemas/MediaDTO"
+          },
+          "watchToken": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "media",
+          "watchToken"
+        ]
+      },
       "MediaDTO": {
         "type": "object",
         "properties": {
@@ -779,6 +863,50 @@
           "libraryId",
           "createdAt",
           "duration"
+        ]
+      },
+      "PlayerSettings": {
+        "type": "object",
+        "properties": {
+          "media": {
+            "type": "string"
+          },
+          "seek": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "media",
+          "seek"
+        ]
+      },
+      "StartPlayerResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "duration"
+        ]
+      },
+      "QueryPlayer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id"
         ]
       },
       "QueryShow": {

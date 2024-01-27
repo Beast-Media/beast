@@ -60,6 +60,11 @@ export interface ServerPlayerPosition extends MessageBase {
     seek: number;
 }
 
+export interface ServerPlayerData extends MessageBase {
+    type: 'server/player/data';
+    data: Uint8Array;
+}
+
 export interface ServerPing extends MessageBase {
     type: 'server/ping';
 }
@@ -75,7 +80,7 @@ export interface ServerAuthStatus extends MessageBase {
 }
 
 export interface OutgoingServerMessage {
-    data: ServerPlayerPosition | ServerPing | ServerAuthStatus
+    data: ServerPlayerPosition | ServerPing | ServerAuthStatus | ServerPlayerData
 }
 
 export type OutgoingServerMessageTypes = OutgoingServerMessage['data']['type'];

@@ -29,11 +29,14 @@ import type {
   LibraryContent,
   LibraryDTO,
   LoginBody,
-  MediaDTO,
+  MediaAndWatchToken,
+  PlayerSettings,
+  PostPlayerEndParams,
   RefreshBody,
   RegisterBody,
   SeasonWithEpisodes,
   ShowWithSeasons,
+  StartPlayerResponse,
 } from "../model";
 import { customInstance } from "../../custom-axios-instance";
 import type { ErrorType, BodyType } from "../../custom-axios-instance";
@@ -670,7 +673,7 @@ export const getMedia = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<MediaDTO>(
+  return customInstance<MediaAndWatchToken>(
     { url: `http://localhost:3000/media`, method: "GET", params, signal },
     options,
   );
@@ -808,6 +811,145 @@ export const createGetMediaPlay = <
   }) as CreateQueryResult<TData, TError>;
 
   return query;
+};
+
+export const postPlayerStart = (
+  playerSettings: BodyType<PlayerSettings>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<StartPlayerResponse>(
+    {
+      url: `http://localhost:3000/player/start`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: playerSettings,
+    },
+    options,
+  );
+};
+
+export const getPostPlayerStartMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postPlayerStart>>,
+    TError,
+    { data: BodyType<PlayerSettings> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postPlayerStart>>,
+  TError,
+  { data: BodyType<PlayerSettings> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postPlayerStart>>,
+    { data: BodyType<PlayerSettings> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postPlayerStart(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostPlayerStartMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPlayerStart>>
+>;
+export type PostPlayerStartMutationBody = BodyType<PlayerSettings>;
+export type PostPlayerStartMutationError = ErrorType<unknown>;
+
+export const createPostPlayerStart = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postPlayerStart>>,
+      TError,
+      { data: BodyType<PlayerSettings> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostPlayerStartMutationOptions(opts);
+  });
+};
+
+export const postPlayerEnd = (
+  params: PostPlayerEndParams,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    { url: `http://localhost:3000/player/end`, method: "POST", params },
+    options,
+  );
+};
+
+export const getPostPlayerEndMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postPlayerEnd>>,
+    TError,
+    { params: PostPlayerEndParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postPlayerEnd>>,
+  TError,
+  { params: PostPlayerEndParams },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postPlayerEnd>>,
+    { params: PostPlayerEndParams }
+  > = (props) => {
+    const { params } = props ?? {};
+
+    return postPlayerEnd(params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostPlayerEndMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPlayerEnd>>
+>;
+
+export type PostPlayerEndMutationError = ErrorType<unknown>;
+
+export const createPostPlayerEnd = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postPlayerEnd>>,
+      TError,
+      { params: PostPlayerEndParams },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostPlayerEndMutationOptions(opts);
+  });
 };
 
 /**

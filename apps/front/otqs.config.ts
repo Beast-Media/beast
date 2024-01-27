@@ -27,7 +27,7 @@ export default defineConfig({
       }
     },
     input: {
-      target: "../backend/swagger.json" //or json format
+      target: "../backend/src/swagger.json" //or json format
     }
   }
 });

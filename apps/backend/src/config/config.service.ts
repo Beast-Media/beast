@@ -10,7 +10,12 @@ export class ConfigService {
   }
 
   ensureVariables() {
-    const variables = ['DATABASE_URL', 'METADATAS_PATH', 'AUTH_JWT_SECRET'];
+    const variables = [
+      'DATABASE_URL',
+      'METADATAS_PATH',
+      'TRANSCODE_PATH',
+      'AUTH_JWT_SECRET',
+    ];
 
     for (const variable of variables) {
       this.getValueOrThrow(variable);
@@ -35,5 +40,9 @@ export class ConfigService {
 
   getMetadatasPath() {
     return this.getValueOrThrow('METADATAS_PATH');
+  }
+
+  getTranscodePath() {
+    return this.getValueOrThrow('TRANSCODE_PATH');
   }
 }

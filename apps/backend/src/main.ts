@@ -1,13 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
-import swaggerDocument from '../swagger.json';
+import swaggerDocument from './swagger.json';
 import { SwaggerModule } from '@nestjs/swagger';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { HttpException, HttpStatus, ShutdownSignal } from '@nestjs/common';
+import { join, resolve } from 'path';
+import { ConfigService } from './config/config.service';
+import { fastifyStatic } from '@fastify/static';
 
 async function bootstrap() {
   process.on('unhandledRejection', (reason, p) => {
@@ -59,6 +62,24 @@ async function bootstrap() {
       },
     },
   );
+
+  const config = app.get(ConfigService);
+
+  app.register((instance, opts, next) => {
+    instance.register(fastifyStatic as any, {
+      root: resolve(join(config.getMetadatasPath(), 'images')),
+      prefix: '/public/images',
+    });
+    next();
+  });
+
+  app.register((instance, opts, next) => {
+    instance.register(fastifyStatic as any, {
+      root: resolve(config.getTranscodePath()),
+      prefix: '/public/transcodes',
+    });
+    next();
+  });
 
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());

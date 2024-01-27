@@ -1,5 +1,10 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
+import hls, { TimelineController } from 'hls.js'
+import 'plyr/dist/plyr.css'
 import { useWebsockets } from "../../hooks/websockets";
+import { postPlayerEnd, postPlayerSeek, postPlayerStart } from "../../api/endpoints/beast-endpoints";
+import Hls from "hls.js";
+import { StartPlayerResponse } from "../../api/model";
 
 interface SliderProps {
   initialValue: number;
@@ -49,56 +54,121 @@ const Slider = (props: SliderProps) => {
 };
 
 export function Player({ mediaId }: { mediaId: string }) {
-
-  const { send } = useWebsockets();
-
-  
-  let video: HTMLVideoElement | undefined;
+  // const { sendWithAck, send, onMessage, socket } = useWebsockets();
   const [playerStatus, setStatus] = createSignal<{
     time: number;
     duration: number;
     buffer: number;
   }>({ time: 0, duration: 0, buffer: 0 });
 
-  const createPlayer = () => {
-    if (!video) return;
-    video.addEventListener("timeupdate", (ev) => {
-      if (!video) return;
-      setStatus({ time: video.currentTime, duration: 5000, buffer: 0 });
-    });
-  };
+  let video: HTMLVideoElement;
+  let hls = new Hls();
+  let player: StartPlayerResponse;
+ 
 
-  const createMediaStream = () => {
-    if (!window.MediaSource) {
-      throw new Error("MediaSource API is not supported in this browser");
-    }
-    const mediaSource = new MediaSource();
-    return URL.createObjectURL(mediaSource);
+  const closePlayer = async () => {
+    await postPlayerEnd({ id: player.id })
   }
 
-  onMount(() => {
-    if (!video) return;
-    send({ type: 'client/player/start', mediaId })
+  // const initDash = () => {
+    // const source = `http://localhost:3000/public/transcodes/${playerId}/video.mpd`;
+    // dash = dashjs.MediaPlayer().create();
 
-    createPlayer();
-    video.src = createMediaStream();
+    // dash.initialize(video, source, true);
+  // }  
+  
+  const initHls = () => {
+    console.log('init')
+    hls = new Hls({
+    });
+    const source = `http://localhost:3000/public/transcodes/${player.id}/video.m3u8`;
+    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+      console.log('video and hls.js are now bound together !');
+    });
+    hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+      console.log(
+        'manifest loaded, found ' + data.levels.length + ' quality level',
+      );
+    });
+    hls.on(Hls.Events.ERROR, function (event, data) {
+      if (data.fatal) {
+        switch (data.type) {
+          case Hls.ErrorTypes.MEDIA_ERROR:
+            console.log('fatal media error encountered, try to recover', data);
+            // hls.recoverMediaError();
+            break;
+          case Hls.ErrorTypes.NETWORK_ERROR:
+            console.error('fatal network error encountered', data);
+            // All retries and media options have been exhausted.
+            // Immediately trying to restart loading could cause loop loading.
+            // Consider modifying loading policies to best fit your asset and network
+            // conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
+            break;
+          default:
+            // cannot recover
+            hls.destroy();
+            break;
+        }
+      }
+    });
+    hls.loadSource(source);
+    hls.attachMedia(video);
+    video.autoplay = true;
+  }
+
+  onMount(async () => {
+    if (!video) return;
+
+    video.addEventListener("timeupdate", (ev) => {
+      if (!video) return;
+      console.log(video.currentTime)
+      setStatus({ time: video.currentTime, duration: 1200, buffer: 0 });
+    });
+
+    window.addEventListener('beforeunload', closePlayer, true)
+    window.addEventListener('popstate', closePlayer, true);
+    player = await postPlayerStart({ media: mediaId, seek: 0 })
+    console.log(player.duration)
+    setStatus({ time: video.currentTime, duration: player.duration, buffer: 0 });
+    // await new Promise((resolve) => setTimeout(resolve, 4000));
+    initHls();
   });
 
+  const seek = async (seek: number) => {
+    console.log(seek)
+    hls.destroy();
+    await closePlayer();
+    player = await postPlayerStart({ media: mediaId, seek })
+    // dash.attachSource(`http://localhost:3000/public/transcodes/${playerId}/video.mpd`, 0)
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    initHls();
+  }
+
   onCleanup(() => {
-    send({ type: 'client/player/end' })
+    hls.destroy();
+    window.removeEventListener('beforeunload', closePlayer, true)
+    window.removeEventListener('popstate', closePlayer, true);
+    // player.destroy()
   })
 
-  // const onSeek = (pos: number) => {
-  //   if (!video) return;
-  //   console.log(pos);
-  //   video.src = `http://172.30.21.127:3000/media/play?seek=${video.duration * (pos / 100)}&media=${mediaId}`;
-  //   video.play();
-  // };
-
   return (
-    <div>
-      <video ref={video}></video>
-      <div class="flex flex-col w-full">
+    <div  class="relative">
+      <video ref={video!} class="w-full h-screen"></video>
+      <div class="absolute bottom-0 left-0 h-20 flex flex-col w-full">
+        <div>
+          <button onClick={() => video?.play()}>PLAY</button>
+          <button onClick={() => video?.pause()}>PAUSE</button>
+        </div>
+        <Slider
+            initialValue={playerStatus().time}
+            bufferValue={0}
+            maxValue={playerStatus().duration}
+            onChange={seek}
+        ></Slider>
+      </div>
+    
+      {/* <video ref={video} controls class="w-full h-screen" autoplay muted></video> */}
+      {/* <div class="flex flex-col w-full">
         <button onClick={() => video?.play()}>PLAY</button>
         <button onClick={() => video?.pause()}>PAUSE</button>
         <Slider
@@ -107,7 +177,7 @@ export function Player({ mediaId }: { mediaId: string }) {
           maxValue={playerStatus().duration}
           // onChange={onSeek}
         ></Slider>
-      </div>
+      </div> */}
     </div>
   );
 }

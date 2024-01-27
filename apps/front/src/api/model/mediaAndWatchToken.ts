@@ -4,9 +4,9 @@
  * @beast/backend
  * OpenAPI spec version: 0.0.1
  */
+import type { MediaDTO } from "./mediaDTO";
 
-export type GetMediaPlayParams = {
-  seek: number;
-  media: string;
+export interface MediaAndWatchToken {
+  media: MediaDTO;
   watchToken: string;
-};
+}

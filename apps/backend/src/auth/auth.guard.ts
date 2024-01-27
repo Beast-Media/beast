@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { Reflector } from '@nestjs/core';
 import { AUTHENTICATED_KEY } from './auth.decorator';
 import { FastifyRequest } from 'fastify';
+import { UserSession } from './dto/session';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -24,14 +25,20 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const request = context
+      .switchToHttp()
+      .getRequest<FastifyRequest & { user: UserSession }>();
 
     const token = request.headers.authorization?.substring('Bearer '.length);
 
     if (!token) return false;
 
     try {
-      jwt.verify(token, this.configService.getAuthJWTSecret());
+      request.user = (
+        jwt.verify(token, this.configService.getAuthJWTSecret()) as {
+          user: UserSession;
+        }
+      ).user;
       return true;
     } catch {
       return false;

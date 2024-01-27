@@ -5,8 +5,7 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type GetMediaPlayParams = {
-  seek: number;
+export interface PlayerSettings {
   media: string;
-  watchToken: string;
-};
+  seek: number;
+}

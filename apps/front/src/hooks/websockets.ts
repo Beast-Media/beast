@@ -10,6 +10,7 @@ export interface WebsocketContext {
   send: (msg: OutgoingClientMessage['data']) => void;
   sendWithAck: (msg: OutgoingClientMessage['data']) => Promise<OutgoingServerMessage['data']>;
   login: () => void;
+  socket: Socket,
   onMessage: <T extends OutgoingServerMessageTypes>(type: T, cb: (data: OutgoingServerMessageTypeMap[T]) => void | OutgoingClientMessage['data']) => void;
 }
 
@@ -46,7 +47,6 @@ export interface SocketInputs {
 
 export function provideWebsockets(): WebsocketContext {
   const [state, setState] = createSignal<WebsocketState>({ status: 'open' });
-  console.log(import.meta.env.VITE_API_WS_PATH)
   const socket: Socket<SocketInputs> = io(import.meta.env.VITE_API_WS_PATH, { transports: ['websocket'] });
   const eventlistener = new EventTarget();
 
@@ -69,7 +69,10 @@ export function provideWebsockets(): WebsocketContext {
     if (!access_token)
       return;
     const res = await sendWithAck({ type: 'client/login', access_token })
-    return res.type === 'server/auth' && res.status.type === 'success';
+    if (res.type === 'server/auth' && res.status.type === 'success') {
+      setState({ status: 'connected' })
+      return true;
+    }
   }
 
   const pingId = setInterval(() => {
@@ -118,6 +121,7 @@ export function provideWebsockets(): WebsocketContext {
     send,
     sendWithAck,
     login,
+    socket,
     onMessage: (type, cb) => {
       const internalCb = (ev: CustomEventInit<MessageEvent>) => {
         if (!ev.detail)

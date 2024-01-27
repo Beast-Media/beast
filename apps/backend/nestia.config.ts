@@ -9,7 +9,7 @@ const config: INestiaConfig = {
     exclude: [],
   },
   swagger: {
-    output: 'swagger.json',
+    output: 'src/swagger.json',
     security: {
       bearer: {
         type: 'apiKey',
