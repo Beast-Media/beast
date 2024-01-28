@@ -13,7 +13,7 @@ For information on building and contributing to the codebase, see [CONTRIBUTING.
 
 Any contributions submitted for inclusion in this repository will be licensed under:
 
-- Apache License, Version 2.0 ([LICENSE](https://github.com/loucass003/beast/blob/main/LICENSE))
+- MIT License ([LICENSE](https://github.com/loucass003/beast/blob/main/LICENSE))
 
 
 # In Progress
