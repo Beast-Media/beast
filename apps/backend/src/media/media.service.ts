@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/commons/prisma/prisma.service';
 import { Media } from '@prisma/client';
-import { CreateMedia, IndexingMedia } from './dto/media.dto';
+import { CreateMedia, IndexingMedia, MediaWithStreams } from './dto/media.dto';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
+import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
 
 @Injectable()
 export class MediaService {
@@ -17,18 +18,71 @@ export class MediaService {
     });
   }
 
+  async getMediaWithStreams(id: Media['id']): Promise<MediaWithStreams> {
+    return this.prisma.media.findFirstOrThrow({
+      where: { id },
+      include: { streams: true },
+    });
+  }
+
   async createMediaFromIndexing(media: IndexingMedia): Promise<Media> {
     const probeData = await this.ffmpegService.probeFile(media.path);
 
+    if (!probeData) throw new Error('unable to probe file');
+
+    if (!probeData.format || !probeData.streams)
+      throw new Error(
+        'unable to create this media, not enough informations while probing',
+      );
     const createMedia = {
       ...media,
-      duration: Number(probeData?.format.duration),
+      duration: Number(probeData.format.duration),
     } as CreateMedia;
 
-    return this.prisma.media.upsert({
+    const mediaDb = await this.prisma.media.upsert({
       where: { path: media.path },
       create: createMedia,
       update: createMedia,
     });
+
+    const getStreamName = (stream: MediaStream) => {
+      switch (stream.codec_type) {
+        case 'subtitle':
+          return stream.tags?.title ?? `Subtitle Track #${stream.index}`;
+        case 'audio':
+          return 'audio track ' + stream.index;
+        default:
+          return `${stream.codec_type}#${stream.index}`;
+      }
+    };
+
+    for (const stream of probeData.streams) {
+      if (stream.codec_type === 'attachment') continue; // DO not store attachments for now. Not needed;
+
+      const name = getStreamName(stream);
+
+      await this.prisma.stream.upsert({
+        where: {
+          mediaId_streamIndex: {
+            mediaId: mediaDb.id,
+            streamIndex: stream.index,
+          },
+        },
+        create: {
+          name: name,
+          streamIndex: stream.index,
+          mediaId: mediaDb.id,
+          type: stream.codec_type,
+        },
+        update: {
+          name: name,
+          streamIndex: stream.index,
+          mediaId: mediaDb.id,
+          type: stream.codec_type,
+        },
+      });
+    }
+
+    return mediaDb;
   }
 }

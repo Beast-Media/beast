@@ -10,6 +10,7 @@ import { ConfigService } from 'src/config/config.service';
 import { createHash } from 'crypto';
 import { MediaService } from 'src/media/media.service';
 import { IndexingMedia } from 'src/media/dto/media.dto';
+import { TasksService } from 'src/tasks/tasks.service';
 
 interface TvShowMatch {
   seriesTitle: string;
@@ -46,6 +47,7 @@ export class ShowService {
     private tvmaze: TVMazeService,
     private configService: ConfigService,
     private mediaService: MediaService,
+    private tasksService: TasksService,
   ) {}
 
   async getShow(id: Show['id']): Promise<ShowWithSeasons> {
@@ -98,7 +100,7 @@ export class ShowService {
     file: string;
     library: Library['id'];
   }) {
-    console.log('not matched', reason, file);
+    // console.log('not matched', reason, file);
   }
 
   async storeImage(imageUrl: string, root: string): Promise<string> {
@@ -112,17 +114,20 @@ export class ShowService {
     return finalName;
   }
 
-  async scanShows(library: Library) {
+  async scanShow(showPath: string, library: Pick<Library, 'id' | 'path'>) {
     const metadataFolder = this.configService.getMetadatasPath();
-    await mkdir(join(metadataFolder, 'images'), { recursive: true });
-    const files = await readdir(library.path, { recursive: true });
+    const files = await readdir(showPath, { recursive: true });
 
-    const composedShows = new Map<number, ComposedShow>();
+    let composedShow: ComposedShow | null = null;
 
     for (const file of files) {
       const match = this.matchTvShowFile(file.split('/').reverse()[0]);
       if (!match) {
-        this.markAsUnmatched({ reason: 'filename', file, library: library.id });
+        this.markAsUnmatched({
+          reason: 'filename',
+          file: file.split('/').reverse()[0],
+          library: library.id,
+        });
         continue;
       }
 
@@ -151,9 +156,8 @@ export class ShowService {
         continue;
       }
 
-      const composedShow =
-        composedShows.get(match.tvmazeId) ||
-        ({
+      if (!composedShow) {
+        composedShow = {
           show: {
             name: showMeta.name,
             tvmazeId: match.tvmazeId,
@@ -163,10 +167,9 @@ export class ShowService {
               ? await this.storeImage(showMeta.image.original, metadataFolder)
               : null,
           },
-          episodes: new Map(),
-          medias: new Map(),
           seasons: new Map() as ComposedShow['seasons'],
-        } as ComposedShow);
+        };
+      }
 
       const composedSeason = composedShow.seasons.get(match.season) ?? {
         episodes: new Map() as MapValue<ComposedShow['seasons']>['episodes'],
@@ -197,56 +200,67 @@ export class ShowService {
               : null,
           },
           media: {
-            path: join(library.path, file),
+            path: join(showPath, file),
             libraryId: library.id,
           },
         });
       }
 
       composedShow.seasons.set(match.season, composedSeason);
-      composedShows.set(match.tvmazeId, composedShow);
     }
 
-    for (const composedShow of composedShows.values()) {
-      const dbShow = await this.prisma.show.upsert({
-        where: { tvmazeId: composedShow.show.tvmazeId },
-        create: composedShow.show,
-        update: composedShow.show,
+    if (!composedShow) return;
+
+    const dbShow = await this.prisma.show.upsert({
+      where: { tvmazeId: composedShow.show.tvmazeId },
+      create: composedShow.show,
+      update: composedShow.show,
+    });
+
+    for (const composedSeason of composedShow.seasons.values()) {
+      const dbSeason = await this.prisma.season.upsert({
+        where: {
+          showId_season_number: {
+            showId: dbShow.id,
+            season_number: composedSeason.season.season_number,
+          },
+        },
+        create: { ...composedSeason.season, showId: dbShow.id },
+        update: composedSeason.season,
       });
 
-      for (const composedSeason of composedShow.seasons.values()) {
-        const dbSeason = await this.prisma.season.upsert({
+      for (const episodeAndMedia of composedSeason.episodes.values()) {
+        const media = await this.mediaService.createMediaFromIndexing(
+          episodeAndMedia.media,
+        );
+
+        const episodeData = {
+          ...episodeAndMedia.episode,
+          seasonId: dbSeason.id,
+          mediaId: media.id,
+        };
+        await this.prisma.episode.upsert({
           where: {
-            showId_season_number: {
-              showId: dbShow.id,
-              season_number: composedSeason.season.season_number,
-            },
-          },
-          create: { ...composedSeason.season, showId: dbShow.id },
-          update: composedSeason.season,
-        });
-
-        for (const episodeAndMedia of composedSeason.episodes.values()) {
-          const media = await this.mediaService.createMediaFromIndexing(
-            episodeAndMedia.media,
-          );
-
-          const episodeData = {
-            ...episodeAndMedia.episode,
-            seasonId: dbSeason.id,
             mediaId: media.id,
-          };
-          await this.prisma.episode.upsert({
-            where: {
-              mediaId: media.id,
-            },
-            create: episodeData,
-            update: episodeData,
-          });
-        }
+          },
+          create: episodeData,
+          update: episodeData,
+        });
       }
     }
+  }
 
-    // TODO: remove shows / seasons / episode that does not have a file anymore or are empty
+  async scanShows(library: Library) {
+    const metadataFolder = this.configService.getMetadatasPath();
+    await mkdir(join(metadataFolder, 'images'), { recursive: true });
+
+    const showFolders = await readdir(library.path);
+    for (const showFolder of showFolders) {
+      this.tasksService.queueTask({
+        name: 'index_show',
+        library,
+        showPath: join(library.path, showFolder),
+      });
+    }
   }
 }

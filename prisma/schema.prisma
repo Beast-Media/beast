@@ -15,6 +15,13 @@ enum LibraryType {
   TV_SHOWS
 }
 
+enum StreamType {
+  video
+  audio
+  subtitle
+  attachment
+}
+
 model Library {
   id        String      @id @unique @default(uuid())
   type      LibraryType
@@ -27,20 +34,16 @@ model Library {
   movies Movie[]
 }
 
-model AudioTrack {
-  id      String  @id @unique @default(uuid())
-  name    String
+model Stream {
+  id            String  @id @unique @default(uuid())
+  name          String
+  streamIndex   Int
+  type          StreamType
   
-  media   Media?  @relation(fields: [mediaId], references: [id])
-  mediaId String?
-}
+  media         Media?  @relation(fields: [mediaId], references: [id])
+  mediaId       String?
 
-model SubtitleTrack {
-  id      String  @id @unique @default(uuid())
-  name    String
-  
-  media   Media?  @relation(fields: [mediaId], references: [id])
-  mediaId String?
+  @@unique([mediaId, streamIndex])
 }
 
 model Media {
@@ -49,8 +52,7 @@ model Media {
   library     Library         @relation(fields: [libraryId], references: [id])
   libraryId   String
   createdAt   DateTime        @default(now())
-  audioTracks AudioTrack[]
-  subtitles   SubtitleTrack[]
+  streams     Stream[]
   
   duration    Float
 
@@ -59,13 +61,13 @@ model Media {
 }
 
 model Episode {
-  id String @id @unique @default(uuid())
+  id             String @id @unique @default(uuid())
 
-  media   Media  @relation(fields: [mediaId], references: [id])
-  mediaId String @unique
+  media          Media  @relation(fields: [mediaId], references: [id])
+  mediaId        String @unique
 
-  season   Season? @relation(fields: [seasonId], references: [id])
-  seasonId String?
+  season         Season? @relation(fields: [seasonId], references: [id])
+  seasonId       String?
 
   overview       String?
   name           String

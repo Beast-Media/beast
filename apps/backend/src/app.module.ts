@@ -10,6 +10,7 @@ import { ShowModule } from './show/show.module';
 import { MediaModule } from './media/media.module';
 import { WebsocketModule } from './websockets/websockets.module';
 import { PlayerModule } from './player/player.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PlayerModule } from './player/player.module';
     AuthModule,
     ShowModule,
     MediaModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [

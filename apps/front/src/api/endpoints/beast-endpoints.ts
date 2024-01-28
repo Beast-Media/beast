@@ -36,7 +36,7 @@ import type {
   RegisterBody,
   SeasonWithEpisodes,
   ShowWithSeasons,
-  StartPlayerResponse,
+  StartedPlayerInfos,
 } from "../model";
 import { customInstance } from "../../custom-axios-instance";
 import type { ErrorType, BodyType } from "../../custom-axios-instance";
@@ -817,7 +817,7 @@ export const postPlayerStart = (
   playerSettings: BodyType<PlayerSettings>,
   options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<StartPlayerResponse>(
+  return customInstance<StartedPlayerInfos>(
     {
       url: `http://localhost:3000/player/start`,
       method: "POST",

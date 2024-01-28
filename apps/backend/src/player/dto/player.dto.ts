@@ -1,10 +1,11 @@
 import { Media } from '@prisma/client';
 import { ChildProcessWithoutNullStreams } from 'child_process';
+import { MediaWithStreams } from 'src/media/dto/media.dto';
 
 export type PlayerId = string;
 
 export interface PlayerSettings {
-  media: Media['id'];
+  mediaId: Media['id'];
   seek: number;
 }
 
@@ -23,7 +24,8 @@ export interface SeekPlayer {
   seek: number;
 }
 
-export interface StartPlayerResponse {
+export interface StartedPlayerInfos {
   id: PlayerId;
-  duration: number;
+  settings: PlayerSettings;
+  media: MediaWithStreams;
 }

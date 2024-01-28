@@ -1,4 +1,4 @@
-import { Media } from '@prisma/client';
+import { Media, Prisma } from '@prisma/client';
 
 export interface MediaDTO extends Media {}
 
@@ -19,3 +19,8 @@ export interface QueryPlayMedia {
   seek: number;
   watchToken: string;
 }
+
+export interface MediaWithStreams
+  extends Prisma.MediaGetPayload<{
+    include: { streams: true };
+  }> {}

@@ -1,10 +1,7 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
-import hls, { TimelineController } from 'hls.js'
-import 'plyr/dist/plyr.css'
-import { useWebsockets } from "../../hooks/websockets";
-import { postPlayerEnd, postPlayerSeek, postPlayerStart } from "../../api/endpoints/beast-endpoints";
+import { postPlayerEnd, postPlayerStart } from "../../api/endpoints/beast-endpoints";
+import { StartedPlayerInfos } from "../../api/model";
 import Hls from "hls.js";
-import { StartPlayerResponse } from "../../api/model";
 
 interface SliderProps {
   initialValue: number;
@@ -13,13 +10,9 @@ interface SliderProps {
   onChange?: (value: number) => void;
 }
 const Slider = (props: SliderProps) => {
-  const [value, setValue] = createSignal(props.initialValue || 0);
-
   const handleChange = (event: Event) => {
-    const newValue = +(event.target as HTMLInputElement).value;
-    setValue(newValue);
     if (props.onChange) {
-      props.onChange(newValue);
+      props.onChange(+(event.target as HTMLInputElement).value);
     }
   };
 
@@ -28,7 +21,7 @@ const Slider = (props: SliderProps) => {
   };
 
   const calculateSeekWidth = () => {
-    return `${(value() / props.maxValue) * 100}%`;
+    return `${(props.initialValue / props.maxValue) * 100}%`;
   };
 
   return (
@@ -45,7 +38,7 @@ const Slider = (props: SliderProps) => {
         type="range"
         min="0"
         max={props.maxValue}
-        value={value()}
+        value={props.initialValue}
         onInput={handleChange}
         class="absolute top-0 w-full h-2 opacity-0 cursor-pointer"
       />
@@ -63,7 +56,7 @@ export function Player({ mediaId }: { mediaId: string }) {
 
   let video: HTMLVideoElement;
   let hls = new Hls();
-  let player: StartPlayerResponse;
+  let player: StartedPlayerInfos;
  
 
   const closePlayer = async () => {
@@ -71,10 +64,12 @@ export function Player({ mediaId }: { mediaId: string }) {
   }
 
   const initHls = () => {
+    setStatus({ time: player.settings.seek + video.currentTime, duration: player.media.duration, buffer: 0 });
+
     console.log('init')
     hls = new Hls();
     const source = `http://localhost:3000/public/transcodes/${player.id}/master.m3u8`;
-    hls.on(Hls.Events.MEDIA_ATTACHED, function (a, ab) {
+    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
       console.log('video and hls.js are now bound together !');
     });
     hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
@@ -105,7 +100,6 @@ export function Player({ mediaId }: { mediaId: string }) {
     });
     hls.loadSource(source);
     hls.attachMedia(video);
-    video.autoplay = true;
   }
 
   if (import.meta.hot) {
@@ -121,15 +115,12 @@ export function Player({ mediaId }: { mediaId: string }) {
     video.addEventListener("timeupdate", (ev) => {
       if (!video) return;
       console.log(video.currentTime)
-      setStatus({ time: video.currentTime, duration: 1200, buffer: 0 });
+      setStatus({ time: player.settings.seek + video.currentTime, duration: 1200, buffer: 0 });
     });
 
     window.addEventListener('beforeunload', closePlayer, true)
     window.addEventListener('popstate', closePlayer, true);
-    player = await postPlayerStart({ media: mediaId, seek: 0 })
-    console.log(player.duration)
-    setStatus({ time: video.currentTime, duration: player.duration, buffer: 0 });
-    // await new Promise((resolve) => setTimeout(resolve, 4000));
+    player = await postPlayerStart({ mediaId, seek: 0 })
     initHls();
   });
 
@@ -137,17 +128,16 @@ export function Player({ mediaId }: { mediaId: string }) {
     console.log(seek)
     hls.destroy();
     await closePlayer();
-    player = await postPlayerStart({ media: mediaId, seek })
-    // dash.attachSource(`http://localhost:3000/public/transcodes/${playerId}/video.mpd`, 0)
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    player = await postPlayerStart({ mediaId, seek })
     initHls();
+    video.autoplay = true;
   }
 
-  onCleanup(() => {
+  onCleanup(async () => {
     hls.destroy();
+    await closePlayer();
     window.removeEventListener('beforeunload', closePlayer, true)
     window.removeEventListener('popstate', closePlayer, true);
-    // player.destroy()
   })
 
   return (
@@ -157,6 +147,7 @@ export function Player({ mediaId }: { mediaId: string }) {
         <div>
           <button onClick={() => video?.play()}>PLAY</button>
           <button onClick={() => video?.pause()}>PAUSE</button>
+          {playerStatus().time}
         </div>
         <Slider
             initialValue={playerStatus().time}
@@ -165,18 +156,6 @@ export function Player({ mediaId }: { mediaId: string }) {
             onChange={seek}
         ></Slider>
       </div>
-    
-      {/* <video ref={video} controls class="w-full h-screen" autoplay muted></video> */}
-      {/* <div class="flex flex-col w-full">
-        <button onClick={() => video?.play()}>PLAY</button>
-        <button onClick={() => video?.pause()}>PAUSE</button>
-        <Slider
-          initialValue={playerStatus().time}
-          bufferValue={0}
-          maxValue={playerStatus().duration}
-          // onChange={onSeek}
-        ></Slider>
-      </div> */}
     </div>
   );
 }

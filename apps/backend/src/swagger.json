@@ -410,7 +410,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StartPlayerResponse"
+                  "$ref": "#/components/schemas/StartedPlayerInfos"
                 }
               }
             }
@@ -868,7 +868,7 @@
       "PlayerSettings": {
         "type": "object",
         "properties": {
-          "media": {
+          "mediaId": {
             "type": "string"
           },
           "seek": {
@@ -877,15 +877,77 @@
         },
         "nullable": false,
         "required": [
-          "media",
+          "mediaId",
           "seek"
         ]
       },
-      "StartPlayerResponse": {
+      "StartedPlayerInfos": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/PlayerSettings"
+          },
+          "media": {
+            "$ref": "#/components/schemas/MediaWithStreams"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "settings",
+          "media"
+        ]
+      },
+      "MediaWithStreams": {
+        "type": "object",
+        "properties": {
+          "streams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "streamIndex": {
+                  "type": "number"
+                },
+                "type": {
+                  "$ref": "#/components/schemas/StreamType"
+                },
+                "mediaId": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "nullable": false,
+              "required": [
+                "id",
+                "name",
+                "streamIndex",
+                "type",
+                "mediaId"
+              ]
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "libraryId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           },
           "duration": {
             "type": "number"
@@ -893,8 +955,21 @@
         },
         "nullable": false,
         "required": [
+          "streams",
           "id",
+          "path",
+          "libraryId",
+          "createdAt",
           "duration"
+        ]
+      },
+      "StreamType": {
+        "type": "string",
+        "enum": [
+          "video",
+          "audio",
+          "subtitle",
+          "attachment"
         ]
       },
       "QueryPlayer": {

@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { TVMazeEpisode, TVMazeSeason, TVMazeShow } from './tvmaze.dto';
-import { assertEquals } from 'typia';
+import { validateEquals } from 'typia';
 
 @Injectable()
 export class TVMazeService {
@@ -69,24 +69,25 @@ export class TVMazeService {
     ).json();
   }
 
-  async getTVShowMeta(tvmazeId: number): Promise<TVMazeShow> {
-    return this.cacheManager.wrap(`@tvmaze/show/${tvmazeId}`, async () =>
-      assertEquals(
-        await this.fetchTVMaze<TVMazeShow, { thetvdb: number }>(
-          `lookup/shows`,
-          undefined,
-          { thetvdb: tvmazeId },
-        ),
-      ),
-    );
+  async getTVShowMeta(tvmazeId: number): Promise<TVMazeShow | null> {
+    return this.cacheManager.wrap(`@tvmaze/show/${tvmazeId}`, async () => {
+      const res = await this.fetchTVMaze<TVMazeShow | null, { q: string }>(
+        `shows/${tvmazeId}`,
+      );
+      const validation = validateEquals(res);
+      // console.log(res);
+      return (validation.success && validation.data) || null;
+    });
   }
 
   async getTVShowEpisodesMeta(tvmazeId: number): Promise<TVMazeEpisode[]> {
-    return this.cacheManager.wrap(`@tvmaze/episodes/${tvmazeId}`, async () =>
-      assertEquals(
-        await this.fetchTVMaze<TVMazeEpisode[]>(`shows/${tvmazeId}/episodes`),
-      ),
-    );
+    return this.cacheManager.wrap(`@tvmaze/episodes/${tvmazeId}`, async () => {
+      const res = await this.fetchTVMaze<TVMazeEpisode[]>(
+        `shows/${tvmazeId}/episodes`,
+      );
+      const validation = validateEquals(res);
+      return (validation.success && validation.data) || [];
+    });
   }
 
   async getTVShowSeasonsMeta(tvmazeId: number): Promise<TVMazeSeason[]> {
@@ -94,8 +95,8 @@ export class TVMazeService {
       const res = await this.fetchTVMaze<TVMazeSeason[]>(
         `shows/${tvmazeId}/seasons`,
       );
-      console.log(res);
-      return assertEquals(res);
+      const validation = validateEquals(res);
+      return (validation.success && validation.data) || [];
     });
   }
 }

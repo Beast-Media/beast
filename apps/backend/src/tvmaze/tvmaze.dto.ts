@@ -70,14 +70,14 @@ export type TVMazeEpisode = {
   airtime: string;
   airstamp: string;
   runtime: number;
-  rating: {
-    average: number;
-  };
+  rating?: {
+    average: number | null;
+  } | null;
   image: {
     medium: string;
     original: string;
   } | null;
-  summary: string;
+  summary: string | null;
   _links: {
     self: {
       href: string;
@@ -110,6 +110,9 @@ export type TVMazeSeason = {
   image: {
     medium: string;
     original: string;
+  } | null;
+  rating?: {
+    average: number | null;
   } | null;
   summary: string | null;
   _links: {

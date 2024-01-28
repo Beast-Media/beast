@@ -1,33 +1,33 @@
 interface BaseStream {
   index: number;
   codec_type: 'video' | 'audio' | 'subtitle' | 'attachment';
-  codec_name: string;
+  codec_name?: string;
 }
 
 interface VideoStream extends BaseStream {
   codec_type: 'video';
   width: number;
   height: number;
-  pix_fmt: 'yuv420p' | 'yuv420p10le';
+  pix_fmt: 'yuv420p' | 'yuv420p10le' | 'yuvj420p';
 }
 interface AudioStream extends BaseStream {
   codec_type: 'audio';
   sample_rate: string;
-  sample_fmt: 'fltp' | 's32';
+  sample_fmt: 'fltp' | 's32' | 's32p' | 's16' | 's16p';
   channels: number;
 }
 interface SubtitleStream extends BaseStream {
   codec_type: 'subtitle';
   duration?: string;
-  tags: {
-    language: string;
+  tags?: {
+    language?: string;
     title?: string;
   };
 }
 
 interface AttachmentStream extends BaseStream {
   codec_type: 'attachment';
-  codec_name: never;
+  codec_name?: string | never;
 }
 
 interface Format {
@@ -40,9 +40,13 @@ interface Format {
   bit_rate: string;
 }
 
-type Stream = VideoStream | AudioStream | SubtitleStream | AttachmentStream;
+export type MediaStream =
+  | VideoStream
+  | AudioStream
+  | SubtitleStream
+  | AttachmentStream;
 
 export interface ProbeData {
-  streams: Stream[];
-  format: Format;
+  streams?: MediaStream[];
+  format?: Format;
 }

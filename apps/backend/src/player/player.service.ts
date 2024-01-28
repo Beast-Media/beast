@@ -3,7 +3,12 @@ import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { Player, PlayerId, PlayerSettings } from './dto/player.dto';
+import {
+  Player,
+  PlayerId,
+  PlayerSettings,
+  StartedPlayerInfos,
+} from './dto/player.dto';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import { MediaService } from 'src/media/media.service';
 import { join } from 'path';
@@ -12,7 +17,6 @@ import { mkdir, rm, readdir } from 'fs/promises';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { randomUUID } from 'crypto';
 import { watch } from 'fs';
-import { Media } from '@prisma/client';
 
 @Injectable()
 export class PlayerService
@@ -29,8 +33,7 @@ export class PlayerService
   async onApplicationBootstrap() {
     const folders = await readdir(this.configService.getTranscodePath());
     for (const folder of folders) {
-      console.log(folder);
-      await rm(folder, {
+      await rm(join(this.configService.getTranscodePath(), folder), {
         recursive: true,
         force: true,
         maxRetries: 3,
@@ -84,23 +87,16 @@ export class PlayerService
         if (filename === 'master.m3u8') {
           watcher.close();
           clearTimeout(timeoutId);
-          // setTimeout(() => {
           resolve(ffpmegProcess);
-          // }, 1000);
-          // resolve(ffpmegProcess);
         }
       });
     });
   }
 
-  async startPlayer(settings: PlayerSettings): Promise<[Player, Media]> {
+  async startPlayer(settings: PlayerSettings): Promise<StartedPlayerInfos> {
     const playerId = randomUUID();
-    // const playerId = '1';
 
-    // const foundPlayer = this.players.get(playerId);
-    // if (foundPlayer) return foundPlayer;
-
-    const media = await this.mediaService.getMedia(settings.media);
+    const media = await this.mediaService.getMediaWithStreams(settings.mediaId);
 
     const playerFolder = join(this.configService.getTranscodePath(), playerId);
     await mkdir(playerFolder, { recursive: true });
@@ -117,25 +113,12 @@ export class PlayerService
     };
     this.players.set(playerId, player);
 
-    return [player, media];
+    return {
+      id: playerId,
+      settings,
+      media,
+    };
   }
-
-  // async seekPlayer(playerId: PlayerId, seek: number) {
-  //   const foundPlayer = this.players.get(playerId);
-  //   if (!foundPlayer) return;
-
-  //   const media = await this.mediaService.getMedia(foundPlayer.settings.media);
-  //   const playerFolder = join(this.configService.getTranscodePath(), playerId);
-
-  //   foundPlayer.settings.seek = seek;
-  //   foundPlayer.ffpmegProcess = this.spawnTranscoder(
-  //     seek,
-  //     media.path,
-  //     join(playerFolder, 'video.mpd'),
-  //   );
-
-  //   this.players.set(playerId, foundPlayer);
-  // }
 
   async endPlayer(playerId: PlayerId) {
     console.log('END CALLED \n\n\n\n\n\n\n');
@@ -145,7 +128,6 @@ export class PlayerService
     const playerFolder = join(this.configService.getTranscodePath(), playerId);
     await rm(playerFolder, { recursive: true, force: true });
 
-    console.log('kill');
     // NOTE should we care about closing nicecly?
     foundPlayer.ffpmegProcess.kill(9);
 

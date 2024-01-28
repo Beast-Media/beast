@@ -8,15 +8,13 @@ export class FFmpegService {
   async probeFile(path: string): Promise<ProbeData | null> {
     const { stdout } = await spawn(
       `ffprobe`,
-      [
-        `-v`,
-        `quiet`,
-        `-print_format`,
-        `json`,
-        `-show_format`,
-        `-show_streams`,
-        `${path}`,
-      ],
+      this.args`
+        -v quiet
+        -print_format json
+        -show_format
+        -show_streams
+        "${path}"
+      `,
       {},
     );
     if (!stdout) return null;

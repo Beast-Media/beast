@@ -6,6 +6,6 @@
  */
 
 export interface PlayerSettings {
-  media: string;
+  mediaId: string;
   seek: number;
 }

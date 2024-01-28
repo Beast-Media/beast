@@ -6,7 +6,7 @@ import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import {
   PlayerSettings,
   QueryPlayer,
-  StartPlayerResponse,
+  StartedPlayerInfos,
 } from './dto/player.dto';
 
 @ApiTags('player')
@@ -20,13 +20,8 @@ export class PlayerController {
   async startPlayer(
     // @User() user: UserSession,
     @TypedBody() body: PlayerSettings,
-  ): Promise<StartPlayerResponse> {
-    const [{ id }, { duration }] = await this.playerService.startPlayer(body);
-
-    return {
-      id,
-      duration,
-    };
+  ): Promise<StartedPlayerInfos> {
+    return this.playerService.startPlayer(body);
   }
 
   @TypedRoute.Post('/end')
