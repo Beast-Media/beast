@@ -18,7 +18,7 @@ export const Season: Component = () => {
                     <div class="text-sm">{season.data?.overview}</div>
                     <div class="flex flex-wrap gap-3">
                         <For each={season.data?.episodes.sort(({ episode_number: a }, { episode_number: b }) => a - b)}>
-                            {(episode) => <Card name={episode.name} to={`/episode/${episode.id}`} picture={episode.image} aspect="landscape"></Card>}
+                            {(episode) => <Card name={episode.name} to={`/episode/${episode.id}`} picture={episode.images.length === 3 ? episode.images[2] : null} aspect="landscape"></Card>}
                         </For>
                     </div>
                 </div>

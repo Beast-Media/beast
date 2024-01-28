@@ -39,9 +39,5 @@ async function bootstrap() {
   parentPort.on('message', (task: Task) => {
     subject.next(task);
   });
-
-  setInterval(() => {
-    console.log('WORKER STILL ALIVE');
-  }, 1000);
 }
 bootstrap();

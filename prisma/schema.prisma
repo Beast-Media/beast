@@ -72,7 +72,7 @@ model Episode {
   overview       String?
   name           String
   episode_number Int
-  image          String?
+  images          String[]
 
   @@unique([seasonId, episode_number])
 }
@@ -86,7 +86,7 @@ model Season {
   episodes Episode[]
   show     Show      @relation(fields: [showId], references: [id])
   showId   String
-  image    String?
+  images    String[]
 
   @@unique([showId, season_number])
 }
@@ -97,7 +97,7 @@ model Show {
   name     String
   overview String?
   seasons  Season[]
-  image    String?
+  images    String[]
 
   library   Library @relation(fields: [libraryId], references: [id])
   libraryId String

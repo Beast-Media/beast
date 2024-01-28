@@ -8,7 +8,7 @@ import type { ShowWithSeasonsSeasonsItem } from "./showWithSeasonsSeasonsItem";
 
 export interface ShowWithSeasons {
   id: string;
-  image: string | null;
+  images: string[];
   libraryId: string;
   name: string;
   overview: string | null;

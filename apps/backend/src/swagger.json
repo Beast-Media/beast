@@ -309,84 +309,6 @@
         ]
       }
     },
-    "/media": {
-      "get": {
-        "tags": [
-          "media"
-        ],
-        "operationId": "getMedia",
-        "parameters": [
-          {
-            "name": "mediaId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MediaAndWatchToken"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get a media informations",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/media/play": {
-      "get": {
-        "tags": [
-          "media"
-        ],
-        "operationId": "getMediaPlay",
-        "parameters": [
-          {
-            "name": "seek",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            },
-            "description": "",
-            "required": true
-          },
-          {
-            "name": "media",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "",
-            "required": true
-          },
-          {
-            "name": "watchToken",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/player/start": {
       "post": {
         "tags": [
@@ -738,9 +660,11 @@
                 "type": "string",
                 "nullable": true
               },
-              "image": {
-                "type": "string",
-                "nullable": true
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "libraryId": {
                 "type": "string"
@@ -752,7 +676,7 @@
               "tvmazeId",
               "name",
               "overview",
-              "image",
+              "images",
               "libraryId"
             ]
           }
@@ -806,63 +730,6 @@
         "required": [
           "type",
           "data"
-        ]
-      },
-      "QueryMedia": {
-        "type": "object",
-        "properties": {
-          "mediaId": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "mediaId"
-        ]
-      },
-      "MediaAndWatchToken": {
-        "type": "object",
-        "properties": {
-          "media": {
-            "$ref": "#/components/schemas/MediaDTO"
-          },
-          "watchToken": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "media",
-          "watchToken"
-        ]
-      },
-      "MediaDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "libraryId": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "duration": {
-            "type": "number"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "path",
-          "libraryId",
-          "createdAt",
-          "duration"
         ]
       },
       "PlayerSettings": {
@@ -1020,9 +887,11 @@
                 "showId": {
                   "type": "string"
                 },
-                "image": {
-                  "type": "string",
-                  "nullable": true
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               },
               "nullable": false,
@@ -1032,7 +901,7 @@
                 "season_number",
                 "overview",
                 "showId",
-                "image"
+                "images"
               ]
             }
           },
@@ -1049,9 +918,11 @@
             "type": "string",
             "nullable": true
           },
-          "image": {
-            "type": "string",
-            "nullable": true
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "libraryId": {
             "type": "string"
@@ -1064,7 +935,7 @@
           "tvmazeId",
           "name",
           "overview",
-          "image",
+          "images",
           "libraryId"
         ]
       },
@@ -1108,9 +979,11 @@
                 "episode_number": {
                   "type": "number"
                 },
-                "image": {
-                  "type": "string",
-                  "nullable": true
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               },
               "nullable": false,
@@ -1121,7 +994,7 @@
                 "overview",
                 "name",
                 "episode_number",
-                "image"
+                "images"
               ]
             }
           },
@@ -1141,9 +1014,11 @@
           "showId": {
             "type": "string"
           },
-          "image": {
-            "type": "string",
-            "nullable": true
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "nullable": false,
@@ -1154,7 +1029,7 @@
           "season_number",
           "overview",
           "showId",
-          "image"
+          "images"
         ]
       },
       "QueryEpisode": {
@@ -1192,9 +1067,11 @@
           "episode_number": {
             "type": "number"
           },
-          "image": {
-            "type": "string",
-            "nullable": true
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "nullable": false,
@@ -1205,7 +1082,7 @@
           "overview",
           "name",
           "episode_number",
-          "image"
+          "images"
         ]
       }
     },

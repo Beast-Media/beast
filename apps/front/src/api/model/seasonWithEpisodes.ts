@@ -9,7 +9,7 @@ import type { SeasonWithEpisodesEpisodesItem } from "./seasonWithEpisodesEpisode
 export interface SeasonWithEpisodes {
   episodes: SeasonWithEpisodesEpisodesItem[];
   id: string;
-  image: string | null;
+  images: string[];
   name: string;
   overview: string | null;
   season_number: number;

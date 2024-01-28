@@ -58,17 +58,18 @@ export function Player({ mediaId }: { mediaId: string }) {
   let hls = new Hls();
   let player: StartedPlayerInfos;
  
+  const timeupdate = () => {
+    setStatus({ time: player.settings.seek + video.currentTime, duration: 1200, buffer: 0 });
+  }
 
   const closePlayer = async () => {
+    hls.destroy();
     await postPlayerEnd({ id: player.id })
   }
 
   const initHls = () => {
-    setStatus({ time: player.settings.seek + video.currentTime, duration: player.media.duration, buffer: 0 });
-
-    console.log('init')
-    hls = new Hls();
     const source = `http://localhost:3000/public/transcodes/${player.id}/master.m3u8`;
+    hls = new Hls();
     hls.on(Hls.Events.MEDIA_ATTACHED, function () {
       console.log('video and hls.js are now bound together !');
     });
@@ -86,14 +87,11 @@ export function Player({ mediaId }: { mediaId: string }) {
             break;
           case Hls.ErrorTypes.NETWORK_ERROR:
             console.error('fatal network error encountered', data);
-            // All retries and media options have been exhausted.
-            // Immediately trying to restart loading could cause loop loading.
-            // Consider modifying loading policies to best fit your asset and network
-            // conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
             break;
           default:
             // cannot recover
             hls.destroy();
+            closePlayer()
             break;
         }
       }
@@ -102,22 +100,15 @@ export function Player({ mediaId }: { mediaId: string }) {
     hls.attachMedia(video);
   }
 
-  if (import.meta.hot) {
-    import.meta.hot.dispose(async (data) => {
-      // cleanup side effect
-      await closePlayer()
-    })
-  }
-
   onMount(async () => {
-    if (!video) return;
+    if (import.meta.hot) {
+      import.meta.hot.dispose(async (data) => {
+        // cleanup side effect
+        await closePlayer()
+      })
+    }
 
-    video.addEventListener("timeupdate", (ev) => {
-      if (!video) return;
-      console.log(video.currentTime)
-      setStatus({ time: player.settings.seek + video.currentTime, duration: 1200, buffer: 0 });
-    });
-
+    video.addEventListener("timeupdate", timeupdate);
     window.addEventListener('beforeunload', closePlayer, true)
     window.addEventListener('popstate', closePlayer, true);
     player = await postPlayerStart({ mediaId, seek: 0 })
@@ -125,8 +116,6 @@ export function Player({ mediaId }: { mediaId: string }) {
   });
 
   const seek = async (seek: number) => {
-    console.log(seek)
-    hls.destroy();
     await closePlayer();
     player = await postPlayerStart({ mediaId, seek })
     initHls();
@@ -134,8 +123,8 @@ export function Player({ mediaId }: { mediaId: string }) {
   }
 
   onCleanup(async () => {
-    hls.destroy();
     await closePlayer();
+    video.removeEventListener("timeupdate", timeupdate);
     window.removeEventListener('beforeunload', closePlayer, true)
     window.removeEventListener('popstate', closePlayer, true);
   })

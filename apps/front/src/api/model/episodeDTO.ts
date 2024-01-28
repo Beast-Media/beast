@@ -8,7 +8,7 @@
 export interface EpisodeDTO {
   episode_number: number;
   id: string;
-  image: string | null;
+  images: string[];
   mediaId: string;
   name: string;
   overview: string | null;

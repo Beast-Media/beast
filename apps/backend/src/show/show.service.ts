@@ -11,6 +11,7 @@ import { createHash } from 'crypto';
 import { MediaService } from 'src/media/media.service';
 import { IndexingMedia } from 'src/media/dto/media.dto';
 import { TasksService } from 'src/tasks/tasks.service';
+import sharp, { ResizeOptions } from 'sharp';
 
 interface TvShowMatch {
   seriesTitle: string;
@@ -72,7 +73,7 @@ export class ShowService {
 
   matchTvShowFile(path: string) {
     const match = path.match(
-      /^(?<seriesTitle>.+?) - S(?<season>\d{2})E(?<episode>\d{2}) - (?<episodeTitle>.+?) (?<qualityFull>\S+) ID(?<tvmazeId>\d+)ID\.mkv/,
+      /^(?<seriesTitle>.+?) - S(?<season>\d{2})E(?<episode>\d{2}) - (?<episodeTitle>.+?) (?<qualityFull>\S+) ID(?<tvmazeId>\d+)ID\.(mkv|mp4|avi)/,
     );
     if (!match || !match.groups) return null;
 
@@ -103,15 +104,41 @@ export class ShowService {
     // console.log('not matched', reason, file);
   }
 
-  async storeImage(imageUrl: string, root: string): Promise<string> {
+  async storeImage(
+    imageUrl: string,
+    root: string,
+    resizeVariants: Record<string, ResizeOptions>,
+  ): Promise<string[]> {
     const res = await fetch(imageUrl);
     const buffer = Buffer.from(await res.arrayBuffer());
+
     const hashSum = createHash('sha256');
     hashSum.update(buffer);
-    const finalName = `images/${hashSum.digest('hex')}.jpg`;
-    const path = join(root, finalName);
-    await writeFile(path, buffer);
-    return finalName;
+    const hash = hashSum.digest('hex');
+
+    const writeBuffer = async (buffer: Buffer, name: string) => {
+      const filename = `images/${hash}-${name}.jpg`;
+      const path = join(root, filename);
+      await writeFile(path, buffer);
+      return filename;
+    };
+
+    const images = [
+      await sharp(buffer)
+        .jpeg({ progressive: true, quality: 100 })
+        .toBuffer()
+        .then((buffer) => writeBuffer(buffer, 'original')),
+    ];
+
+    for (const [name, resize] of Object.entries(resizeVariants)) {
+      const resizeBuffer = await sharp(buffer)
+        .resize(resize)
+        .jpeg({ progressive: true, quality: 100 })
+        .toBuffer();
+      const path = await writeBuffer(resizeBuffer, name);
+      images.push(path);
+    }
+    return images;
   }
 
   async scanShow(showPath: string, library: Pick<Library, 'id' | 'path'>) {
@@ -163,9 +190,12 @@ export class ShowService {
             tvmazeId: match.tvmazeId,
             libraryId: library.id,
             overview: showMeta.summary,
-            image: showMeta.image?.original
-              ? await this.storeImage(showMeta.image.original, metadataFolder)
-              : null,
+            images: showMeta.image?.original
+              ? await this.storeImage(showMeta.image.original, metadataFolder, {
+                  medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
+                  small: { width: 160, height: 234, fit: 'cover' },
+                })
+              : [],
           },
           seasons: new Map() as ComposedShow['seasons'],
         };
@@ -180,9 +210,12 @@ export class ShowService {
               ? seasonMeta.name
               : `Season ${match.season}`,
           overview: seasonMeta.summary,
-          image: seasonMeta.image?.original
-            ? await this.storeImage(seasonMeta.image.original, metadataFolder)
-            : null,
+          images: seasonMeta.image?.original
+            ? await this.storeImage(seasonMeta.image.original, metadataFolder, {
+                medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
+                small: { width: 160, height: 234, fit: 'cover' },
+              })
+            : [],
         },
       };
 
@@ -192,12 +225,16 @@ export class ShowService {
             episode_number: match.episode,
             name: episodeMeta.name ?? `Episode ${match.episode}`,
             overview: episodeMeta.summary,
-            image: episodeMeta.image?.original
+            images: episodeMeta.image?.original
               ? await this.storeImage(
                   episodeMeta.image.original,
                   metadataFolder,
+                  {
+                    medium: { width: 256 * 2, height: 160 * 2, fit: 'cover' },
+                    small: { width: 256, height: 160, fit: 'cover' },
+                  },
                 )
-              : null,
+              : [],
           },
           media: {
             path: join(showPath, file),

@@ -52,12 +52,6 @@ export class PlayerService
   async spawnTranscoder(seek: number, source: string, dest: string) {
     const ffpmegProcess = spawn(
       'ffmpeg',
-      // this.ffmpegService.args`
-      //   -ss ${seek} -i "${source}" -preset ultrafast -strict -2
-      //   -map 0:v -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1
-      //   -map 0:a -c:a copy -map 0:1 -map 0:0 -seg_duration 2 -use_template 1 -use_timeline 1
-      //   -f dash "${join(dest, 'video.mpd')}"
-      // `,
       this.ffmpegService.args`
         -hide_banner
         -ss ${seek} 

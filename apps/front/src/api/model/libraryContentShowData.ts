@@ -7,7 +7,7 @@
 
 export type LibraryContentShowData = {
   id: string;
-  image: string | null;
+  images: string[];
   libraryId: string;
   name: string;
   overview: string | null;

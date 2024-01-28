@@ -19,7 +19,7 @@ export const Library: Component = () => {
                             {(libContent) => 
                                 <For each={libContent()}>
                                     {(item) => item.type === 'TV_SHOWS' ? 
-                                    <Card name={item.data.name} to={`/show/${item.data.id}`} picture={item.data.image}/> : 
+                                    <Card name={item.data.name} to={`/show/${item.data.id}`} picture={item.data.images.length === 3 ? item.data.images[2] : null}/> : 
                                     <Card name={item.data.name} to={`/movie/${item.data.id}`} />}
                                 </For>
                             }

@@ -21,15 +21,12 @@ import type {
   GetLibraryContentParams,
   GetLibraryParams,
   GetLibraryScanParams,
-  GetMediaParams,
-  GetMediaPlayParams,
   GetShowEpisodeParams,
   GetShowParams,
   GetShowSeasonParams,
   LibraryContent,
   LibraryDTO,
   LoginBody,
-  MediaAndWatchToken,
   PlayerSettings,
   PostPlayerEndParams,
   RefreshBody,
@@ -660,154 +657,6 @@ export const createGetLibraryContent = <
   const query = createQuery(() => {
     const opts = options?.() || {};
     return getGetLibraryContentQueryOptions(opts["params"], opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-/**
- * Get a media informations
- */
-export const getMedia = (
-  params: GetMediaParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<MediaAndWatchToken>(
-    { url: `http://localhost:3000/media`, method: "GET", params, signal },
-    options,
-  );
-};
-
-export const getGetMediaQueryKey = (params: GetMediaParams) => {
-  return [`http://localhost:3000/media`, ...(params ? [params] : [])] as const;
-};
-
-export const getGetMediaQueryOptions = <
-  TData = Awaited<ReturnType<typeof getMedia>>,
-  TError = ErrorType<unknown>,
->(
-  params: GetMediaParams,
-  options?: {
-    query?: Partial<
-      SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetMediaQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMedia>>> = ({
-    signal,
-  }) => getMedia(params, requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getMedia>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetMediaQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getMedia>>
->;
-export type GetMediaQueryError = ErrorType<unknown>;
-
-export const createGetMedia = <
-  TData = Awaited<ReturnType<typeof getMedia>>,
-  TError = ErrorType<unknown>,
->(
-  options: () => {
-    params: GetMediaParams;
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetMediaQueryOptions(opts["params"], opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-export const getMediaPlay = (
-  params: GetMediaPlayParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<void>(
-    { url: `http://localhost:3000/media/play`, method: "GET", params, signal },
-    options,
-  );
-};
-
-export const getGetMediaPlayQueryKey = (params: GetMediaPlayParams) => {
-  return [
-    `http://localhost:3000/media/play`,
-    ...(params ? [params] : []),
-  ] as const;
-};
-
-export const getGetMediaPlayQueryOptions = <
-  TData = Awaited<ReturnType<typeof getMediaPlay>>,
-  TError = ErrorType<unknown>,
->(
-  params: GetMediaPlayParams,
-  options?: {
-    query?: Partial<
-      SolidQueryOptions<Awaited<ReturnType<typeof getMediaPlay>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetMediaPlayQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMediaPlay>>> = ({
-    signal,
-  }) => getMediaPlay(params, requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getMediaPlay>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetMediaPlayQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getMediaPlay>>
->;
-export type GetMediaPlayQueryError = ErrorType<unknown>;
-
-export const createGetMediaPlay = <
-  TData = Awaited<ReturnType<typeof getMediaPlay>>,
-  TError = ErrorType<unknown>,
->(
-  options: () => {
-    params: GetMediaPlayParams;
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<
-          Awaited<ReturnType<typeof getMediaPlay>>,
-          TError,
-          TData
-        >
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetMediaPlayQueryOptions(opts["params"], opts["options"]);
   }) as CreateQueryResult<TData, TError>;
 
   return query;

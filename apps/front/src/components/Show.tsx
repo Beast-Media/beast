@@ -16,7 +16,7 @@ export const TVShow: Component = () => {
                     <div class="text-sm">{show.data?.overview}</div>
                     <div class="flex flex-wrap gap-3">
                         <For each={show.data?.seasons}>
-                            {(season) => <Card name={season.name} to={`/season/${season.id}`} picture={season.image}></Card>}
+                            {(season) => <Card name={season.name} to={`/season/${season.id}`} picture={season.images.length === 3 ? season.images[2] : null}></Card>}
                         </For>
                     </div>
                 </div>

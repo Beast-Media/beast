@@ -9,9 +9,8 @@ import { isLoggedIn } from "./hooks/auth";
 import { Library } from "./components/Library";
 import { TVShow } from "./components/Show";
 import { Season } from "./components/Season";
-import { Episode } from "./components/Espisode";
+import { Episode } from "./components/Episode";
 import { Media } from "./components/Media";
-import { useWebsockets } from "./hooks/websockets";
 
 const AuthenticatedGuard: ParentComponent = ({ children }) => {
   const navigate = useNavigate();
