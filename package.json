@@ -2,10 +2,12 @@
   "name": "beast-turbo",
   "private": true,
   "scripts": {
-    "build": "dotenv --  turbo build",
+    "build": "dotenv -- turbo build",
     "dev": "dotenv -- turbo dev",
     "lint": "dotenv -- turbo lint",
     "prisma:gen": "prisma generate",
+    "prisma:push": "prisma db push",
+    "swagger": "dotenv -- turbo run swagger",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {

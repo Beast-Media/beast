@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "swagger": "otqs"
   },
   "dependencies": {
     "@beast/shared": "^1.0.0",
