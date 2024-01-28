@@ -6,6 +6,12 @@ It organizes movie and television content and adds posters, plot summaries, cast
 Beast is also capable of transcoding files if the codec is incompatible with the device playing the media.
 It can run on any linux (and more in the future) system and supports docker
 
+# Contributing
+
+We will open a lot of issues with the differents freatures we are trying to add. 
+
 # In Progress
 
-This project is still in active developpement and is not usable as is
+This project is still in active developpement and is not usable as is.
+
+Check https://github.com/users/loucass003/projects/1 to see current progress
