@@ -3,6 +3,7 @@ import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { TVMazeEpisode, TVMazeSeason, TVMazeShow } from './tvmaze.dto';
 import { validateEquals } from 'typia';
+import stripTags from 'striptags';
 
 @Injectable()
 export class TVMazeService {
@@ -75,7 +76,7 @@ export class TVMazeService {
         `shows/${tvmazeId}`,
       );
       const validation = validateEquals(res);
-      // console.log(res);
+      if (res?.summary) res.summary = stripTags(res.summary);
       return (validation.success && validation.data) || null;
     });
   }
@@ -86,6 +87,9 @@ export class TVMazeService {
         `shows/${tvmazeId}/episodes`,
       );
       const validation = validateEquals(res);
+      for (const episode of res) {
+        if (episode?.summary) episode.summary = stripTags(episode.summary);
+      }
       return (validation.success && validation.data) || [];
     });
   }
@@ -96,6 +100,9 @@ export class TVMazeService {
         `shows/${tvmazeId}/seasons`,
       );
       const validation = validateEquals(res);
+      for (const season of res) {
+        if (season?.summary) season.summary = stripTags(season.summary);
+      }
       return (validation.success && validation.data) || [];
     });
   }

@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/commons/prisma/prisma.service';
 import { Episode, Library, Season, Show } from '@prisma/client';
-import { SeasonWithEpisodes, ShowWithSeasons } from './dto/show.dto';
+import {
+  SeasonWithEpisodes,
+  ShowWithLibrary,
+  ShowWithSeasons,
+} from './dto/show.dto';
 import { mkdir, readdir, writeFile } from 'fs/promises';
 import { assertEquals } from 'typia';
 import { join } from 'path';
@@ -55,6 +59,13 @@ export class ShowService {
     return this.prisma.show.findFirstOrThrow({
       where: { id },
       include: { seasons: true },
+    });
+  }
+
+  async getShowWithLibrary(id: Show['id']): Promise<ShowWithLibrary> {
+    return this.prisma.show.findFirstOrThrow({
+      where: { id },
+      include: { library: true },
     });
   }
 
@@ -186,6 +197,7 @@ export class ShowService {
       if (!composedShow) {
         composedShow = {
           show: {
+            path: showPath,
             name: showMeta.name,
             tvmazeId: match.tvmazeId,
             libraryId: library.id,

@@ -11,6 +11,7 @@ import {
   SeasonWithEpisodes,
   ShowWithSeasons,
 } from './dto/show.dto';
+import { TasksService } from 'src/tasks/tasks.service';
 
 /**
  * Controller for the TV Shows
@@ -20,7 +21,10 @@ import {
 @Controller('show')
 @Authenticated()
 export class ShowController {
-  constructor(public showService: ShowService) {}
+  constructor(
+    public showService: ShowService,
+    public tasksService: TasksService,
+  ) {}
 
   /**
    * Get the informations of a show
@@ -28,6 +32,20 @@ export class ShowController {
   @TypedRoute.Get('/')
   public async show(@TypedQuery() query: QueryShow): Promise<ShowWithSeasons> {
     return this.showService.getShow(query.showId);
+  }
+
+  /**
+   * Start a scan on a show
+   */
+  @TypedRoute.Post('/scan')
+  public async scanShow(@TypedQuery() query: QueryShow): Promise<boolean> {
+    const show = await this.showService.getShowWithLibrary(query.showId);
+    this.tasksService.queueTask({
+      name: 'index_show',
+      library: show.library,
+      showPath: show.path,
+    });
+    return true;
   }
 
   /**

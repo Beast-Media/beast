@@ -48,9 +48,18 @@ export class MediaService {
     const getStreamName = (stream: MediaStream) => {
       switch (stream.codec_type) {
         case 'subtitle':
-          return stream.tags?.title ?? `Subtitle Track #${stream.index}`;
+          if (stream.tags?.language && stream.tags?.title)
+            return `${stream.tags.title} (${stream.tags.language})`;
+          if (stream.tags?.title) return `${stream.tags.title}`;
+          if (stream.tags?.language)
+            return `Subtitle (${stream.tags.language})`;
+          return `Subtitle Track #${stream.index}`;
         case 'audio':
-          return 'audio track ' + stream.index;
+          if (stream.tags?.language && stream.tags?.title)
+            return `${stream.tags.title} (${stream.tags.language})`;
+          if (stream.tags?.title) return `${stream.tags.title}`;
+          if (stream.tags?.language) return `Audio (${stream.tags.language})`;
+          return `Audio Track #${stream.index}`;
         default:
           return `${stream.codec_type}#${stream.index}`;
       }

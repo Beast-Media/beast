@@ -309,6 +309,78 @@
         ]
       }
     },
+    "/media": {
+      "get": {
+        "tags": [
+          "media"
+        ],
+        "operationId": "getMedia",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaDTO"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a media from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/media/detail": {
+      "get": {
+        "tags": [
+          "media"
+        ],
+        "operationId": "getMediaDetail",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaWithStreams"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a media details from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/player/start": {
       "post": {
         "tags": [
@@ -402,6 +474,42 @@
           }
         },
         "description": "Get the informations of a show",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/show/scan": {
+      "post": {
+        "tags": [
+          "show"
+        ],
+        "operationId": "postShowScan",
+        "parameters": [
+          {
+            "name": "showId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "description": "Start a scan on a show",
         "security": [
           {
             "bearer": []
@@ -656,6 +764,9 @@
               "name": {
                 "type": "string"
               },
+              "path": {
+                "type": "string"
+              },
               "overview": {
                 "type": "string",
                 "nullable": true
@@ -675,6 +786,7 @@
               "id",
               "tvmazeId",
               "name",
+              "path",
               "overview",
               "images",
               "libraryId"
@@ -732,40 +844,45 @@
           "data"
         ]
       },
-      "PlayerSettings": {
+      "QueryMedia": {
         "type": "object",
         "properties": {
           "mediaId": {
             "type": "string"
-          },
-          "seek": {
-            "type": "number"
           }
         },
         "nullable": false,
         "required": [
-          "mediaId",
-          "seek"
+          "mediaId"
         ]
       },
-      "StartedPlayerInfos": {
+      "MediaDTO": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
           },
-          "settings": {
-            "$ref": "#/components/schemas/PlayerSettings"
+          "path": {
+            "type": "string"
           },
-          "media": {
-            "$ref": "#/components/schemas/MediaWithStreams"
+          "libraryId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "number"
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "settings",
-          "media"
+          "path",
+          "libraryId",
+          "createdAt",
+          "duration"
         ]
       },
       "MediaWithStreams": {
@@ -837,6 +954,42 @@
           "audio",
           "subtitle",
           "attachment"
+        ]
+      },
+      "PlayerSettings": {
+        "type": "object",
+        "properties": {
+          "mediaId": {
+            "type": "string"
+          },
+          "seek": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "mediaId",
+          "seek"
+        ]
+      },
+      "StartedPlayerInfos": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/PlayerSettings"
+          },
+          "media": {
+            "$ref": "#/components/schemas/MediaWithStreams"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "settings",
+          "media"
         ]
       },
       "QueryPlayer": {
@@ -914,6 +1067,9 @@
           "name": {
             "type": "string"
           },
+          "path": {
+            "type": "string"
+          },
           "overview": {
             "type": "string",
             "nullable": true
@@ -934,6 +1090,7 @@
           "id",
           "tvmazeId",
           "name",
+          "path",
           "overview",
           "images",
           "libraryId"

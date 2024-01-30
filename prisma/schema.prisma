@@ -95,6 +95,7 @@ model Show {
   id       String   @id @unique @default(uuid())
   tvmazeId Int      @unique
   name     String
+  path     String
   overview String?
   seasons  Season[]
   images    String[]

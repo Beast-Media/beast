@@ -15,6 +15,10 @@ interface AudioStream extends BaseStream {
   sample_rate: string;
   sample_fmt: 'fltp' | 's32' | 's32p' | 's16' | 's16p';
   channels: number;
+  tags?: {
+    language?: string;
+    title?: string;
+  };
 }
 interface SubtitleStream extends BaseStream {
   codec_type: 'subtitle';
