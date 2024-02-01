@@ -40,73 +40,75 @@ const LoginGuard: ParentComponent = ({ children }) => {
 
 export default function App() {
   return (
-    <Router>
-      <Route path="/" component={AuthenticatedGuard}>
-        <Route
-          path="/"
-          component={() => (
-            <MainLayout>
-              <Home></Home>
-            </MainLayout>
-          )}
-        />
-        <Route
-          path="/library/:id"
-          component={() => (
-            <MainLayout>
-              <Library></Library>
-            </MainLayout>
-          )}
-        />
-        <Route
-          path="/show/:id"
-          component={() => (
-            <MainLayout>
-              <TVShow></TVShow>
-            </MainLayout>
-          )}
-        />
-        <Route
-          path="/season/:id"
-          component={() => (
-            <MainLayout>
-              <Season></Season>
-            </MainLayout>
-          )}
-        />
-        <Route
-          path="/episode/:id"
-          component={() => (
-            <MainLayout>
-              <Episode></Episode>
-            </MainLayout>
-          )}
-        />
-        <Route
-          path="/media/:id"
-          component={() => (
-            <Media></Media>
-          )}
-        />
-      </Route>
-      <Route path="/" component={LoginGuard}>
-        <Route
-          path="/login"
-          component={() => (
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
-          )}
-        />
-        <Route
-          path="/register"
-          component={() => (
-            <AuthLayout>
-              <Register />
-            </AuthLayout>
-          )}
-        />
-      </Route>
-    </Router>
+    <div class="bg-beast-bg text-beast-font fill-beast-font">
+      <Router>
+        <Route path="/" component={AuthenticatedGuard}>
+          <Route
+            path="/"
+            component={() => (
+              <MainLayout>
+                <Home></Home>
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/library/:id"
+            component={() => (
+              <MainLayout>
+                <Library></Library>
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/show/:id"
+            component={() => (
+              <MainLayout>
+                <TVShow></TVShow>
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/season/:id"
+            component={() => (
+              <MainLayout>
+                <Season></Season>
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/episode/:id"
+            component={() => (
+              <MainLayout>
+                <Episode></Episode>
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/media/:id"
+            component={() => (
+              <Media></Media>
+            )}
+          />
+        </Route>
+        <Route path="/" component={LoginGuard}>
+          <Route
+            path="/login"
+            component={() => (
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            )}
+          />
+          <Route
+            path="/register"
+            component={() => (
+              <AuthLayout>
+                <Register />
+              </AuthLayout>
+            )}
+          />
+        </Route>
+      </Router>
+    </div>
   );
 }

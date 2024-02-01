@@ -21,14 +21,20 @@ import type {
   GetLibraryContentParams,
   GetLibraryParams,
   GetLibraryScanParams,
+  GetMediaDetailParams,
+  GetMediaParams,
   GetShowEpisodeParams,
   GetShowParams,
   GetShowSeasonParams,
   LibraryContent,
   LibraryDTO,
   LoginBody,
+  MediaDTO,
+  MediaWithStreams,
   PlayerSettings,
   PostPlayerEndParams,
+  PostPlayerKeepaliveParams,
+  PostShowScanParams,
   RefreshBody,
   RegisterBody,
   SeasonWithEpisodes,
@@ -662,6 +668,166 @@ export const createGetLibraryContent = <
   return query;
 };
 
+/**
+ * Get a media from its id
+ */
+export const getMedia = (
+  params: GetMediaParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MediaDTO>(
+    { url: `http://localhost:3000/media`, method: "GET", params, signal },
+    options,
+  );
+};
+
+export const getGetMediaQueryKey = (params: GetMediaParams) => {
+  return [`http://localhost:3000/media`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetMediaQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMedia>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMediaParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMediaQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMedia>>> = ({
+    signal,
+  }) => getMedia(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMedia>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMediaQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMedia>>
+>;
+export type GetMediaQueryError = ErrorType<unknown>;
+
+export const createGetMedia = <
+  TData = Awaited<ReturnType<typeof getMedia>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMediaParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMediaQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+/**
+ * Get a media details from its id
+ */
+export const getMediaDetail = (
+  params: GetMediaDetailParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MediaWithStreams>(
+    {
+      url: `http://localhost:3000/media/detail`,
+      method: "GET",
+      params,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetMediaDetailQueryKey = (params: GetMediaDetailParams) => {
+  return [
+    `http://localhost:3000/media/detail`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMediaDetailQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMediaDetail>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMediaDetailParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<
+        Awaited<ReturnType<typeof getMediaDetail>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMediaDetailQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMediaDetail>>> = ({
+    signal,
+  }) => getMediaDetail(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMediaDetail>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMediaDetailQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMediaDetail>>
+>;
+export type GetMediaDetailQueryError = ErrorType<unknown>;
+
+export const createGetMediaDetail = <
+  TData = Awaited<ReturnType<typeof getMediaDetail>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMediaDetailParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<
+          Awaited<ReturnType<typeof getMediaDetail>>,
+          TError,
+          TData
+        >
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMediaDetailQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
 export const postPlayerStart = (
   playerSettings: BodyType<PlayerSettings>,
   options?: SecondParameter<typeof customInstance>,
@@ -731,6 +897,78 @@ export const createPostPlayerStart = <
   return createMutation(() => {
     const opts = options?.();
     return getPostPlayerStartMutationOptions(opts);
+  });
+};
+
+/**
+ * Used to tell the server that the user is still watching
+if the server does not receive this call within a 10s window,
+the server will close the player to save ressources
+ */
+export const postPlayerKeepalive = (
+  params: PostPlayerKeepaliveParams,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<boolean>(
+    { url: `http://localhost:3000/player/keepalive`, method: "POST", params },
+    options,
+  );
+};
+
+export const getPostPlayerKeepaliveMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postPlayerKeepalive>>,
+    TError,
+    { params: PostPlayerKeepaliveParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postPlayerKeepalive>>,
+  TError,
+  { params: PostPlayerKeepaliveParams },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postPlayerKeepalive>>,
+    { params: PostPlayerKeepaliveParams }
+  > = (props) => {
+    const { params } = props ?? {};
+
+    return postPlayerKeepalive(params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostPlayerKeepaliveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPlayerKeepalive>>
+>;
+
+export type PostPlayerKeepaliveMutationError = ErrorType<unknown>;
+
+export const createPostPlayerKeepalive = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postPlayerKeepalive>>,
+      TError,
+      { params: PostPlayerKeepaliveParams },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostPlayerKeepaliveMutationOptions(opts);
   });
 };
 
@@ -871,6 +1109,76 @@ export const createGetShow = <
   }) as CreateQueryResult<TData, TError>;
 
   return query;
+};
+
+/**
+ * Start a scan on a show
+ */
+export const postShowScan = (
+  params: PostShowScanParams,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<boolean>(
+    { url: `http://localhost:3000/show/scan`, method: "POST", params },
+    options,
+  );
+};
+
+export const getPostShowScanMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postShowScan>>,
+    TError,
+    { params: PostShowScanParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postShowScan>>,
+  TError,
+  { params: PostShowScanParams },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postShowScan>>,
+    { params: PostShowScanParams }
+  > = (props) => {
+    const { params } = props ?? {};
+
+    return postShowScan(params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostShowScanMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postShowScan>>
+>;
+
+export type PostShowScanMutationError = ErrorType<unknown>;
+
+export const createPostShowScan = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postShowScan>>,
+      TError,
+      { params: PostShowScanParams },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostShowScanMutationOptions(opts);
+  });
 };
 
 /**

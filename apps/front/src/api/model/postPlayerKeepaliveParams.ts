@@ -4,9 +4,7 @@
  * @beast/backend
  * OpenAPI spec version: 0.0.1
  */
-import type { PlayerSettings } from "./playerSettings";
 
-export interface StartedPlayerInfos {
+export type PostPlayerKeepaliveParams = {
   id: string;
-  settings: PlayerSettings;
-}
+};

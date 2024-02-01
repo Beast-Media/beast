@@ -417,6 +417,42 @@
         ]
       }
     },
+    "/player/keepalive": {
+      "post": {
+        "tags": [
+          "player"
+        ],
+        "operationId": "postPlayerKeepalive",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "description": "Used to tell the server that the user is still watching\nif the server does not receive this call within a 10s window,\nthe server will close the player to save ressources",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/player/end": {
       "post": {
         "tags": [
@@ -964,12 +1000,40 @@
           },
           "seek": {
             "type": "number"
+          },
+          "streams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerSettingStream"
+            }
           }
         },
         "nullable": false,
         "required": [
           "mediaId",
-          "seek"
+          "seek",
+          "streams"
+        ]
+      },
+      "PlayerSettingStream": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "video",
+              "audio",
+              "subtitle"
+            ]
+          },
+          "index": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "index"
         ]
       },
       "StartedPlayerInfos": {
@@ -980,16 +1044,12 @@
           },
           "settings": {
             "$ref": "#/components/schemas/PlayerSettings"
-          },
-          "media": {
-            "$ref": "#/components/schemas/MediaWithStreams"
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "settings",
-          "media"
+          "settings"
         ]
       },
       "QueryPlayer": {

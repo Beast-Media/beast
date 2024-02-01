@@ -7,7 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        spotify: "#1DB954"
+        'beast-main': '#FF8A00',
+        'beast-main-1': '#DB7600',
+        'beast-main-2': '#BC6600',
+        'beast-main-3': '#874900',
+        'beast-main-4': '#552E00',
+        'beast-bg': '#242424',
+        'beast-bg-1': '#2D2D2D',
+        'beast-bg-2': '#505050',
+        'beast-bg-3': '#C0C0C0',
+        'beast-bg-4': '#FFFFFF',
+        'beast-accent-success': '#3E9D47',
+        'beast-accent-error': '#D65656',
+        'beast-accent-warning': '#D8CD37',
+        'beast-font': '#FFFFFF',
+        'beast-font-1': '#FF8A00',
+        'beast-font-2': '#7B7B7B',
       },
       fontSize: {
         sm: rem(0.6),

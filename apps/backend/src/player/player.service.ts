@@ -49,24 +49,37 @@ export class PlayerService
     }
   }
 
-  async spawnTranscoder(seek: number, source: string, dest: string) {
-    const ffpmegProcess = spawn(
-      'ffmpeg',
-      this.ffmpegService.args`
-        -hide_banner
-        -ss ${seek} 
-        -i "${source}" -preset ultrafast
-        -movflags frag_keyframe+empty_moov
-        -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1
-        -c:a aac -ac 2 
-        -c:s webvtt -muxdelay 0
-        -map 0:1 -map 0:0 -map 0:3 
-        -master_pl_name "master.m3u8"
-        -var_stream_map "v:0,a:0,s:0,sgroup:subtitle"
-        -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
-        "${join(dest, 'out_%v.m3u8')}"
-      `,
+  async spawnTranscoder(
+    settings: PlayerSettings,
+    source: string,
+    dest: string,
+  ) {
+    const videoStream = settings.streams.find(({ type }) => type === 'video');
+    const audioStream = settings.streams.find(({ type }) => type === 'audio');
+    const subtitleStream = settings.streams.find(
+      ({ type }) => type === 'subtitle',
     );
+
+    const args = this.ffmpegService.args`
+    -hide_banner
+    -ss ${settings.seek} 
+    -i "${source}" -preset ultrafast
+    -movflags frag_keyframe+empty_moov
+    -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1
+    ${videoStream ? `-map 0:${videoStream.index}` : '-vn'} 
+    ${audioStream ? `-c:a aac -ac 2 -map 0:${audioStream.index}` : '-an'} 
+    ${subtitleStream ? `-c:s webvtt -muxdelay 0 -map 0:${subtitleStream.index}` : '-sn'} 
+    -master_pl_name "master.m3u8"
+    ${
+      subtitleStream
+        ? `-var_stream_map "${videoStream ? 'v:0' : ''}${audioStream ? ',a:0' : ''}${subtitleStream ? ',s:0,sgroup:subtitle' : ''}"`
+        : ''
+    }
+    -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
+    "${join(dest, 'out_%v.m3u8')}"
+  `;
+    const ffpmegProcess = spawn('ffmpeg', args);
+    console.log(args);
 
     ffpmegProcess.stderr.on('data', (data) => {
       console.log(data.toString());
@@ -87,15 +100,39 @@ export class PlayerService
     });
   }
 
+  keepalive(playerId: PlayerId) {
+    const foundPlayer = this.players.get(playerId);
+    if (!foundPlayer) return;
+
+    foundPlayer.lastKeepalive = new Date();
+  }
+
   async startPlayer(settings: PlayerSettings): Promise<StartedPlayerInfos> {
     const playerId = randomUUID();
 
     const media = await this.mediaService.getMediaWithStreams(settings.mediaId);
 
+    const defVideo = media.streams.find(({ type }) => type === 'video');
+    if (!settings.streams.find(({ type }) => type === 'video')) {
+      if (!defVideo) throw new Error('No video stream');
+      settings.streams.push({ index: defVideo.streamIndex, type: 'video' });
+    }
+
+    const defAudio = media.streams.find(({ type }) => type === 'audio');
+    if (!settings.streams.find(({ type }) => type === 'audio') && defAudio) {
+      console.log(defAudio);
+      settings.streams.push({ index: defAudio.streamIndex, type: 'audio' });
+    }
+
+    const defSub = media.streams.find(({ type }) => type === 'subtitle');
+    if (!settings.streams.find(({ type }) => type === 'subtitle') && defSub) {
+      settings.streams.push({ index: defSub.streamIndex, type: 'subtitle' });
+    }
+
     const playerFolder = join(this.configService.getTranscodePath(), playerId);
     await mkdir(playerFolder, { recursive: true });
     const ffpmegProcess = await this.spawnTranscoder(
-      settings.seek,
+      settings,
       media.path,
       playerFolder,
     );
@@ -104,27 +141,40 @@ export class PlayerService
       id: playerId,
       settings,
       ffpmegProcess,
+      lastKeepalive: new Date(),
     };
     this.players.set(playerId, player);
+
+    const keepaliveId = setInterval(() => {
+      const foundPlayer = this.players.get(playerId);
+      if (!foundPlayer) return;
+      if (Date.now() - foundPlayer.lastKeepalive.getTime() >= 10_000) {
+        clearInterval(keepaliveId);
+        this.endPlayer(playerId);
+      }
+    }, 1000).unref();
 
     return {
       id: playerId,
       settings,
-      media,
     };
   }
 
   async endPlayer(playerId: PlayerId) {
-    console.log('END CALLED \n\n\n\n\n\n\n');
     const foundPlayer = this.players.get(playerId);
     if (!foundPlayer) return;
 
-    const playerFolder = join(this.configService.getTranscodePath(), playerId);
-    await rm(playerFolder, { recursive: true, force: true });
-
     // NOTE should we care about closing nicecly?
+    // Kill the ffmpeg instance before removing the transcode folder
     foundPlayer.ffpmegProcess.kill(9);
 
+    const playerFolder = join(this.configService.getTranscodePath(), playerId);
+    await rm(playerFolder, {
+      recursive: true,
+      force: true,
+      retryDelay: 1000,
+      maxRetries: 5,
+    });
     this.players.delete(playerId);
   }
 }

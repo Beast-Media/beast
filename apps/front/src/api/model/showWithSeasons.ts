@@ -12,6 +12,7 @@ export interface ShowWithSeasons {
   libraryId: string;
   name: string;
   overview: string | null;
+  path: string;
   seasons: ShowWithSeasonsSeasonsItem[];
   tvmazeId: number;
 }

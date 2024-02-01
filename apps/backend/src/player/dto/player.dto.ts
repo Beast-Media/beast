@@ -1,17 +1,23 @@
 import { Media } from '@prisma/client';
 import { ChildProcessWithoutNullStreams } from 'child_process';
-import { MediaWithStreams } from 'src/media/dto/media.dto';
 
 export type PlayerId = string;
+
+export interface PlayerSettingStream {
+  type: 'audio' | 'subtitle' | 'video';
+  index: number;
+}
 
 export interface PlayerSettings {
   mediaId: Media['id'];
   seek: number;
+  streams: PlayerSettingStream[];
 }
 
 export interface Player {
   id: PlayerId;
   settings: PlayerSettings;
+  lastKeepalive: Date;
   ffpmegProcess: ChildProcessWithoutNullStreams;
 }
 
@@ -27,5 +33,4 @@ export interface SeekPlayer {
 export interface StartedPlayerInfos {
   id: PlayerId;
   settings: PlayerSettings;
-  media: MediaWithStreams;
 }

@@ -29,8 +29,6 @@ export const customInstance = <T>(
         source.cancel('Query was cancelled');
     };
 
-    console.log('using custom instance')
-
     return promise;
 };
 

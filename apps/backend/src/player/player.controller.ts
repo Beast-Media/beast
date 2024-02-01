@@ -24,6 +24,20 @@ export class PlayerController {
     return this.playerService.startPlayer(body);
   }
 
+  /**
+   * Used to tell the server that the user is still watching
+   * if the server does not receive this call within a 10s window,
+   * the server will close the player to save ressources
+   */
+  @TypedRoute.Post('/keepalive')
+  async keepalive(
+    // @User() user: UserSession,
+    @TypedQuery() query: QueryPlayer,
+  ): Promise<boolean> {
+    this.playerService.keepalive(query.id);
+    return true;
+  }
+
   @TypedRoute.Post('/end')
   async endPlayer(
     // @User() user: UserSession,
@@ -31,12 +45,4 @@ export class PlayerController {
   ) {
     await this.playerService.endPlayer(query.id);
   }
-
-  //   @TypedRoute.Post('/seek')
-  //   async seekPlayer(
-  //     // @User() user: UserSession,
-  //     @TypedQuery() query: SeekPlayer,
-  //   ) {
-  //     await this.playerService.seekPlayer(query.id, query.seek);
-  //   }
 }

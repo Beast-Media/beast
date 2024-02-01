@@ -4,8 +4,10 @@
  * @beast/backend
  * OpenAPI spec version: 0.0.1
  */
+import type { PlayerSettingStream } from "./playerSettingStream";
 
 export interface PlayerSettings {
   mediaId: string;
   seek: number;
+  streams: PlayerSettingStream[];
 }

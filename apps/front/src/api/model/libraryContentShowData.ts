@@ -11,5 +11,6 @@ export type LibraryContentShowData = {
   libraryId: string;
   name: string;
   overview: string | null;
+  path: string;
   tvmazeId: number;
 };
