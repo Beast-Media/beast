@@ -13,24 +13,17 @@ import {
   postPlayerKeepalive,
   postPlayerStart,
 } from "../../api/endpoints/beast-endpoints";
-import {
-  MediaWithStreams,
-  PlayerSettings,
-} from "../../api/model";
+import { MediaWithStreams, PlayerSettings } from "../../api/model";
 import Hls from "hls.js";
 import { createMutable, modifyMutable, reconcile } from "solid-js/store";
-import {
-  ArrowIcon,
-  PauseIcon,
-  PiPIcon,
-  PlayIcon,
-} from "../commons/Icons";
+import { ArrowIcon, PauseIcon, PiPIcon, PlayIcon } from "../commons/Icons";
 import { Logo } from "../commons/Logo";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { SettingsControl } from "./PlayerSettings";
 import { VolumeControl } from "./PlayerVolume";
 import { Slider } from "./PlayerSlider";
+import { debounce } from "@solid-primitives/scheduled";
 
 interface PlayerStatusBase<T extends string> {
   status: T;
@@ -44,9 +37,12 @@ interface PlayerStatusBase<T extends string> {
   volume: number;
   prevVolume: number;
   pip: boolean;
+  showControls: boolean;
 }
 
-type PlayerStore = { status: "init" } | PlayerStatusBase<"mounted">;
+type PlayerStore =
+  | { status: "init"; showControls: boolean }
+  | PlayerStatusBase<"mounted">;
 
 const MiddleControl: ParentComponent<ComponentProps<"div">> = (props) => {
   return (
@@ -91,8 +87,13 @@ const TogglePlaying: Component<{ togglePlay: () => void; playing: boolean }> = (
 };
 
 export function Player({ mediaId }: { mediaId: string }) {
-  const player = createMutable<PlayerStore>({ status: "init" });
+  const player = createMutable<PlayerStore>({
+    status: "init",
+    showControls: true,
+  });
   const [time, setTime] = createSignal("--:-- XX");
+
+  const mouseMoving = debounce(() => (player.showControls = false), 1000);
 
   let video!: HTMLVideoElement;
 
@@ -143,7 +144,7 @@ export function Player({ mediaId }: { mediaId: string }) {
   const seek = async (position: number) => {
     if (player.status !== "mounted") return;
     player.absoluteSeek = position;
-    await updateSettings(player.settings)
+    await updateSettings(player.settings);
   };
 
   const onPlayerClose = async () => {
@@ -211,13 +212,21 @@ export function Player({ mediaId }: { mediaId: string }) {
     player.buffering = true;
     video.autoplay = true;
     await endPlayer();
-    const { start, hls } = await startPlayer({ ...settings, seek: player.absoluteSeek });
+    const { start, hls } = await startPlayer({
+      ...settings,
+      seek: player.absoluteSeek,
+    });
 
     player.hls = hls;
-    player.settings = start.settings
-    player.playerId = start.id
-    player.absoluteSeek = start.settings.seek
-  }
+    player.settings = start.settings;
+    player.playerId = start.id;
+    player.absoluteSeek = start.settings.seek;
+  };
+
+  const onMouseMove = () => {
+    player.showControls = true;
+    mouseMoving();
+  };
 
   onMount(async () => {
     video.addEventListener("canplaythrough", whenCanplaythrough);
@@ -254,6 +263,7 @@ export function Player({ mediaId }: { mediaId: string }) {
         volume: video.volume,
         prevVolume: 0,
         pip: false,
+        showControls: true,
       })
     );
   });
@@ -275,7 +285,7 @@ export function Player({ mediaId }: { mediaId: string }) {
   });
 
   return (
-    <div class="w-full h-screen relative">
+    <div class={clsx("w-full h-screen relative", !player.showControls && 'cursor-none')} onMouseMove={onMouseMove}>
       <video ref={video} class="w-full h-screen bg-black"></video>
       <Show
         when={player.status === "mounted" && player}
@@ -285,49 +295,55 @@ export function Player({ mediaId }: { mediaId: string }) {
           <>
             {player().buffering && <Loader></Loader>}
             <TogglePlaying playing={player().playing} togglePlay={togglePlay} />
-            <div class="absolute top-0 left-0 w-full h-screen flex flex-col justify-between pointer-events-none">
-              <div class="flex justify-between h-24 px-4 items-center pointer-events-auto bg-gradient-to-b from-beast-bg">
-                <div>
-                  <ArrowIcon />
+            <Show when={player().showControls}>
+              <div class="absolute top-0 left-0 w-full h-screen flex flex-col justify-between pointer-events-none">
+                <div class="flex justify-between h-24 px-4 items-center pointer-events-auto bg-gradient-to-b from-beast-bg">
+                  <div>
+                    <ArrowIcon />
+                  </div>
+                  <div class="text-lg">Title</div>
+                  <div>{time()}</div>
                 </div>
-                <div class="text-lg">Title</div>
-                <div>{time()}</div>
+                <div class="flex px-4 items-center h-24 gap-4 pointer-events-auto bg-gradient-to-t from-beast-bg">
+                  <div
+                    class="bg-beast-main flex justify-center items-center rounded-full p-2"
+                    onClick={togglePlay}
+                  >
+                    {player().playing ? (
+                      <PauseIcon size={40} />
+                    ) : (
+                      <PlayIcon size={40} />
+                    )}
+                  </div>
+                  <div class="flex flex-grow pointer-events-auto">
+                    <Slider
+                      initialValue={player().absoluteSeek}
+                      bufferValue={0}
+                      duration={player().media.duration}
+                      onSeek={seek}
+                    ></Slider>
+                  </div>
+                  <div class="flex gap-4 pointer-events-auto">
+                    {document.pictureInPictureEnabled && (
+                      <PiPIcon
+                        onClick={togglePiP}
+                        class={clsx(player().pip && "fill-beast-main")}
+                      ></PiPIcon>
+                    )}
+                    <SettingsControl
+                      streams={player().media.streams}
+                      settings={player().settings}
+                      updateSettings={updateSettings}
+                    ></SettingsControl>
+                    <VolumeControl
+                      volume={player().volume}
+                      toggleMute={toggleMute}
+                      changeVolume={changeVolume}
+                    ></VolumeControl>
+                  </div>
+                </div>
               </div>
-              <div class="flex px-4 items-center h-24 gap-4 pointer-events-auto bg-gradient-to-t from-beast-bg">
-                <div
-                  class="bg-beast-main flex justify-center items-center rounded-full p-2"
-                  onClick={togglePlay}
-                >
-                  {player().playing ? (
-                    <PauseIcon size={40} />
-                  ) : (
-                    <PlayIcon size={40} />
-                  )}
-                </div>
-                <div class="flex flex-grow pointer-events-auto">
-                  <Slider
-                    initialValue={player().absoluteSeek}
-                    bufferValue={0}
-                    duration={player().media.duration}
-                    onSeek={seek}
-                  ></Slider>
-                </div>
-                <div class="flex gap-4 pointer-events-auto">
-                  {document.pictureInPictureEnabled && (
-                    <PiPIcon
-                      onClick={togglePiP}
-                      class={clsx(player().pip && "fill-beast-main")}
-                    ></PiPIcon>
-                  )}
-                  <SettingsControl streams={player().media.streams} settings={player().settings} updateSettings={updateSettings}></SettingsControl>
-                  <VolumeControl
-                    volume={player().volume}
-                    toggleMute={toggleMute}
-                    changeVolume={changeVolume}
-                  ></VolumeControl>
-                </div>
-              </div>
-            </div>
+            </Show>
           </>
         )}
       </Show>
