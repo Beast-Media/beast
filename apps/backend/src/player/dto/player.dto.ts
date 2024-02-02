@@ -3,6 +3,12 @@ import { ChildProcessWithoutNullStreams } from 'child_process';
 
 export type PlayerId = string;
 
+export interface PlayerResolution {
+  width: number;
+  height: number;
+  bitrate?: number;
+}
+
 export interface PlayerSettingStream {
   type: 'audio' | 'subtitle' | 'video';
   index: number;
@@ -12,6 +18,7 @@ export interface PlayerSettings {
   mediaId: Media['id'];
   seek: number;
   streams: PlayerSettingStream[];
+  resolution?: PlayerResolution;
 }
 
 export interface Player {
@@ -33,4 +40,5 @@ export interface SeekPlayer {
 export interface StartedPlayerInfos {
   id: PlayerId;
   settings: PlayerSettings;
+  availableResolutions: PlayerResolution[];
 }

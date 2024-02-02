@@ -47,31 +47,33 @@ model Stream {
 }
 
 model Media {
-  id          String          @id @unique @default(uuid())
-  path        String          @unique
-  library     Library         @relation(fields: [libraryId], references: [id])
-  libraryId   String
-  createdAt   DateTime        @default(now())
-  streams     Stream[]
-  
-  duration    Float
+  id              String          @id @unique @default(uuid())
+  path            String          @unique
+  library         Library         @relation(fields: [libraryId], references: [id])
+  libraryId       String
+  createdAt       DateTime        @default(now())
+  streams         Stream[]
+  width           Int
+  height          Int
+  bitrate         Int
+  duration        Float
 
-  episode Episode?
-  movie   Movie?
+  episode         Episode?
+  movie           Movie?
 }
 
 model Episode {
-  id             String @id @unique @default(uuid())
+  id              String @id @unique @default(uuid())
 
-  media          Media  @relation(fields: [mediaId], references: [id])
-  mediaId        String @unique
+  media           Media  @relation(fields: [mediaId], references: [id])
+  mediaId         String @unique
 
-  season         Season? @relation(fields: [seasonId], references: [id])
-  seasonId       String?
+  season          Season? @relation(fields: [seasonId], references: [id])
+  seasonId        String?
 
-  overview       String?
-  name           String
-  episode_number Int
+  overview        String?
+  name            String
+  episode_number  Int
   images          String[]
 
   @@unique([seasonId, episode_number])

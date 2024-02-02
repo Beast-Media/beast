@@ -7,10 +7,13 @@
 import type { MediaWithStreamsStreamsItem } from "./mediaWithStreamsStreamsItem";
 
 export interface MediaWithStreams {
+  bitrate: number;
   createdAt: string;
   duration: number;
+  height: number;
   id: string;
   libraryId: string;
   path: string;
   streams: MediaWithStreamsStreamsItem[];
+  width: number;
 }

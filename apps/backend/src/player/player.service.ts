@@ -6,6 +6,7 @@ import {
 import {
   Player,
   PlayerId,
+  PlayerResolution,
   PlayerSettings,
   StartedPlayerInfos,
 } from './dto/player.dto';
@@ -49,6 +50,22 @@ export class PlayerService
     }
   }
 
+  lowerResolutions(width: number, height: number): PlayerResolution[] {
+    const availableResolutions = new Map<number, PlayerResolution>();
+
+    availableResolutions.set(3840 * 2160, { width: 3840, height: 2160 });
+    availableResolutions.set(2560 * 1440, { width: 2560, height: 1440 });
+    availableResolutions.set(1920 * 1080, { width: 1920, height: 1080 });
+    availableResolutions.set(1280 * 720, { width: 1280, height: 720 });
+    availableResolutions.set(640 * 480, { width: 640, height: 480 });
+
+    for (const [pixels] of availableResolutions) {
+      if (pixels >= width * height) availableResolutions.delete(pixels);
+    }
+
+    return Array.from(availableResolutions.values());
+  }
+
   async spawnTranscoder(
     settings: PlayerSettings,
     source: string,
@@ -66,6 +83,8 @@ export class PlayerService
     -i "${source}" -preset ultrafast
     -movflags frag_keyframe+empty_moov
     -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1
+    ${settings.resolution ? `-filter:v:0 scale=w=${settings.resolution.width}:h=${settings.resolution.height}` : ''}
+    ${settings.resolution?.bitrate ? `-maxrate:v:0 ${settings.resolution.bitrate}` : ''}
     ${videoStream ? `-map 0:${videoStream.index}` : '-vn'} 
     ${audioStream ? `-c:a aac -ac 2 -map 0:${audioStream.index}` : '-an'} 
     ${subtitleStream ? `-c:s webvtt -muxdelay 0 -map 0:${subtitleStream.index}` : '-sn'} 
@@ -157,6 +176,7 @@ export class PlayerService
     return {
       id: playerId,
       settings,
+      availableResolutions: this.lowerResolutions(media.width, media.height),
     };
   }
 

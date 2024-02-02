@@ -8,6 +8,7 @@
 export * from "./authTokens";
 export * from "./createLibraryDTO";
 export * from "./createLibraryDTOType";
+export * from "./defaultPlayerSettings";
 export * from "./episodeDTO";
 export * from "./getLibrary200Item";
 export * from "./getLibraryAll200Item";
@@ -43,6 +44,7 @@ export * from "./mediaAndWatchToken";
 export * from "./mediaDTO";
 export * from "./mediaWithStreams";
 export * from "./mediaWithStreamsStreamsItem";
+export * from "./playerResolution";
 export * from "./playerSettingStream";
 export * from "./playerSettingStreamType";
 export * from "./playerSettings";

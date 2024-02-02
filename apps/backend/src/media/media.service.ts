@@ -34,9 +34,22 @@ export class MediaService {
       throw new Error(
         'unable to create this media, not enough informations while probing',
       );
+
+    const videoStream = probeData.streams.find(
+      ({ codec_type }) => codec_type === 'video',
+    );
+
+    if (!videoStream || videoStream.codec_type !== 'video')
+      throw new Error(
+        'no video stream in this media, not enough informations while probing',
+      );
+
     const createMedia = {
       ...media,
-      duration: Number(probeData.format.duration),
+      duration: Number(probeData.format.duration), // need check
+      bitrate: Number(probeData.format.bit_rate), // need check
+      height: videoStream.height,
+      width: videoStream.width,
     } as CreateMedia;
 
     const mediaDb = await this.prisma.media.upsert({

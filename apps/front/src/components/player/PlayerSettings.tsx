@@ -1,5 +1,6 @@
 import {
   Component,
+  ComponentProps,
   For,
   ParentComponent,
   Show,
@@ -7,7 +8,11 @@ import {
   onCleanup,
   onMount,
 } from "solid-js";
-import { MediaWithStreamsStreamsItem, PlayerSettings } from "../../api/model";
+import {
+  MediaWithStreamsStreamsItem,
+  PlayerResolution,
+  PlayerSettings,
+} from "../../api/model";
 import { ArrowIcon, SettingsIcon } from "../commons/Icons";
 import { createSignal } from "solid-js";
 import clsx from "clsx";
@@ -23,7 +28,9 @@ const SettingType: Component<{
     onClick={() => props.onSelect(props.label)}
   >
     <div>{props.title}</div>
-    <div class="text-nowrap max-w-32 text-ellipsis overflow-clip">{props.value}</div>
+    <div class="text-nowrap max-w-32 text-ellipsis overflow-clip">
+      {props.value}
+    </div>
   </div>
 );
 
@@ -48,9 +55,21 @@ const SettingMenu: ParentComponent<{
   </div>
 );
 
+const SettingItem: ParentComponent<ComponentProps<"div">> = (props) => {
+  return (
+    <div
+      {...props}
+      class="text-nowrap max-w-64 text-ellipsis overflow-clip hover:underline"
+    >
+      {props.children}
+    </div>
+  );
+};
+
 export const SettingsControl: Component<{
   settings: PlayerSettings;
   streams: MediaWithStreamsStreamsItem[];
+  availableResolutions: PlayerResolution[];
   updateSettings: (settings: PlayerSettings) => void;
 }> = (props) => {
   let settingsDiv!: HTMLDivElement;
@@ -111,6 +130,16 @@ export const SettingsControl: Component<{
     closeSettings();
   };
 
+  const selectResolution = (res: PlayerResolution | undefined) => {
+    props.settings.resolution = res;
+    props.updateSettings(props.settings);
+    closeSettings();
+  }
+
+  const resolution = createMemo(
+    () => props.settings.resolution ? `${props.settings.resolution.height}p` : 'Original'
+  );
+
   const foundAudioTrack = createMemo(
     () =>
       props.streams.find(
@@ -166,12 +195,12 @@ export const SettingsControl: Component<{
                 ></SettingType>
               )}
             </Show>
-            {/* <SettingType
+            <SettingType
               title="Quality"
-              value="Original"
+              value={resolution()}
               label="quality"
               onSelect={setSelectedSetting}
-            ></SettingType> */}
+            ></SettingType>
           </div>
           <div
             class="w-full transition-transform"
@@ -190,13 +219,12 @@ export const SettingsControl: Component<{
             >
               <For each={props.streams.filter(({ type }) => type === "audio")}>
                 {(stream) => (
-                  <div
-                    class="text-nowrap max-w-64 text-ellipsis overflow-clip hover:underline"
+                  <SettingItem
                     onClick={() => chooseStream(stream)}
                     title={stream.name}
                   >
                     {stream.name}
-                  </div>
+                  </SettingItem>
                 )}
               </For>
             </SettingMenu>
@@ -210,13 +238,12 @@ export const SettingsControl: Component<{
                 each={props.streams.filter(({ type }) => type === "subtitle")}
               >
                 {(stream) => (
-                  <div
-                    class="text-nowrap max-w-64 text-ellipsis overflow-clip hover:underline"
+                  <SettingItem
                     onClick={() => chooseStream(stream)}
                     title={stream.name}
                   >
                     {stream.name}
-                  </div>
+                  </SettingItem>
                 )}
               </For>
             </SettingMenu>
@@ -226,10 +253,17 @@ export const SettingsControl: Component<{
               close={closeSetting}
               selected={selectedSetting()}
             >
-              <div>Original</div>
-              <div>1080p</div>
-              <div>720p</div>
-              <div>480p</div>
+              <SettingItem title="Original" onClick={() => selectResolution(undefined)}>Original</SettingItem>
+              <For each={props.availableResolutions}>
+                {(res) => (
+                  <SettingItem
+                    onClick={() => selectResolution(res)}
+                    title={`${res.height}p`}
+                  >
+                    {`${res.height}p`}
+                  </SettingItem>
+                )}
+              </For>
             </SettingMenu>
           </div>
         </div>

@@ -908,6 +908,15 @@
             "type": "string",
             "format": "date-time"
           },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bitrate": {
+            "type": "number"
+          },
           "duration": {
             "type": "number"
           }
@@ -918,6 +927,9 @@
           "path",
           "libraryId",
           "createdAt",
+          "width",
+          "height",
+          "bitrate",
           "duration"
         ]
       },
@@ -969,6 +981,15 @@
             "type": "string",
             "format": "date-time"
           },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bitrate": {
+            "type": "number"
+          },
           "duration": {
             "type": "number"
           }
@@ -980,6 +1001,9 @@
           "path",
           "libraryId",
           "createdAt",
+          "width",
+          "height",
+          "bitrate",
           "duration"
         ]
       },
@@ -1006,6 +1030,9 @@
             "items": {
               "$ref": "#/components/schemas/PlayerSettingStream"
             }
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/PlayerResolution"
           }
         },
         "nullable": false,
@@ -1036,6 +1063,25 @@
           "index"
         ]
       },
+      "PlayerResolution": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bitrate": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "width",
+          "height"
+        ]
+      },
       "StartedPlayerInfos": {
         "type": "object",
         "properties": {
@@ -1044,12 +1090,19 @@
           },
           "settings": {
             "$ref": "#/components/schemas/PlayerSettings"
+          },
+          "availableResolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerResolution"
+            }
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "settings"
+          "settings",
+          "availableResolutions"
         ]
       },
       "QueryPlayer": {

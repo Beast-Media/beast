@@ -5,10 +5,12 @@
  * OpenAPI spec version: 0.0.1
  */
 import type { PlayerResolution } from "./playerResolution";
-import type { PlayerSettings } from "./playerSettings";
+import type { PlayerSettingStream } from "./playerSettingStream";
 
-export interface StartedPlayerInfos {
+export interface DefaultPlayerSettings {
   availableResolutions: PlayerResolution[];
-  id: string;
-  settings: PlayerSettings;
+  mediaId: string;
+  resolution?: PlayerResolution;
+  seek: number;
+  streams: PlayerSettingStream[];
 }

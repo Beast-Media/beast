@@ -13,7 +13,7 @@ import {
   postPlayerKeepalive,
   postPlayerStart,
 } from "../../api/endpoints/beast-endpoints";
-import { MediaWithStreams, PlayerSettings } from "../../api/model";
+import { DefaultPlayerSettings, MediaWithStreams, PlayerResolution, PlayerSettings } from "../../api/model";
 import Hls from "hls.js";
 import { createMutable, modifyMutable, reconcile } from "solid-js/store";
 import { ArrowIcon, PauseIcon, PiPIcon, PlayIcon } from "../commons/Icons";
@@ -31,6 +31,7 @@ interface PlayerStatusBase<T extends string> {
   hls: Hls;
   playerId: string;
   settings: PlayerSettings;
+  availableResolutions: PlayerResolution[]
   buffering: boolean;
   playing: boolean;
   absoluteSeek: number;
@@ -260,6 +261,7 @@ export function Player({ mediaId }: { mediaId: string }) {
         buffering: true,
         playing: false,
         absoluteSeek: start.settings.seek,
+        availableResolutions: start.availableResolutions,
         volume: video.volume,
         prevVolume: 0,
         pip: false,
@@ -286,7 +288,7 @@ export function Player({ mediaId }: { mediaId: string }) {
 
   return (
     <div class={clsx("w-full h-screen relative", !player.showControls && 'cursor-none')} onMouseMove={onMouseMove}>
-      <video ref={video} class="w-full h-screen bg-black"></video>
+      <video ref={video} class="w-full h-screen bg-black object-contain"></video>
       <Show
         when={player.status === "mounted" && player}
         fallback={<Loader></Loader>}
@@ -333,6 +335,7 @@ export function Player({ mediaId }: { mediaId: string }) {
                     <SettingsControl
                       streams={player().media.streams}
                       settings={player().settings}
+                      availableResolutions={player().availableResolutions}
                       updateSettings={updateSettings}
                     ></SettingsControl>
                     <VolumeControl
