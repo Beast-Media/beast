@@ -1,0 +1,272 @@
+{
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "url": "https://github.com/samchon/nestia",
+      "description": "insert your server url"
+    }
+  ],
+  "info": {
+    "version": "0.0.1",
+    "title": "@beast/api",
+    "description": "",
+    "license": {
+      "name": "UNLICENSED"
+    }
+  },
+  "paths": {
+    "/tmdb/movie/{id}": {
+      "get": {
+        "tags": [
+          "tmdb"
+        ],
+        "operationId": "getTmdbMovie:id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TMDBMovie.Nullable"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a move from its id"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TMDBMovie.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string"
+          },
+          "poster_path": {
+            "type": "string"
+          },
+          "backdrop_path": {
+            "type": "string",
+            "nullable": true
+          },
+          "adult": {
+            "type": "boolean"
+          },
+          "belongs_to_collection": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              },
+              "poster_path": {
+                "type": "string"
+              },
+              "backdrop_path": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "nullable": true,
+            "required": [
+              "id",
+              "name",
+              "poster_path",
+              "backdrop_path"
+            ]
+          },
+          "budget": {
+            "type": "number"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "nullable": false,
+              "required": [
+                "id",
+                "name"
+              ]
+            }
+          },
+          "homepage": {
+            "type": "string"
+          },
+          "imdb_id": {
+            "type": "string"
+          },
+          "original_language": {
+            "type": "string"
+          },
+          "original_title": {
+            "type": "string"
+          },
+          "production_companies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductionCompany"
+            },
+            "nullable": true
+          },
+          "production_countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductionCountry"
+            }
+          },
+          "release_date": {
+            "type": "string"
+          },
+          "revenue": {
+            "type": "number"
+          },
+          "runtime": {
+            "type": "number"
+          },
+          "spoken_languages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "english_name": {
+                  "type": "string"
+                },
+                "iso_639_1": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "nullable": false,
+              "required": [
+                "english_name",
+                "iso_639_1",
+                "name"
+              ]
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "tagline": {
+            "type": "string"
+          },
+          "video": {
+            "type": "boolean"
+          },
+          "vote_average": {
+            "type": "number"
+          },
+          "vote_count": {
+            "type": "number"
+          },
+          "popularity": {
+            "type": "number"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "title",
+          "overview",
+          "poster_path",
+          "backdrop_path",
+          "adult",
+          "belongs_to_collection",
+          "budget",
+          "genres",
+          "homepage",
+          "imdb_id",
+          "original_language",
+          "original_title",
+          "release_date",
+          "revenue",
+          "runtime",
+          "spoken_languages",
+          "status",
+          "tagline",
+          "video",
+          "popularity"
+        ]
+      },
+      "ProductionCompany": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "logo_path": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "origin_country": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "ProductionCountry": {
+        "type": "object",
+        "properties": {
+          "iso_3166_1": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "iso_3166_1",
+          "name"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

@@ -7,9 +7,9 @@ import {
   QueryLibrary,
 } from './dto/library.dto';
 import { LibraryService } from './library.service';
-import { Library } from '@prisma/client';
 import { Authenticated } from 'src/auth/auth.decorator';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Library } from '@beast/server-db-schemas';
 
 /**
  * Controller for the Libraries

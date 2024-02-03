@@ -1,4 +1,4 @@
-import { Movie } from '@prisma/client';
+import { Movie } from '@beast/server-db-schemas';
 
 export interface MovieDTO extends Movie {}
 

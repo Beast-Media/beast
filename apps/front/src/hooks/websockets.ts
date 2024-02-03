@@ -1,5 +1,5 @@
 import { Accessor, createContext, createSignal, onCleanup, onMount, useContext } from "solid-js";
-import { OutgoingClientMessage, OutgoingServerMessage, OutgoingServerMessageTypeMap, OutgoingServerMessageTypes, decodeOutgoingServerMessage, encodeOutgoingClientMessage } from '@beast/shared'
+import { OutgoingClientMessage, OutgoingServerMessage, OutgoingServerMessageTypeMap, OutgoingServerMessageTypes, decodeOutgoingServerMessage, encodeOutgoingClientMessage } from '@beast/sockets'
 import { getAuthTokens, logout } from "./auth";
 import { Socket, io } from "socket.io-client";
 
@@ -43,7 +43,7 @@ export type MessageEvent = {
 
 export interface SocketInputs {
   request: (data: ArrayBuffer, cb?: (data: ArrayBuffer) => void) => void;
-};
+}
 
 export function provideWebsockets(): WebsocketContext {
   const [state, setState] = createSignal<WebsocketState>({ status: 'open' });

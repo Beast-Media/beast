@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/commons/prisma/prisma.service';
 import { stat } from 'fs/promises';
 import { CreateLibraryDTO, LibraryContent } from './dto/library.dto';
-import { Library } from '@prisma/client';
 import { ShowService } from 'src/show/show.service';
 import { MovieService } from 'src/movie/movie.service';
+import { Library, ServerDBService } from '@beast/server-db-schemas';
 
 @Injectable()
 export class LibraryService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: ServerDBService,
     private showService: ShowService,
     private movieService: MovieService,
   ) {}

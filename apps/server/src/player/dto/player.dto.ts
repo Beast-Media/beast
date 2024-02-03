@@ -1,4 +1,4 @@
-import { Media } from '@prisma/client';
+import { Media } from '@beast/server-db-schemas';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 
 export type PlayerId = string;

@@ -1,19 +1,18 @@
 import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, HttpException, HttpStatus } from '@nestjs/common';
-import { PrismaService } from 'src/commons/prisma/prisma.service';
 import { verify, hash } from 'argon2';
 import jwt from 'jsonwebtoken';
 import { ConfigService } from 'src/config/config.service';
 import { AuthTokens } from './dto/responses';
 import { LoginBody, RefreshBody, RegisterBody } from './dto/bodies';
-import { User } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
+import { ServerDBService, User } from '@beast/server-db-schemas';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
-    private prisma: PrismaService,
+    private prisma: ServerDBService,
     private configService: ConfigService,
   ) {}
 

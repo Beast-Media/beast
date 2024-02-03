@@ -1,4 +1,4 @@
-import { Episode, Prisma, Season, Show } from '@prisma/client';
+import { Episode, Prisma, Season, Show } from '@beast/server-db-schemas';
 
 export interface ShowWithSeasons
   extends Prisma.ShowGetPayload<{ include: { seasons: true } }> {}

@@ -10,8 +10,9 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "swagger": {
-    },
+    "swagger": {},
+    "prisma:gen": {},
+    "prisma:push": {},
     "dev": {
       "dotEnv": [".env.production.local", ".env.local", ".env.production", ".env"],
       "cache": false,

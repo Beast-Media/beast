@@ -1,20 +1,25 @@
-import { ParentComponent, Show } from "solid-js";
+import { ParentComponent } from "solid-js";
 import { Sidebar } from "../Sidebar";
-import { useWebsockets } from "../../hooks/websockets";
+import { TopBar } from "../TopBar";
 
 export const MainLayout: ParentComponent = ({ children }) => {
-  const { state } = useWebsockets();
-
   return (
-    // <Show when={state().status === 'connected'} fallback="LOADING">
-      <div class="flex w-full">
-        <div class="flex flex-col h-screen bg-red-600 max-w-[200px] w-full">
+      <div class="grid w-full h-screen" style={{ 
+        "grid-template": `
+          "t t" 60px
+          "s c" calc(100% - 60px)
+          / 200px calc(100% - 200px)
+        ` 
+        }}>
+        <div style={{ "grid-area": 't' }}>
+          <TopBar></TopBar>
+        </div>
+        <div style={{ "grid-area": 's' }} class="overflow-y-auto">
           <Sidebar></Sidebar>
         </div>
-        <div class="flex flex-col h-screen bg-blue-400 flex-grow">
-          <div class="h-full overflow-y-scroll">{children}</div>
+        <div style={{ "grid-area": 'c' }} class="overflow-y-auto">
+          {children}
         </div>
       </div>
-    // </Show>
   );
 };

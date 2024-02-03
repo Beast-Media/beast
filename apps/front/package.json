@@ -10,7 +10,7 @@
     "swagger": "otqs"
   },
   "dependencies": {
-    "@beast/shared": "^1.0.0",
+    "@beast/sockets": "^1.0.0",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@modular-forms/solid": "^0.20.0",
     "@solid-primitives/scheduled": "^1.4.2",
@@ -18,7 +18,7 @@
     "@tanstack/solid-query": "^5.17.15",
     "axios": "^1.6.5",
     "clsx": "^2.0.0",
-    "dashjs": "^4.7.3",
+    "dashjs": "^4.7.2",
     "dayjs": "^1.11.10",
     "hls.js": "^1.5.2",
     "otqs": "^1.0.0",

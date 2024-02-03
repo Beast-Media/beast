@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/commons/prisma/prisma.service';
-import { Media } from '@prisma/client';
+import { Media, ServerDBService } from '@beast/server-db-schemas';
 import { CreateMedia, IndexingMedia, MediaWithStreams } from './dto/media.dto';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
@@ -8,7 +7,7 @@ import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
 @Injectable()
 export class MediaService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: ServerDBService,
     private ffmpegService: FFmpegService,
   ) {}
 

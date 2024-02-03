@@ -15,7 +15,6 @@ export class ConfigService {
       'METADATAS_PATH',
       'TRANSCODE_PATH',
       'AUTH_JWT_SECRET',
-      'TMDB_READ_ACCESS_TOKEN',
     ];
 
     for (const variable of variables) {
@@ -45,9 +44,5 @@ export class ConfigService {
 
   getTranscodePath() {
     return this.getValueOrThrow('TRANSCODE_PATH');
-  }
-
-  getTMDBAccessToken() {
-    return this.getValueOrThrow('TMDB_READ_ACCESS_TOKEN');
   }
 }

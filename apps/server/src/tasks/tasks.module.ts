@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { AppLoggerModule } from 'src/commons/log/logger.module';
 import { ShowModule } from 'src/show/show.module';
 import { MovieModule } from 'src/movie/movie.module';
+import { AppLoggerModule } from '@beast/nestjs-commons';
 
 @Global()
 @Module({

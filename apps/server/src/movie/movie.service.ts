@@ -1,21 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Library, Movie } from '@prisma/client';
-import { PrismaService } from 'src/commons/prisma/prisma.service';
+import { Library, Movie, ServerDBService } from '@beast/server-db-schemas';
 import { ConfigService } from 'src/config/config.service';
 import { MovieDTO } from './dto/movie.dto';
 import { mkdir, readdir } from 'fs/promises';
 import { join } from 'path';
 import { TasksService } from 'src/tasks/tasks.service';
-import { TMDBService } from 'src/tmdb/tmdb.service';
 import { MediaService } from 'src/media/media.service';
 import sharp, { ResizeOptions } from 'sharp';
 import { createHash } from 'crypto';
 import { writeFile } from 'fs/promises';
+import { TMDBService } from '@beast/tmdb';
 
 @Injectable()
 export class MovieService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: ServerDBService,
     private tmdb: TMDBService,
     private tasksService: TasksService,
     private mediaService: MediaService,

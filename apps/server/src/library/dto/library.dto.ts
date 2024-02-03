@@ -1,4 +1,4 @@
-import { Library, Movie, Show } from '@prisma/client';
+import { Library, Movie, Show } from '@beast/server-db-schemas';
 
 export interface CreateLibraryDTO extends Omit<Library, 'id' | 'createdAt'> {}
 

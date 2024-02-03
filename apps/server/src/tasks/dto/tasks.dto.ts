@@ -1,4 +1,4 @@
-import { Library } from '@prisma/client';
+import { Library } from '@beast/server-db-schemas';
 
 export interface IndexShowTask {
   name: 'index_show';

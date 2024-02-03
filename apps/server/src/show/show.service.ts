@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/commons/prisma/prisma.service';
-import { Episode, Library, Season, Show } from '@prisma/client';
 import {
   SeasonWithEpisodes,
   ShowWithLibrary,
@@ -16,6 +14,13 @@ import { MediaService } from 'src/media/media.service';
 import { IndexingMedia } from 'src/media/dto/media.dto';
 import { TasksService } from 'src/tasks/tasks.service';
 import sharp, { ResizeOptions } from 'sharp';
+import {
+  Episode,
+  Library,
+  Season,
+  ServerDBService,
+  Show,
+} from '@beast/server-db-schemas';
 
 interface TvShowMatch {
   seriesTitle: string;
@@ -48,7 +53,7 @@ interface ComposedShow {
 @Injectable()
 export class ShowService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: ServerDBService,
     private tvmaze: TVMazeService,
     private configService: ConfigService,
     private mediaService: MediaService,

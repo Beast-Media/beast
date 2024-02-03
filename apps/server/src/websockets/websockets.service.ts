@@ -3,18 +3,18 @@ import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { AppLogger } from 'src/commons/log/logger';
 import killport from 'kill-port';
-import {
-  OutgoingClientMessage,
-  OutgoingServerMessage,
-  decodeOutgoingClientMessage,
-} from '@beast/shared';
-import { encodeOutgoingServerMessage } from '@beast/shared';
 import { Server, Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { ConfigService } from 'src/config/config.service';
 import { PlayerService } from 'src/player/player.service';
+import { AppLogger } from '@beast/nestjs-commons';
+import {
+  OutgoingClientMessage,
+  OutgoingServerMessage,
+  decodeOutgoingClientMessage,
+  encodeOutgoingServerMessage,
+} from '@beast/sockets';
 
 interface WsSession {
   access_token: string;

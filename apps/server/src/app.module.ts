@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppLoggerModule } from './commons/log/logger.module';
+import { AppLoggerModule } from '@beast/nestjs-commons';
 import { RequestContextModule } from 'nestjs-request-context';
 import { LibraryModule } from './library/library.module';
 import { ConfigModule } from './config/config.module';

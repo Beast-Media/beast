@@ -1,4 +1,4 @@
-import { Media, Prisma } from '@prisma/client';
+import { Media, Prisma } from '@beast/server-db-schemas';
 
 export interface MediaDTO extends Media {}
 

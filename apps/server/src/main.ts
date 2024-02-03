@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import swaggerDocument from './swagger.json';
 import { SwaggerModule } from '@nestjs/swagger';
 import {
@@ -11,6 +10,7 @@ import { HttpException, HttpStatus, ShutdownSignal } from '@nestjs/common';
 import { join, resolve } from 'path';
 import { ConfigService } from './config/config.service';
 import { fastifyStatic } from '@fastify/static';
+import { initLogger } from '@beast/nestjs-commons';
 
 async function bootstrap() {
   process.on('unhandledRejection', (reason, p) => {
@@ -81,8 +81,8 @@ async function bootstrap() {
     next();
   });
 
-  app.useLogger(app.get(Logger));
-  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  initLogger(app);
+
   app.enableShutdownHooks([ShutdownSignal.SIGTERM, ShutdownSignal.SIGINT]);
   await app.listen(3000, '0.0.0.0');
 }

@@ -10,7 +10,7 @@ WORKDIR /app
 RUN npm i -g turbo
 
 COPY package*.json ./
-COPY /apps/backend/package*.json ./
+COPY /apps/server/package*.json ./
 
 RUN npm install
 COPY . .

@@ -13,17 +13,17 @@ import {
   postPlayerKeepalive,
   postPlayerStart,
 } from "../../api/endpoints/beast-endpoints";
-import { DefaultPlayerSettings, MediaWithStreams, PlayerResolution, PlayerSettings } from "../../api/model";
+import { MediaWithStreams, PlayerResolution, PlayerSettings } from "../../api/model";
 import Hls from "hls.js";
 import { createMutable, modifyMutable, reconcile } from "solid-js/store";
 import { ArrowIcon, PauseIcon, PiPIcon, PlayIcon } from "../commons/Icons";
-import { Logo } from "../commons/Logo";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { SettingsControl } from "./PlayerSettings";
 import { VolumeControl } from "./PlayerVolume";
 import { Slider } from "./PlayerSlider";
 import { debounce } from "@solid-primitives/scheduled";
+import { Logo } from "../commons/Logo";
 
 interface PlayerStatusBase<T extends string> {
   status: T;
