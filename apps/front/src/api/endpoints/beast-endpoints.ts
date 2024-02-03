@@ -23,6 +23,7 @@ import type {
   GetLibraryScanParams,
   GetMediaDetailParams,
   GetMediaParams,
+  GetMovieParams,
   GetShowEpisodeParams,
   GetShowParams,
   GetShowSeasonParams,
@@ -31,6 +32,7 @@ import type {
   LoginBody,
   MediaDTO,
   MediaWithStreams,
+  MovieDTO,
   PlayerSettings,
   PostPlayerEndParams,
   PostPlayerKeepaliveParams,
@@ -823,6 +825,78 @@ export const createGetMediaDetail = <
   const query = createQuery(() => {
     const opts = options?.() || {};
     return getGetMediaDetailQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+/**
+ * Get the informations of a movie
+ */
+export const getMovie = (
+  params: GetMovieParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MovieDTO>(
+    { url: `http://localhost:3000/movie`, method: "GET", params, signal },
+    options,
+  );
+};
+
+export const getGetMovieQueryKey = (params: GetMovieParams) => {
+  return [`http://localhost:3000/movie`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetMovieQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMovie>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMovieParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<Awaited<ReturnType<typeof getMovie>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMovieQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMovie>>> = ({
+    signal,
+  }) => getMovie(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMovie>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMovieQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMovie>>
+>;
+export type GetMovieQueryError = ErrorType<unknown>;
+
+export const createGetMovie = <
+  TData = Awaited<ReturnType<typeof getMovie>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMovieParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<Awaited<ReturnType<typeof getMovie>>, TError, TData>
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMovieQueryOptions(opts["params"], opts["options"]);
   }) as CreateQueryResult<TData, TError>;
 
   return query;

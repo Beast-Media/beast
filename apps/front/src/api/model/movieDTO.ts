@@ -5,7 +5,7 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type LibraryContentMovieData = {
+export interface MovieDTO {
   id: string;
   images: string[];
   libraryId: string;
@@ -13,4 +13,4 @@ export type LibraryContentMovieData = {
   name: string;
   overview: string | null;
   tmdbId: number;
-};
+}

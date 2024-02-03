@@ -84,22 +84,22 @@ model Season {
   name          String
   season_number Int
 
-  overview String?
-  episodes Episode[]
-  show     Show      @relation(fields: [showId], references: [id])
-  showId   String
-  images    String[]
+  overview      String?
+  episodes      Episode[]
+  show          Show      @relation(fields: [showId], references: [id])
+  showId        String
+  images        String[]
 
   @@unique([showId, season_number])
 }
 
 model Show {
-  id       String   @id @unique @default(uuid())
-  tvmazeId Int      @unique
-  name     String
-  path     String
-  overview String?
-  seasons  Season[]
+  id        String   @id @unique @default(uuid())
+  tvmazeId  Int      @unique
+  name      String
+  path      String
+  overview  String?
+  seasons   Season[]
   images    String[]
 
   library   Library @relation(fields: [libraryId], references: [id])
@@ -110,6 +110,10 @@ model Movie {
   id       String  @id @unique @default(uuid())
   name     String
   overview String?
+  images   String[]
+  tmdbId   Int     @unique
+
+
   media    Media   @relation(fields: [mediaId], references: [id])
   mediaId  String  @unique
 

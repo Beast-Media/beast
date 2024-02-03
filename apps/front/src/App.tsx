@@ -7,10 +7,11 @@ import { Register } from "./components/auth/Register";
 import { ParentComponent, createEffect } from "solid-js";
 import { isLoggedIn } from "./hooks/auth";
 import { Library } from "./components/Library";
-import { TVShow } from "./components/Show";
-import { Season } from "./components/Season";
-import { Episode } from "./components/Episode";
+import { TVShow } from "./components/show/Show";
+import { Season } from "./components/show/Season";
+import { Episode } from "./components/show/Episode";
 import { Media } from "./components/Media";
+import { Movie } from "./components/movie/Movie";
 
 const AuthenticatedGuard: ParentComponent = ({ children }) => {
   const navigate = useNavigate();
@@ -56,6 +57,14 @@ export default function App() {
             component={() => (
               <MainLayout>
                 <Library></Library>
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/movie/:id"
+            component={() => (
+              <MainLayout>
+                <Movie></Movie>
               </MainLayout>
             )}
           />
