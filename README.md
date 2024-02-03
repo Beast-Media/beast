@@ -1,9 +1,9 @@
 # Beast
 
-Beast is a free media server software that allows to stream you local media library to all of your devices and friends.
+Beast is a free media server software that allows you to stream your local media library to all of your devices and friends.
 It organizes movie and television content and adds posters, plot summaries, cast and crew lists, technical details, critical reviews, and subtitles.
 Beast is also capable of transcoding files if the codec is incompatible with the device playing the media.
-It can run on any linux system and supports docker
+It can run on any linux system and supports docker.
 
 # Building & Contributing
 

@@ -19,7 +19,7 @@ git clone https://github.com/loucass003/beast.
 
 - Run ``npm install`` in your terminal.
 - make your own ``.env`` file from the ``.env.template`` template file (all instructions inside).
-- We provide a ``docker-compose.yml`` file help you setup a postgres database, simply run it using ``docker-compose up -d``.
+- We provide a ``docker-compose.yml`` file that help you setup a postgres database, simply run it using ``docker-compose up -d``.
 - To launch the project in dev mode, run ``npm run dev``.
 - Finally to compile for production run ``npm run build``.
 > Note that building for production is not needed as no official builds exists yet.
@@ -29,7 +29,7 @@ git clone https://github.com/loucass003/beast.
 Frontend -> http://locahost:5173
 
 Backend Swagger -> http://localhost:3000/api
-> We recommend you do go check it, it is really usefull to test your endpoints and stuff
+> We recommend you do go check it, it is really useful to test your endpoints and stuff
 
 ## Code Style
 
@@ -37,7 +37,7 @@ We use ESLint and Prettier to format our code.
 
 - You can run ``npm run lint`` to check for formatting, it will also fix the fixable problems.
 
-## Usefull commands
+## Useful commands
 
 ### Updating Swagger / Models
 When changing controllers and DTOs you need to run ``npm run swagger`` to update the swagger definition of the backend and also generate the new models of the frontend based on it.
