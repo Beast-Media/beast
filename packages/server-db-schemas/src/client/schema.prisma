@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../src/client"
+  output   = "../src/client"
 }
 
 datasource db {
@@ -21,43 +21,44 @@ enum StreamType {
 }
 
 model Library {
-  id        String      @id @unique @default(uuid())
-  type      LibraryType
-  name      String      @unique
-  path      String      @unique
-  medias    Media[]
-  createdAt DateTime    @default(now())
+  id            String      @id @unique @default(uuid())
+  type          LibraryType
+  name          String      @unique
+  path          String      @unique
+  medias        Media[]
+  createdAt     DateTime    @default(now())
 
-  shows  Show[]
-  movies Movie[]
+  shows         Show[]
+  movies        Movie[]
+  libraryAccess LibraryAccess[]
 }
 
 model Stream {
-  id            String  @id @unique @default(uuid())
-  name          String
-  streamIndex   Int
-  type          StreamType
-  
-  media         Media?  @relation(fields: [mediaId], references: [id])
-  mediaId       String?
+  id          String     @id @unique @default(uuid())
+  name        String
+  streamIndex Int
+  type        StreamType
+
+  media       Media?  @relation(fields: [mediaId], references: [id])
+  mediaId     String?
 
   @@unique([mediaId, streamIndex])
 }
 
 model Media {
-  id              String          @id @unique @default(uuid())
-  path            String          @unique
-  library         Library         @relation(fields: [libraryId], references: [id])
-  libraryId       String
-  createdAt       DateTime        @default(now())
-  streams         Stream[]
-  width           Int
-  height          Int
-  bitrate         Int
-  duration        Float
+  id        String   @id @unique @default(uuid())
+  path      String   @unique
+  library   Library  @relation(fields: [libraryId], references: [id])
+  libraryId String
+  createdAt DateTime @default(now())
+  streams   Stream[]
+  width     Int
+  height    Int
+  bitrate   Int
+  duration  Float
 
-  episode         Episode?
-  movie           Movie?
+  episode   Episode?
+  movie     Movie?
 }
 
 model Episode {
@@ -92,36 +93,59 @@ model Season {
 }
 
 model Show {
-  id        String   @id @unique @default(uuid())
-  tvmazeId  Int      @unique
-  name      String
-  path      String
-  overview  String?
-  seasons   Season[]
-  images    String[]
+  id            String   @id @unique @default(uuid())
+  tvmazeId      Int      @unique
+  name          String
+  path          String
+  overview      String?
+  seasons       Season[]
+  images        String[]
 
-  library   Library @relation(fields: [libraryId], references: [id])
-  libraryId String
+  library       Library @relation(fields: [libraryId], references: [id])
+  libraryId     String
 }
 
 model Movie {
-  id       String  @id @unique @default(uuid())
-  name     String
-  overview String?
-  images   String[]
-  tmdbId   Int     @unique
+  id            String   @id @unique @default(uuid())
+  name          String
+  overview      String?
+  images        String[]
+  tmdbId        Int      @unique
 
+  media         Media  @relation(fields: [mediaId], references: [id])
+  mediaId       String @unique
 
-  media    Media   @relation(fields: [mediaId], references: [id])
-  mediaId  String  @unique
-
-  library   Library @relation(fields: [libraryId], references: [id])
-  libraryId String
+  library       Library @relation(fields: [libraryId], references: [id])
+  libraryId     String
 }
 
 model User {
-  id String @id @unique @default(uuid())
+  id            String @id @unique @default(uuid())
 
-  username String @unique
-  password String
+  username      String @unique
+  password      String
+  isOwner       Boolean
+
+  user          LibraryAccess[]
+}
+
+model Server {
+  id            String @id @unique @default(uuid())
+  name          String
+}
+
+enum LibraryAccessType {
+  READ
+  WRITE
+}
+
+model LibraryAccess {
+  id          String @id @unique @default(uuid())
+
+  library     Library @relation(fields: [libraryId], references: [id])
+  libraryId   String
+
+  user        User @relation(fields: [userId], references: [id])
+  userId      String
+  access      LibraryAccessType
 }

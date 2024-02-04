@@ -52,6 +52,16 @@ export class AuthController {
         body.refresh_token,
         this.configService.getAuthJWTSecret(),
       ) as { user: { id: string } };
+
+      const foundUser = await this.prisma.user.findFirst({
+        where: { id: res.user.id },
+      });
+      if (!foundUser)
+        throw new HttpException(
+          'invalid refresh token - user does not exists',
+          HttpStatus.FORBIDDEN,
+        );
+
       return this.createTokens(res.user.id);
     } catch {
       throw new HttpException('invalid refresh token', HttpStatus.FORBIDDEN);
@@ -65,11 +75,14 @@ export class AuthController {
     });
     if (foundUser) return false;
 
+    const isFisrtUser = (await this.prisma.user.count()) === 0;
+
     try {
       await this.prisma.user.create({
         data: {
           username: body.username,
           password: await hash(body.password),
+          isOwner: isFisrtUser,
         },
       });
 

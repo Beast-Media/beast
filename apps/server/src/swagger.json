@@ -8,7 +8,7 @@
   ],
   "info": {
     "version": "0.0.1",
-    "title": "@beast/backend",
+    "title": "@beast/server",
     "description": "",
     "license": {
       "name": "UNLICENSED"
@@ -156,7 +156,7 @@
             }
           }
         },
-        "description": "List all libraries",
+        "description": "List all accessible libraries",
         "security": [
           {
             "bearer": []
@@ -187,13 +187,109 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "oneOf": [
+                    {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "$ref": "#/components/schemas/LibraryType"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "nullable": false,
+                      "required": [
+                        "id",
+                        "type",
+                        "name",
+                        "path",
+                        "createdAt"
+                      ]
+                    }
+                  ]
                 }
               }
             }
           }
         },
-        "description": "Create a new library and start scanning it",
+        "description": "create a new library",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/library/access": {
+      "post": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "postLibraryAccess",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditLibraryPermissions"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "libraryId": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "string"
+                      },
+                      "access": {
+                        "$ref": "#/components/schemas/LibraryAccessType"
+                      }
+                    },
+                    "nullable": false,
+                    "required": [
+                      "id",
+                      "libraryId",
+                      "userId",
+                      "access"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
         "security": [
           {
             "bearer": []
@@ -517,6 +613,36 @@
         ]
       }
     },
+    "/settings/init": {
+      "post": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "postSettingsInit",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitServerBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "description": "Save the minimum required informations to use this server",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/show": {
       "get": {
         "tags": [
@@ -756,6 +882,71 @@
           "type",
           "name",
           "path"
+        ]
+      },
+      "EditLibraryPermissions": {
+        "type": "object",
+        "properties": {
+          "libraryId": {
+            "type": "string"
+          },
+          "add": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "access": {
+                  "type": "string",
+                  "enum": [
+                    "READ",
+                    "WRITE"
+                  ]
+                }
+              },
+              "nullable": false,
+              "required": [
+                "userId",
+                "access"
+              ]
+            }
+          },
+          "remove": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "access": {
+                  "type": "string",
+                  "enum": [
+                    "READ",
+                    "WRITE"
+                  ]
+                }
+              },
+              "nullable": false,
+              "required": [
+                "userId",
+                "access"
+              ]
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "libraryId"
+        ]
+      },
+      "LibraryAccessType": {
+        "type": "string",
+        "enum": [
+          "READ",
+          "WRITE"
         ]
       },
       "QueryLibrary": {
@@ -1214,6 +1405,18 @@
         "nullable": false,
         "required": [
           "id"
+        ]
+      },
+      "InitServerBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name"
         ]
       },
       "QueryShow": {

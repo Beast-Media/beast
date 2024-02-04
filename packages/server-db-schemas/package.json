@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "exports": "./dist/index.js",
   "scripts": {
-    "copy-client": "cp -r src/client dist/client",
+    "copy-client": "rm -rf dist/client && cp -r src/client dist/client",
     "build": "tsc -b ./tsconfig.json && npm run copy-client",
     "dev": "npm run copy-client && tsc  -b ./tsconfig.json --watch",
     "format": "prettier --ignore-path .gitignore -w .",

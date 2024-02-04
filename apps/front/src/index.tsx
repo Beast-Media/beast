@@ -6,8 +6,6 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { ParentComponent } from "solid-js";
 import { WebsocketContextC, provideWebsockets } from "./hooks/websockets";
-import dayjs from 'dayjs';
-
 
 const root = document.getElementById("root");
 

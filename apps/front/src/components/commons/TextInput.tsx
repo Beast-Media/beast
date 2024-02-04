@@ -25,7 +25,7 @@ export function TextInput(props: TextInputProps) {
       )}
       <input
         {...inputProps}
-        class="bg-gray-600 rounded-md p-2"
+        class="bg-beast-bg-1 rounded-md p-2"
         id={props.name}
         value={props.value || ""}
         aria-invalid={!!props.error}

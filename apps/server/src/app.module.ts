@@ -11,9 +11,14 @@ import { MediaModule } from './media/media.module';
 import { WebsocketModule } from './websockets/websockets.module';
 import { PlayerModule } from './player/player.module';
 import { TasksModule } from './tasks/tasks.module';
+import { OwnerGuard } from './auth/owner.guard';
+import { ServerDBModule } from '@beast/server-db-schemas';
+import { SettingsModule } from './settings/settings.module';
+import { LibraryAccessGuard } from './library/library-access.guard';
 
 @Module({
   imports: [
+    ServerDBModule,
     ConfigModule,
     RequestContextModule,
     AppLoggerModule,
@@ -24,6 +29,7 @@ import { TasksModule } from './tasks/tasks.module';
     ShowModule,
     MediaModule,
     TasksModule,
+    SettingsModule,
   ],
   controllers: [],
   providers: [
@@ -31,6 +37,11 @@ import { TasksModule } from './tasks/tasks.module';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: OwnerGuard,
+    },
+    { provide: APP_GUARD, useClass: LibraryAccessGuard },
   ],
 })
 export class AppModule {}

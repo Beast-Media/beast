@@ -1,4 +1,10 @@
-import { Library, Movie, Show } from '@beast/server-db-schemas';
+import {
+  Library,
+  LibraryAccessType,
+  Movie,
+  Show,
+  User,
+} from '@beast/server-db-schemas';
 
 export interface CreateLibraryDTO extends Omit<Library, 'id' | 'createdAt'> {}
 
@@ -16,4 +22,10 @@ export type LibraryContent = LibraryContentShow[] | LibraryContentMovie[];
 
 export interface QueryLibrary {
   libraryId: Library['id'];
+}
+
+export interface EditLibraryPermissions {
+  libraryId: Library['id'];
+  add?: { userId: User['id']; access: LibraryAccessType }[];
+  remove?: { userId: User['id']; access: LibraryAccessType }[];
 }

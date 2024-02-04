@@ -2,14 +2,17 @@ import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
 import {
   CreateLibraryDTO,
+  EditLibraryPermissions,
   LibraryContent,
   LibraryDTO,
   QueryLibrary,
 } from './dto/library.dto';
 import { LibraryService } from './library.service';
-import { Authenticated } from 'src/auth/auth.decorator';
+import { Authenticated, User, IsOwner } from 'src/auth/auth.decorator';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { Library } from '@beast/server-db-schemas';
+import { Library, LibraryAccessType } from '@beast/server-db-schemas';
+import { UserSession } from 'src/auth/dto/session';
+import { HasLibraryAccess } from './library-access.decorator';
 
 /**
  * Controller for the Libraries
@@ -22,27 +25,43 @@ export class LibraryController {
   constructor(public libraryService: LibraryService) {}
 
   /**
-   * List all libraries
+   * List all accessible libraries
    */
   @TypedRoute.Get('/all')
-  public async libraries(): Promise<Library[]> {
-    return this.libraryService.getLibraries();
+  public async libraries(@User() user: UserSession): Promise<Library[]> {
+    return this.libraryService.getAccessibleLibraries(user.id);
   }
 
   /**
-   * Create a new library and start scanning it
+   * create a new library
    */
-  @TypedRoute.Post('new')
+  @IsOwner()
+  @TypedRoute.Post('/new')
   public async newLibrary(
-    @TypedBody() createDto: CreateLibraryDTO,
+    @TypedBody() body: CreateLibraryDTO,
+  ): Promise<Library | false> {
+    return this.libraryService.createLibrary(body);
+  }
+
+  @IsOwner()
+  @TypedRoute.Post('/access')
+  public async access(
+    @TypedBody() body: EditLibraryPermissions,
   ): Promise<boolean> {
-    return this.libraryService.createLibrary(createDto);
+    if (body.add) await this.libraryService.addAccess(body.libraryId, body.add);
+    if (body.remove)
+      await this.libraryService.removeAccess(body.libraryId, body.remove);
+    return true;
   }
 
   /**
    * Scan library, check and update missing metadatas or medias
    */
   @TypedRoute.Get('scan')
+  @HasLibraryAccess<QueryLibrary>(LibraryAccessType.WRITE, {
+    from: 'LIBRARY',
+    id: 'libraryId',
+  })
   public async scan(@TypedQuery() query: QueryLibrary): Promise<boolean> {
     try {
       const library = await this.libraryService.getLibrary(query.libraryId);
@@ -58,6 +77,10 @@ export class LibraryController {
    * Get the Library data from its id
    */
   @TypedRoute.Get('/')
+  @HasLibraryAccess<QueryLibrary>(LibraryAccessType.READ, {
+    from: 'LIBRARY',
+    id: 'libraryId',
+  })
   public async library(@TypedQuery() query: QueryLibrary): Promise<LibraryDTO> {
     return this.libraryService.getLibrary(query.libraryId);
   }
@@ -66,6 +89,10 @@ export class LibraryController {
    * Get the Library data from its id
    */
   @TypedRoute.Get('/content')
+  @HasLibraryAccess<QueryLibrary>(LibraryAccessType.READ, {
+    from: 'LIBRARY',
+    id: 'libraryId',
+  })
   public async libraryContent(
     @TypedQuery() query: QueryLibrary,
   ): Promise<LibraryContent> {

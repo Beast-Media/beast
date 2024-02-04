@@ -3,20 +3,15 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: ValeraRound;
-  src: url(/VarelaRound-Regular.ttf);
+  font-family: Roboto;
+  src: url(/fonts/Roboto-Regular.ttf);
 }
 
 body {
-  font-family: ValeraRound, sans-serif;
+  font-family: Roboto, sans-serif;
 
   /* scrollbar-color: theme('colors.beast-bg-2') theme('colors.beast-bg-3'); */
   scrollbar-width: thin;
-}
-
-html,
-body {
-  overscroll-behavior-x: none;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -53,4 +48,9 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: theme('colors.beast-bg-3');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubuntu-R.woff2') format('woff2');
 }

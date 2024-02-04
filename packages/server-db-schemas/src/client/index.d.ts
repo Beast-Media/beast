@@ -53,6 +53,16 @@ export type Movie = $Result.DefaultSelection<Prisma.$MoviePayload>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model Server
+ * 
+ */
+export type Server = $Result.DefaultSelection<Prisma.$ServerPayload>
+/**
+ * Model LibraryAccess
+ * 
+ */
+export type LibraryAccess = $Result.DefaultSelection<Prisma.$LibraryAccessPayload>
 
 /**
  * Enums
@@ -75,6 +85,14 @@ export const StreamType: {
 
 export type StreamType = (typeof StreamType)[keyof typeof StreamType]
 
+
+export const LibraryAccessType: {
+  READ: 'READ',
+  WRITE: 'WRITE'
+};
+
+export type LibraryAccessType = (typeof LibraryAccessType)[keyof typeof LibraryAccessType]
+
 }
 
 export type LibraryType = $Enums.LibraryType
@@ -84,6 +102,10 @@ export const LibraryType: typeof $Enums.LibraryType
 export type StreamType = $Enums.StreamType
 
 export const StreamType: typeof $Enums.StreamType
+
+export type LibraryAccessType = $Enums.LibraryAccessType
+
+export const LibraryAccessType: typeof $Enums.LibraryAccessType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -286,6 +308,26 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs>;
+
+  /**
+   * `prisma.server`: Exposes CRUD operations for the **Server** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Servers
+    * const servers = await prisma.server.findMany()
+    * ```
+    */
+  get server(): Prisma.ServerDelegate<ExtArgs>;
+
+  /**
+   * `prisma.libraryAccess`: Exposes CRUD operations for the **LibraryAccess** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LibraryAccesses
+    * const libraryAccesses = await prisma.libraryAccess.findMany()
+    * ```
+    */
+  get libraryAccess(): Prisma.LibraryAccessDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -763,7 +805,9 @@ export namespace Prisma {
     Season: 'Season',
     Show: 'Show',
     Movie: 'Movie',
-    User: 'User'
+    User: 'User',
+    Server: 'Server',
+    LibraryAccess: 'LibraryAccess'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -780,7 +824,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'library' | 'stream' | 'media' | 'episode' | 'season' | 'show' | 'movie' | 'user'
+      modelProps: 'library' | 'stream' | 'media' | 'episode' | 'season' | 'show' | 'movie' | 'user' | 'server' | 'libraryAccess'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1312,6 +1356,138 @@ export namespace Prisma {
           }
         }
       }
+      Server: {
+        payload: Prisma.$ServerPayload<ExtArgs>
+        fields: Prisma.ServerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ServerFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ServerFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>
+          }
+          findFirst: {
+            args: Prisma.ServerFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ServerFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>
+          }
+          findMany: {
+            args: Prisma.ServerFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>[]
+          }
+          create: {
+            args: Prisma.ServerCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>
+          }
+          createMany: {
+            args: Prisma.ServerCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.ServerDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>
+          }
+          update: {
+            args: Prisma.ServerUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>
+          }
+          deleteMany: {
+            args: Prisma.ServerDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ServerUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.ServerUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$ServerPayload>
+          }
+          aggregate: {
+            args: Prisma.ServerAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateServer>
+          }
+          groupBy: {
+            args: Prisma.ServerGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<ServerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ServerCountArgs<ExtArgs>,
+            result: $Utils.Optional<ServerCountAggregateOutputType> | number
+          }
+        }
+      }
+      LibraryAccess: {
+        payload: Prisma.$LibraryAccessPayload<ExtArgs>
+        fields: Prisma.LibraryAccessFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LibraryAccessFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LibraryAccessFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>
+          }
+          findFirst: {
+            args: Prisma.LibraryAccessFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LibraryAccessFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>
+          }
+          findMany: {
+            args: Prisma.LibraryAccessFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>[]
+          }
+          create: {
+            args: Prisma.LibraryAccessCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>
+          }
+          createMany: {
+            args: Prisma.LibraryAccessCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.LibraryAccessDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>
+          }
+          update: {
+            args: Prisma.LibraryAccessUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>
+          }
+          deleteMany: {
+            args: Prisma.LibraryAccessDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LibraryAccessUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.LibraryAccessUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$LibraryAccessPayload>
+          }
+          aggregate: {
+            args: Prisma.LibraryAccessAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateLibraryAccess>
+          }
+          groupBy: {
+            args: Prisma.LibraryAccessGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<LibraryAccessGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LibraryAccessCountArgs<ExtArgs>,
+            result: $Utils.Optional<LibraryAccessCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1464,12 +1640,14 @@ export namespace Prisma {
     medias: number
     shows: number
     movies: number
+    libraryAccess: number
   }
 
   export type LibraryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     medias?: boolean | LibraryCountOutputTypeCountMediasArgs
     shows?: boolean | LibraryCountOutputTypeCountShowsArgs
     movies?: boolean | LibraryCountOutputTypeCountMoviesArgs
+    libraryAccess?: boolean | LibraryCountOutputTypeCountLibraryAccessArgs
   }
 
   // Custom InputTypes
@@ -1506,6 +1684,14 @@ export namespace Prisma {
    */
   export type LibraryCountOutputTypeCountMoviesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MovieWhereInput
+  }
+
+
+  /**
+   * LibraryCountOutputType without action
+   */
+  export type LibraryCountOutputTypeCountLibraryAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LibraryAccessWhereInput
   }
 
 
@@ -1608,6 +1794,40 @@ export namespace Prisma {
    */
   export type ShowCountOutputTypeCountSeasonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SeasonWhereInput
+  }
+
+
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    user: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserCountOutputTypeCountUserArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LibraryAccessWhereInput
   }
 
 
@@ -1783,6 +2003,7 @@ export namespace Prisma {
     medias?: boolean | Library$mediasArgs<ExtArgs>
     shows?: boolean | Library$showsArgs<ExtArgs>
     movies?: boolean | Library$moviesArgs<ExtArgs>
+    libraryAccess?: boolean | Library$libraryAccessArgs<ExtArgs>
     _count?: boolean | LibraryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["library"]>
 
@@ -1798,6 +2019,7 @@ export namespace Prisma {
     medias?: boolean | Library$mediasArgs<ExtArgs>
     shows?: boolean | Library$showsArgs<ExtArgs>
     movies?: boolean | Library$moviesArgs<ExtArgs>
+    libraryAccess?: boolean | Library$libraryAccessArgs<ExtArgs>
     _count?: boolean | LibraryCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1808,6 +2030,7 @@ export namespace Prisma {
       medias: Prisma.$MediaPayload<ExtArgs>[]
       shows: Prisma.$ShowPayload<ExtArgs>[]
       movies: Prisma.$MoviePayload<ExtArgs>[]
+      libraryAccess: Prisma.$LibraryAccessPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2185,6 +2408,8 @@ export namespace Prisma {
     shows<T extends Library$showsArgs<ExtArgs> = {}>(args?: Subset<T, Library$showsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShowPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     movies<T extends Library$moviesArgs<ExtArgs> = {}>(args?: Subset<T, Library$moviesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MoviePayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    libraryAccess<T extends Library$libraryAccessArgs<ExtArgs> = {}>(args?: Subset<T, Library$libraryAccessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2590,6 +2815,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MovieScalarFieldEnum | MovieScalarFieldEnum[]
+  }
+
+
+  /**
+   * Library.libraryAccess
+   */
+  export type Library$libraryAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    where?: LibraryAccessWhereInput
+    orderBy?: LibraryAccessOrderByWithRelationInput | LibraryAccessOrderByWithRelationInput[]
+    cursor?: LibraryAccessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LibraryAccessScalarFieldEnum | LibraryAccessScalarFieldEnum[]
   }
 
 
@@ -8609,18 +8855,21 @@ export namespace Prisma {
     id: string | null
     username: string | null
     password: string | null
+    isOwner: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
     username: string | null
     password: string | null
+    isOwner: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
     username: number
     password: number
+    isOwner: number
     _all: number
   }
 
@@ -8629,18 +8878,21 @@ export namespace Prisma {
     id?: true
     username?: true
     password?: true
+    isOwner?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
     username?: true
     password?: true
+    isOwner?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
     username?: true
     password?: true
+    isOwner?: true
     _all?: true
   }
 
@@ -8720,6 +8972,7 @@ export namespace Prisma {
     id: string
     username: string
     password: string
+    isOwner: boolean
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -8743,22 +8996,34 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     password?: boolean
+    isOwner?: boolean
+    user?: boolean | User$userArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
     username?: boolean
     password?: boolean
+    isOwner?: boolean
+  }
+
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | User$userArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      user: Prisma.$LibraryAccessPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       username: string
       password: string
+      isOwner: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -9124,6 +9389,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
+    user<T extends User$userArgs<ExtArgs> = {}>(args?: Subset<T, User$userArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9156,6 +9422,7 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'String'>
     readonly username: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly isOwner: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -9169,6 +9436,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -9185,6 +9456,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -9199,6 +9474,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -9245,6 +9524,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -9290,6 +9573,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -9330,6 +9617,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The data needed to create a User.
      */
     data: XOR<UserCreateInput, UserUncheckedCreateInput>
@@ -9356,6 +9647,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -9391,6 +9686,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -9414,6 +9713,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -9432,6 +9735,27 @@ export namespace Prisma {
 
 
   /**
+   * User.user
+   */
+  export type User$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    where?: LibraryAccessWhereInput
+    orderBy?: LibraryAccessOrderByWithRelationInput | LibraryAccessOrderByWithRelationInput[]
+    cursor?: LibraryAccessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LibraryAccessScalarFieldEnum | LibraryAccessScalarFieldEnum[]
+  }
+
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9439,6 +9763,1759 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model Server
+   */
+
+  export type AggregateServer = {
+    _count: ServerCountAggregateOutputType | null
+    _min: ServerMinAggregateOutputType | null
+    _max: ServerMaxAggregateOutputType | null
+  }
+
+  export type ServerMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type ServerMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type ServerCountAggregateOutputType = {
+    id: number
+    name: number
+    _all: number
+  }
+
+
+  export type ServerMinAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type ServerMaxAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type ServerCountAggregateInputType = {
+    id?: true
+    name?: true
+    _all?: true
+  }
+
+  export type ServerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Server to aggregate.
+     */
+    where?: ServerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Servers to fetch.
+     */
+    orderBy?: ServerOrderByWithRelationInput | ServerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ServerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Servers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Servers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Servers
+    **/
+    _count?: true | ServerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ServerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ServerMaxAggregateInputType
+  }
+
+  export type GetServerAggregateType<T extends ServerAggregateArgs> = {
+        [P in keyof T & keyof AggregateServer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateServer[P]>
+      : GetScalarType<T[P], AggregateServer[P]>
+  }
+
+
+
+
+  export type ServerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServerWhereInput
+    orderBy?: ServerOrderByWithAggregationInput | ServerOrderByWithAggregationInput[]
+    by: ServerScalarFieldEnum[] | ServerScalarFieldEnum
+    having?: ServerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ServerCountAggregateInputType | true
+    _min?: ServerMinAggregateInputType
+    _max?: ServerMaxAggregateInputType
+  }
+
+  export type ServerGroupByOutputType = {
+    id: string
+    name: string
+    _count: ServerCountAggregateOutputType | null
+    _min: ServerMinAggregateOutputType | null
+    _max: ServerMaxAggregateOutputType | null
+  }
+
+  type GetServerGroupByPayload<T extends ServerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ServerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ServerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ServerGroupByOutputType[P]>
+            : GetScalarType<T[P], ServerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ServerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["server"]>
+
+  export type ServerSelectScalar = {
+    id?: boolean
+    name?: boolean
+  }
+
+
+  export type $ServerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Server"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+    }, ExtArgs["result"]["server"]>
+    composites: {}
+  }
+
+
+  type ServerGetPayload<S extends boolean | null | undefined | ServerDefaultArgs> = $Result.GetResult<Prisma.$ServerPayload, S>
+
+  type ServerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ServerFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ServerCountAggregateInputType | true
+    }
+
+  export interface ServerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Server'], meta: { name: 'Server' } }
+    /**
+     * Find zero or one Server that matches the filter.
+     * @param {ServerFindUniqueArgs} args - Arguments to find a Server
+     * @example
+     * // Get one Server
+     * const server = await prisma.server.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends ServerFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, ServerFindUniqueArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one Server that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {ServerFindUniqueOrThrowArgs} args - Arguments to find a Server
+     * @example
+     * // Get one Server
+     * const server = await prisma.server.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends ServerFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ServerFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first Server that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerFindFirstArgs} args - Arguments to find a Server
+     * @example
+     * // Get one Server
+     * const server = await prisma.server.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends ServerFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, ServerFindFirstArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first Server that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerFindFirstOrThrowArgs} args - Arguments to find a Server
+     * @example
+     * // Get one Server
+     * const server = await prisma.server.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends ServerFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ServerFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Servers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Servers
+     * const servers = await prisma.server.findMany()
+     * 
+     * // Get first 10 Servers
+     * const servers = await prisma.server.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const serverWithIdOnly = await prisma.server.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends ServerFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ServerFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a Server.
+     * @param {ServerCreateArgs} args - Arguments to create a Server.
+     * @example
+     * // Create one Server
+     * const Server = await prisma.server.create({
+     *   data: {
+     *     // ... data to create a Server
+     *   }
+     * })
+     * 
+    **/
+    create<T extends ServerCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, ServerCreateArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Servers.
+     *     @param {ServerCreateManyArgs} args - Arguments to create many Servers.
+     *     @example
+     *     // Create many Servers
+     *     const server = await prisma.server.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends ServerCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ServerCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Server.
+     * @param {ServerDeleteArgs} args - Arguments to delete one Server.
+     * @example
+     * // Delete one Server
+     * const Server = await prisma.server.delete({
+     *   where: {
+     *     // ... filter to delete one Server
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends ServerDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, ServerDeleteArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one Server.
+     * @param {ServerUpdateArgs} args - Arguments to update one Server.
+     * @example
+     * // Update one Server
+     * const server = await prisma.server.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends ServerUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, ServerUpdateArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Servers.
+     * @param {ServerDeleteManyArgs} args - Arguments to filter Servers to delete.
+     * @example
+     * // Delete a few Servers
+     * const { count } = await prisma.server.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends ServerDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ServerDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Servers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Servers
+     * const server = await prisma.server.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends ServerUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, ServerUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Server.
+     * @param {ServerUpsertArgs} args - Arguments to update or create a Server.
+     * @example
+     * // Update or create a Server
+     * const server = await prisma.server.upsert({
+     *   create: {
+     *     // ... data to create a Server
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Server we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends ServerUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, ServerUpsertArgs<ExtArgs>>
+    ): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Servers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerCountArgs} args - Arguments to filter Servers to count.
+     * @example
+     * // Count the number of Servers
+     * const count = await prisma.server.count({
+     *   where: {
+     *     // ... the filter for the Servers we want to count
+     *   }
+     * })
+    **/
+    count<T extends ServerCountArgs>(
+      args?: Subset<T, ServerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ServerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Server.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ServerAggregateArgs>(args: Subset<T, ServerAggregateArgs>): Prisma.PrismaPromise<GetServerAggregateType<T>>
+
+    /**
+     * Group by Server.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ServerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ServerGroupByArgs['orderBy'] }
+        : { orderBy?: ServerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ServerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetServerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Server model
+   */
+  readonly fields: ServerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Server.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ServerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the Server model
+   */ 
+  interface ServerFieldRefs {
+    readonly id: FieldRef<"Server", 'String'>
+    readonly name: FieldRef<"Server", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * Server findUnique
+   */
+  export type ServerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * Filter, which Server to fetch.
+     */
+    where: ServerWhereUniqueInput
+  }
+
+
+  /**
+   * Server findUniqueOrThrow
+   */
+  export type ServerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * Filter, which Server to fetch.
+     */
+    where: ServerWhereUniqueInput
+  }
+
+
+  /**
+   * Server findFirst
+   */
+  export type ServerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * Filter, which Server to fetch.
+     */
+    where?: ServerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Servers to fetch.
+     */
+    orderBy?: ServerOrderByWithRelationInput | ServerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Servers.
+     */
+    cursor?: ServerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Servers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Servers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Servers.
+     */
+    distinct?: ServerScalarFieldEnum | ServerScalarFieldEnum[]
+  }
+
+
+  /**
+   * Server findFirstOrThrow
+   */
+  export type ServerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * Filter, which Server to fetch.
+     */
+    where?: ServerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Servers to fetch.
+     */
+    orderBy?: ServerOrderByWithRelationInput | ServerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Servers.
+     */
+    cursor?: ServerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Servers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Servers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Servers.
+     */
+    distinct?: ServerScalarFieldEnum | ServerScalarFieldEnum[]
+  }
+
+
+  /**
+   * Server findMany
+   */
+  export type ServerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * Filter, which Servers to fetch.
+     */
+    where?: ServerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Servers to fetch.
+     */
+    orderBy?: ServerOrderByWithRelationInput | ServerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Servers.
+     */
+    cursor?: ServerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Servers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Servers.
+     */
+    skip?: number
+    distinct?: ServerScalarFieldEnum | ServerScalarFieldEnum[]
+  }
+
+
+  /**
+   * Server create
+   */
+  export type ServerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * The data needed to create a Server.
+     */
+    data: XOR<ServerCreateInput, ServerUncheckedCreateInput>
+  }
+
+
+  /**
+   * Server createMany
+   */
+  export type ServerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Servers.
+     */
+    data: ServerCreateManyInput | ServerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Server update
+   */
+  export type ServerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * The data needed to update a Server.
+     */
+    data: XOR<ServerUpdateInput, ServerUncheckedUpdateInput>
+    /**
+     * Choose, which Server to update.
+     */
+    where: ServerWhereUniqueInput
+  }
+
+
+  /**
+   * Server updateMany
+   */
+  export type ServerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Servers.
+     */
+    data: XOR<ServerUpdateManyMutationInput, ServerUncheckedUpdateManyInput>
+    /**
+     * Filter which Servers to update
+     */
+    where?: ServerWhereInput
+  }
+
+
+  /**
+   * Server upsert
+   */
+  export type ServerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * The filter to search for the Server to update in case it exists.
+     */
+    where: ServerWhereUniqueInput
+    /**
+     * In case the Server found by the `where` argument doesn't exist, create a new Server with this data.
+     */
+    create: XOR<ServerCreateInput, ServerUncheckedCreateInput>
+    /**
+     * In case the Server was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ServerUpdateInput, ServerUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Server delete
+   */
+  export type ServerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+    /**
+     * Filter which Server to delete.
+     */
+    where: ServerWhereUniqueInput
+  }
+
+
+  /**
+   * Server deleteMany
+   */
+  export type ServerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Servers to delete
+     */
+    where?: ServerWhereInput
+  }
+
+
+  /**
+   * Server without action
+   */
+  export type ServerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Server
+     */
+    select?: ServerSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model LibraryAccess
+   */
+
+  export type AggregateLibraryAccess = {
+    _count: LibraryAccessCountAggregateOutputType | null
+    _min: LibraryAccessMinAggregateOutputType | null
+    _max: LibraryAccessMaxAggregateOutputType | null
+  }
+
+  export type LibraryAccessMinAggregateOutputType = {
+    id: string | null
+    libraryId: string | null
+    userId: string | null
+    access: $Enums.LibraryAccessType | null
+  }
+
+  export type LibraryAccessMaxAggregateOutputType = {
+    id: string | null
+    libraryId: string | null
+    userId: string | null
+    access: $Enums.LibraryAccessType | null
+  }
+
+  export type LibraryAccessCountAggregateOutputType = {
+    id: number
+    libraryId: number
+    userId: number
+    access: number
+    _all: number
+  }
+
+
+  export type LibraryAccessMinAggregateInputType = {
+    id?: true
+    libraryId?: true
+    userId?: true
+    access?: true
+  }
+
+  export type LibraryAccessMaxAggregateInputType = {
+    id?: true
+    libraryId?: true
+    userId?: true
+    access?: true
+  }
+
+  export type LibraryAccessCountAggregateInputType = {
+    id?: true
+    libraryId?: true
+    userId?: true
+    access?: true
+    _all?: true
+  }
+
+  export type LibraryAccessAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LibraryAccess to aggregate.
+     */
+    where?: LibraryAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LibraryAccesses to fetch.
+     */
+    orderBy?: LibraryAccessOrderByWithRelationInput | LibraryAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LibraryAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LibraryAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LibraryAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LibraryAccesses
+    **/
+    _count?: true | LibraryAccessCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LibraryAccessMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LibraryAccessMaxAggregateInputType
+  }
+
+  export type GetLibraryAccessAggregateType<T extends LibraryAccessAggregateArgs> = {
+        [P in keyof T & keyof AggregateLibraryAccess]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLibraryAccess[P]>
+      : GetScalarType<T[P], AggregateLibraryAccess[P]>
+  }
+
+
+
+
+  export type LibraryAccessGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LibraryAccessWhereInput
+    orderBy?: LibraryAccessOrderByWithAggregationInput | LibraryAccessOrderByWithAggregationInput[]
+    by: LibraryAccessScalarFieldEnum[] | LibraryAccessScalarFieldEnum
+    having?: LibraryAccessScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LibraryAccessCountAggregateInputType | true
+    _min?: LibraryAccessMinAggregateInputType
+    _max?: LibraryAccessMaxAggregateInputType
+  }
+
+  export type LibraryAccessGroupByOutputType = {
+    id: string
+    libraryId: string
+    userId: string
+    access: $Enums.LibraryAccessType
+    _count: LibraryAccessCountAggregateOutputType | null
+    _min: LibraryAccessMinAggregateOutputType | null
+    _max: LibraryAccessMaxAggregateOutputType | null
+  }
+
+  type GetLibraryAccessGroupByPayload<T extends LibraryAccessGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LibraryAccessGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LibraryAccessGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LibraryAccessGroupByOutputType[P]>
+            : GetScalarType<T[P], LibraryAccessGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LibraryAccessSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    libraryId?: boolean
+    userId?: boolean
+    access?: boolean
+    library?: boolean | LibraryDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["libraryAccess"]>
+
+  export type LibraryAccessSelectScalar = {
+    id?: boolean
+    libraryId?: boolean
+    userId?: boolean
+    access?: boolean
+  }
+
+  export type LibraryAccessInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    library?: boolean | LibraryDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+
+  export type $LibraryAccessPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LibraryAccess"
+    objects: {
+      library: Prisma.$LibraryPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      libraryId: string
+      userId: string
+      access: $Enums.LibraryAccessType
+    }, ExtArgs["result"]["libraryAccess"]>
+    composites: {}
+  }
+
+
+  type LibraryAccessGetPayload<S extends boolean | null | undefined | LibraryAccessDefaultArgs> = $Result.GetResult<Prisma.$LibraryAccessPayload, S>
+
+  type LibraryAccessCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<LibraryAccessFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: LibraryAccessCountAggregateInputType | true
+    }
+
+  export interface LibraryAccessDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LibraryAccess'], meta: { name: 'LibraryAccess' } }
+    /**
+     * Find zero or one LibraryAccess that matches the filter.
+     * @param {LibraryAccessFindUniqueArgs} args - Arguments to find a LibraryAccess
+     * @example
+     * // Get one LibraryAccess
+     * const libraryAccess = await prisma.libraryAccess.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends LibraryAccessFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, LibraryAccessFindUniqueArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one LibraryAccess that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {LibraryAccessFindUniqueOrThrowArgs} args - Arguments to find a LibraryAccess
+     * @example
+     * // Get one LibraryAccess
+     * const libraryAccess = await prisma.libraryAccess.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends LibraryAccessFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibraryAccessFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first LibraryAccess that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessFindFirstArgs} args - Arguments to find a LibraryAccess
+     * @example
+     * // Get one LibraryAccess
+     * const libraryAccess = await prisma.libraryAccess.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends LibraryAccessFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibraryAccessFindFirstArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first LibraryAccess that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessFindFirstOrThrowArgs} args - Arguments to find a LibraryAccess
+     * @example
+     * // Get one LibraryAccess
+     * const libraryAccess = await prisma.libraryAccess.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends LibraryAccessFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibraryAccessFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more LibraryAccesses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LibraryAccesses
+     * const libraryAccesses = await prisma.libraryAccess.findMany()
+     * 
+     * // Get first 10 LibraryAccesses
+     * const libraryAccesses = await prisma.libraryAccess.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const libraryAccessWithIdOnly = await prisma.libraryAccess.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends LibraryAccessFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibraryAccessFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a LibraryAccess.
+     * @param {LibraryAccessCreateArgs} args - Arguments to create a LibraryAccess.
+     * @example
+     * // Create one LibraryAccess
+     * const LibraryAccess = await prisma.libraryAccess.create({
+     *   data: {
+     *     // ... data to create a LibraryAccess
+     *   }
+     * })
+     * 
+    **/
+    create<T extends LibraryAccessCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, LibraryAccessCreateArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many LibraryAccesses.
+     *     @param {LibraryAccessCreateManyArgs} args - Arguments to create many LibraryAccesses.
+     *     @example
+     *     // Create many LibraryAccesses
+     *     const libraryAccess = await prisma.libraryAccess.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends LibraryAccessCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibraryAccessCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LibraryAccess.
+     * @param {LibraryAccessDeleteArgs} args - Arguments to delete one LibraryAccess.
+     * @example
+     * // Delete one LibraryAccess
+     * const LibraryAccess = await prisma.libraryAccess.delete({
+     *   where: {
+     *     // ... filter to delete one LibraryAccess
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends LibraryAccessDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, LibraryAccessDeleteArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one LibraryAccess.
+     * @param {LibraryAccessUpdateArgs} args - Arguments to update one LibraryAccess.
+     * @example
+     * // Update one LibraryAccess
+     * const libraryAccess = await prisma.libraryAccess.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends LibraryAccessUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, LibraryAccessUpdateArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more LibraryAccesses.
+     * @param {LibraryAccessDeleteManyArgs} args - Arguments to filter LibraryAccesses to delete.
+     * @example
+     * // Delete a few LibraryAccesses
+     * const { count } = await prisma.libraryAccess.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends LibraryAccessDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibraryAccessDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LibraryAccesses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LibraryAccesses
+     * const libraryAccess = await prisma.libraryAccess.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends LibraryAccessUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, LibraryAccessUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LibraryAccess.
+     * @param {LibraryAccessUpsertArgs} args - Arguments to update or create a LibraryAccess.
+     * @example
+     * // Update or create a LibraryAccess
+     * const libraryAccess = await prisma.libraryAccess.upsert({
+     *   create: {
+     *     // ... data to create a LibraryAccess
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LibraryAccess we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends LibraryAccessUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, LibraryAccessUpsertArgs<ExtArgs>>
+    ): Prisma__LibraryAccessClient<$Result.GetResult<Prisma.$LibraryAccessPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of LibraryAccesses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessCountArgs} args - Arguments to filter LibraryAccesses to count.
+     * @example
+     * // Count the number of LibraryAccesses
+     * const count = await prisma.libraryAccess.count({
+     *   where: {
+     *     // ... the filter for the LibraryAccesses we want to count
+     *   }
+     * })
+    **/
+    count<T extends LibraryAccessCountArgs>(
+      args?: Subset<T, LibraryAccessCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LibraryAccessCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LibraryAccess.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LibraryAccessAggregateArgs>(args: Subset<T, LibraryAccessAggregateArgs>): Prisma.PrismaPromise<GetLibraryAccessAggregateType<T>>
+
+    /**
+     * Group by LibraryAccess.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LibraryAccessGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LibraryAccessGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LibraryAccessGroupByArgs['orderBy'] }
+        : { orderBy?: LibraryAccessGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LibraryAccessGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLibraryAccessGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LibraryAccess model
+   */
+  readonly fields: LibraryAccessFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LibraryAccess.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LibraryAccessClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    library<T extends LibraryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LibraryDefaultArgs<ExtArgs>>): Prisma__LibraryClient<$Result.GetResult<Prisma.$LibraryPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the LibraryAccess model
+   */ 
+  interface LibraryAccessFieldRefs {
+    readonly id: FieldRef<"LibraryAccess", 'String'>
+    readonly libraryId: FieldRef<"LibraryAccess", 'String'>
+    readonly userId: FieldRef<"LibraryAccess", 'String'>
+    readonly access: FieldRef<"LibraryAccess", 'LibraryAccessType'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * LibraryAccess findUnique
+   */
+  export type LibraryAccessFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which LibraryAccess to fetch.
+     */
+    where: LibraryAccessWhereUniqueInput
+  }
+
+
+  /**
+   * LibraryAccess findUniqueOrThrow
+   */
+  export type LibraryAccessFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which LibraryAccess to fetch.
+     */
+    where: LibraryAccessWhereUniqueInput
+  }
+
+
+  /**
+   * LibraryAccess findFirst
+   */
+  export type LibraryAccessFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which LibraryAccess to fetch.
+     */
+    where?: LibraryAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LibraryAccesses to fetch.
+     */
+    orderBy?: LibraryAccessOrderByWithRelationInput | LibraryAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LibraryAccesses.
+     */
+    cursor?: LibraryAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LibraryAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LibraryAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LibraryAccesses.
+     */
+    distinct?: LibraryAccessScalarFieldEnum | LibraryAccessScalarFieldEnum[]
+  }
+
+
+  /**
+   * LibraryAccess findFirstOrThrow
+   */
+  export type LibraryAccessFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which LibraryAccess to fetch.
+     */
+    where?: LibraryAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LibraryAccesses to fetch.
+     */
+    orderBy?: LibraryAccessOrderByWithRelationInput | LibraryAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LibraryAccesses.
+     */
+    cursor?: LibraryAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LibraryAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LibraryAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LibraryAccesses.
+     */
+    distinct?: LibraryAccessScalarFieldEnum | LibraryAccessScalarFieldEnum[]
+  }
+
+
+  /**
+   * LibraryAccess findMany
+   */
+  export type LibraryAccessFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which LibraryAccesses to fetch.
+     */
+    where?: LibraryAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LibraryAccesses to fetch.
+     */
+    orderBy?: LibraryAccessOrderByWithRelationInput | LibraryAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LibraryAccesses.
+     */
+    cursor?: LibraryAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LibraryAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LibraryAccesses.
+     */
+    skip?: number
+    distinct?: LibraryAccessScalarFieldEnum | LibraryAccessScalarFieldEnum[]
+  }
+
+
+  /**
+   * LibraryAccess create
+   */
+  export type LibraryAccessCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LibraryAccess.
+     */
+    data: XOR<LibraryAccessCreateInput, LibraryAccessUncheckedCreateInput>
+  }
+
+
+  /**
+   * LibraryAccess createMany
+   */
+  export type LibraryAccessCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LibraryAccesses.
+     */
+    data: LibraryAccessCreateManyInput | LibraryAccessCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * LibraryAccess update
+   */
+  export type LibraryAccessUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LibraryAccess.
+     */
+    data: XOR<LibraryAccessUpdateInput, LibraryAccessUncheckedUpdateInput>
+    /**
+     * Choose, which LibraryAccess to update.
+     */
+    where: LibraryAccessWhereUniqueInput
+  }
+
+
+  /**
+   * LibraryAccess updateMany
+   */
+  export type LibraryAccessUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LibraryAccesses.
+     */
+    data: XOR<LibraryAccessUpdateManyMutationInput, LibraryAccessUncheckedUpdateManyInput>
+    /**
+     * Filter which LibraryAccesses to update
+     */
+    where?: LibraryAccessWhereInput
+  }
+
+
+  /**
+   * LibraryAccess upsert
+   */
+  export type LibraryAccessUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LibraryAccess to update in case it exists.
+     */
+    where: LibraryAccessWhereUniqueInput
+    /**
+     * In case the LibraryAccess found by the `where` argument doesn't exist, create a new LibraryAccess with this data.
+     */
+    create: XOR<LibraryAccessCreateInput, LibraryAccessUncheckedCreateInput>
+    /**
+     * In case the LibraryAccess was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LibraryAccessUpdateInput, LibraryAccessUncheckedUpdateInput>
+  }
+
+
+  /**
+   * LibraryAccess delete
+   */
+  export type LibraryAccessDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
+    /**
+     * Filter which LibraryAccess to delete.
+     */
+    where: LibraryAccessWhereUniqueInput
+  }
+
+
+  /**
+   * LibraryAccess deleteMany
+   */
+  export type LibraryAccessDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LibraryAccesses to delete
+     */
+    where?: LibraryAccessWhereInput
+  }
+
+
+  /**
+   * LibraryAccess without action
+   */
+  export type LibraryAccessDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LibraryAccess
+     */
+    select?: LibraryAccessSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: LibraryAccessInclude<ExtArgs> | null
   }
 
 
@@ -9547,10 +11624,29 @@ export namespace Prisma {
   export const UserScalarFieldEnum: {
     id: 'id',
     username: 'username',
-    password: 'password'
+    password: 'password',
+    isOwner: 'isOwner'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const ServerScalarFieldEnum: {
+    id: 'id',
+    name: 'name'
+  };
+
+  export type ServerScalarFieldEnum = (typeof ServerScalarFieldEnum)[keyof typeof ServerScalarFieldEnum]
+
+
+  export const LibraryAccessScalarFieldEnum: {
+    id: 'id',
+    libraryId: 'libraryId',
+    userId: 'userId',
+    access: 'access'
+  };
+
+  export type LibraryAccessScalarFieldEnum = (typeof LibraryAccessScalarFieldEnum)[keyof typeof LibraryAccessScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -9664,6 +11760,27 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'LibraryAccessType'
+   */
+  export type EnumLibraryAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LibraryAccessType'>
+    
+
+
+  /**
+   * Reference to a field of type 'LibraryAccessType[]'
+   */
+  export type ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LibraryAccessType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -9681,6 +11798,7 @@ export namespace Prisma {
     medias?: MediaListRelationFilter
     shows?: ShowListRelationFilter
     movies?: MovieListRelationFilter
+    libraryAccess?: LibraryAccessListRelationFilter
   }
 
   export type LibraryOrderByWithRelationInput = {
@@ -9692,6 +11810,7 @@ export namespace Prisma {
     medias?: MediaOrderByRelationAggregateInput
     shows?: ShowOrderByRelationAggregateInput
     movies?: MovieOrderByRelationAggregateInput
+    libraryAccess?: LibraryAccessOrderByRelationAggregateInput
   }
 
   export type LibraryWhereUniqueInput = Prisma.AtLeast<{
@@ -9706,6 +11825,7 @@ export namespace Prisma {
     medias?: MediaListRelationFilter
     shows?: ShowListRelationFilter
     movies?: MovieListRelationFilter
+    libraryAccess?: LibraryAccessListRelationFilter
   }, "id" | "id" | "name" | "path">
 
   export type LibraryOrderByWithAggregationInput = {
@@ -10153,12 +12273,16 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     username?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    isOwner?: BoolFilter<"User"> | boolean
+    user?: LibraryAccessListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
+    isOwner?: SortOrder
+    user?: LibraryAccessOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -10168,12 +12292,15 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
+    isOwner?: BoolFilter<"User"> | boolean
+    user?: LibraryAccessListRelationFilter
   }, "id" | "id" | "username">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
+    isOwner?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -10186,6 +12313,97 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     username?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    isOwner?: BoolWithAggregatesFilter<"User"> | boolean
+  }
+
+  export type ServerWhereInput = {
+    AND?: ServerWhereInput | ServerWhereInput[]
+    OR?: ServerWhereInput[]
+    NOT?: ServerWhereInput | ServerWhereInput[]
+    id?: StringFilter<"Server"> | string
+    name?: StringFilter<"Server"> | string
+  }
+
+  export type ServerOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type ServerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ServerWhereInput | ServerWhereInput[]
+    OR?: ServerWhereInput[]
+    NOT?: ServerWhereInput | ServerWhereInput[]
+    name?: StringFilter<"Server"> | string
+  }, "id" | "id">
+
+  export type ServerOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    _count?: ServerCountOrderByAggregateInput
+    _max?: ServerMaxOrderByAggregateInput
+    _min?: ServerMinOrderByAggregateInput
+  }
+
+  export type ServerScalarWhereWithAggregatesInput = {
+    AND?: ServerScalarWhereWithAggregatesInput | ServerScalarWhereWithAggregatesInput[]
+    OR?: ServerScalarWhereWithAggregatesInput[]
+    NOT?: ServerScalarWhereWithAggregatesInput | ServerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Server"> | string
+    name?: StringWithAggregatesFilter<"Server"> | string
+  }
+
+  export type LibraryAccessWhereInput = {
+    AND?: LibraryAccessWhereInput | LibraryAccessWhereInput[]
+    OR?: LibraryAccessWhereInput[]
+    NOT?: LibraryAccessWhereInput | LibraryAccessWhereInput[]
+    id?: StringFilter<"LibraryAccess"> | string
+    libraryId?: StringFilter<"LibraryAccess"> | string
+    userId?: StringFilter<"LibraryAccess"> | string
+    access?: EnumLibraryAccessTypeFilter<"LibraryAccess"> | $Enums.LibraryAccessType
+    library?: XOR<LibraryRelationFilter, LibraryWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type LibraryAccessOrderByWithRelationInput = {
+    id?: SortOrder
+    libraryId?: SortOrder
+    userId?: SortOrder
+    access?: SortOrder
+    library?: LibraryOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type LibraryAccessWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LibraryAccessWhereInput | LibraryAccessWhereInput[]
+    OR?: LibraryAccessWhereInput[]
+    NOT?: LibraryAccessWhereInput | LibraryAccessWhereInput[]
+    libraryId?: StringFilter<"LibraryAccess"> | string
+    userId?: StringFilter<"LibraryAccess"> | string
+    access?: EnumLibraryAccessTypeFilter<"LibraryAccess"> | $Enums.LibraryAccessType
+    library?: XOR<LibraryRelationFilter, LibraryWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "id">
+
+  export type LibraryAccessOrderByWithAggregationInput = {
+    id?: SortOrder
+    libraryId?: SortOrder
+    userId?: SortOrder
+    access?: SortOrder
+    _count?: LibraryAccessCountOrderByAggregateInput
+    _max?: LibraryAccessMaxOrderByAggregateInput
+    _min?: LibraryAccessMinOrderByAggregateInput
+  }
+
+  export type LibraryAccessScalarWhereWithAggregatesInput = {
+    AND?: LibraryAccessScalarWhereWithAggregatesInput | LibraryAccessScalarWhereWithAggregatesInput[]
+    OR?: LibraryAccessScalarWhereWithAggregatesInput[]
+    NOT?: LibraryAccessScalarWhereWithAggregatesInput | LibraryAccessScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LibraryAccess"> | string
+    libraryId?: StringWithAggregatesFilter<"LibraryAccess"> | string
+    userId?: StringWithAggregatesFilter<"LibraryAccess"> | string
+    access?: EnumLibraryAccessTypeWithAggregatesFilter<"LibraryAccess"> | $Enums.LibraryAccessType
   }
 
   export type LibraryCreateInput = {
@@ -10197,6 +12415,7 @@ export namespace Prisma {
     medias?: MediaCreateNestedManyWithoutLibraryInput
     shows?: ShowCreateNestedManyWithoutLibraryInput
     movies?: MovieCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryUncheckedCreateInput = {
@@ -10208,6 +12427,7 @@ export namespace Prisma {
     medias?: MediaUncheckedCreateNestedManyWithoutLibraryInput
     shows?: ShowUncheckedCreateNestedManyWithoutLibraryInput
     movies?: MovieUncheckedCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessUncheckedCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryUpdateInput = {
@@ -10219,6 +12439,7 @@ export namespace Prisma {
     medias?: MediaUpdateManyWithoutLibraryNestedInput
     shows?: ShowUpdateManyWithoutLibraryNestedInput
     movies?: MovieUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUpdateManyWithoutLibraryNestedInput
   }
 
   export type LibraryUncheckedUpdateInput = {
@@ -10230,6 +12451,7 @@ export namespace Prisma {
     medias?: MediaUncheckedUpdateManyWithoutLibraryNestedInput
     shows?: ShowUncheckedUpdateManyWithoutLibraryNestedInput
     movies?: MovieUncheckedUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUncheckedUpdateManyWithoutLibraryNestedInput
   }
 
   export type LibraryCreateManyInput = {
@@ -10678,42 +12900,135 @@ export namespace Prisma {
     id?: string
     username: string
     password: string
+    isOwner: boolean
+    user?: LibraryAccessCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
     username: string
     password: string
+    isOwner: boolean
+    user?: LibraryAccessUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    isOwner?: BoolFieldUpdateOperationsInput | boolean
+    user?: LibraryAccessUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    isOwner?: BoolFieldUpdateOperationsInput | boolean
+    user?: LibraryAccessUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
     username: string
     password: string
+    isOwner: boolean
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    isOwner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    isOwner?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ServerCreateInput = {
+    id?: string
+    name: string
+  }
+
+  export type ServerUncheckedCreateInput = {
+    id?: string
+    name: string
+  }
+
+  export type ServerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ServerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ServerCreateManyInput = {
+    id?: string
+    name: string
+  }
+
+  export type ServerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ServerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LibraryAccessCreateInput = {
+    id?: string
+    access: $Enums.LibraryAccessType
+    library: LibraryCreateNestedOneWithoutLibraryAccessInput
+    user: UserCreateNestedOneWithoutUserInput
+  }
+
+  export type LibraryAccessUncheckedCreateInput = {
+    id?: string
+    libraryId: string
+    userId: string
+    access: $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+    library?: LibraryUpdateOneRequiredWithoutLibraryAccessNestedInput
+    user?: UserUpdateOneRequiredWithoutUserNestedInput
+  }
+
+  export type LibraryAccessUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    libraryId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessCreateManyInput = {
+    id?: string
+    libraryId: string
+    userId: string
+    access: $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    libraryId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10767,6 +13082,12 @@ export namespace Prisma {
     none?: MovieWhereInput
   }
 
+  export type LibraryAccessListRelationFilter = {
+    every?: LibraryAccessWhereInput
+    some?: LibraryAccessWhereInput
+    none?: LibraryAccessWhereInput
+  }
+
   export type MediaOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -10776,6 +13097,10 @@ export namespace Prisma {
   }
 
   export type MovieOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LibraryAccessOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11262,22 +13587,96 @@ export namespace Prisma {
     tmdbId?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
+    isOwner?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
+    isOwner?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
+    isOwner?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type ServerCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type ServerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type ServerMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type EnumLibraryAccessTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LibraryAccessType | EnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLibraryAccessTypeFilter<$PrismaModel> | $Enums.LibraryAccessType
+  }
+
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type LibraryAccessCountOrderByAggregateInput = {
+    id?: SortOrder
+    libraryId?: SortOrder
+    userId?: SortOrder
+    access?: SortOrder
+  }
+
+  export type LibraryAccessMaxOrderByAggregateInput = {
+    id?: SortOrder
+    libraryId?: SortOrder
+    userId?: SortOrder
+    access?: SortOrder
+  }
+
+  export type LibraryAccessMinOrderByAggregateInput = {
+    id?: SortOrder
+    libraryId?: SortOrder
+    userId?: SortOrder
+    access?: SortOrder
+  }
+
+  export type EnumLibraryAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LibraryAccessType | EnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLibraryAccessTypeWithAggregatesFilter<$PrismaModel> | $Enums.LibraryAccessType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLibraryAccessTypeFilter<$PrismaModel>
+    _max?: NestedEnumLibraryAccessTypeFilter<$PrismaModel>
   }
 
   export type MediaCreateNestedManyWithoutLibraryInput = {
@@ -11301,6 +13700,13 @@ export namespace Prisma {
     connect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
   }
 
+  export type LibraryAccessCreateNestedManyWithoutLibraryInput = {
+    create?: XOR<LibraryAccessCreateWithoutLibraryInput, LibraryAccessUncheckedCreateWithoutLibraryInput> | LibraryAccessCreateWithoutLibraryInput[] | LibraryAccessUncheckedCreateWithoutLibraryInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutLibraryInput | LibraryAccessCreateOrConnectWithoutLibraryInput[]
+    createMany?: LibraryAccessCreateManyLibraryInputEnvelope
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+  }
+
   export type MediaUncheckedCreateNestedManyWithoutLibraryInput = {
     create?: XOR<MediaCreateWithoutLibraryInput, MediaUncheckedCreateWithoutLibraryInput> | MediaCreateWithoutLibraryInput[] | MediaUncheckedCreateWithoutLibraryInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutLibraryInput | MediaCreateOrConnectWithoutLibraryInput[]
@@ -11320,6 +13726,13 @@ export namespace Prisma {
     connectOrCreate?: MovieCreateOrConnectWithoutLibraryInput | MovieCreateOrConnectWithoutLibraryInput[]
     createMany?: MovieCreateManyLibraryInputEnvelope
     connect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
+  }
+
+  export type LibraryAccessUncheckedCreateNestedManyWithoutLibraryInput = {
+    create?: XOR<LibraryAccessCreateWithoutLibraryInput, LibraryAccessUncheckedCreateWithoutLibraryInput> | LibraryAccessCreateWithoutLibraryInput[] | LibraryAccessUncheckedCreateWithoutLibraryInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutLibraryInput | LibraryAccessCreateOrConnectWithoutLibraryInput[]
+    createMany?: LibraryAccessCreateManyLibraryInputEnvelope
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11376,6 +13789,20 @@ export namespace Prisma {
     deleteMany?: MovieScalarWhereInput | MovieScalarWhereInput[]
   }
 
+  export type LibraryAccessUpdateManyWithoutLibraryNestedInput = {
+    create?: XOR<LibraryAccessCreateWithoutLibraryInput, LibraryAccessUncheckedCreateWithoutLibraryInput> | LibraryAccessCreateWithoutLibraryInput[] | LibraryAccessUncheckedCreateWithoutLibraryInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutLibraryInput | LibraryAccessCreateOrConnectWithoutLibraryInput[]
+    upsert?: LibraryAccessUpsertWithWhereUniqueWithoutLibraryInput | LibraryAccessUpsertWithWhereUniqueWithoutLibraryInput[]
+    createMany?: LibraryAccessCreateManyLibraryInputEnvelope
+    set?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    disconnect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    delete?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    update?: LibraryAccessUpdateWithWhereUniqueWithoutLibraryInput | LibraryAccessUpdateWithWhereUniqueWithoutLibraryInput[]
+    updateMany?: LibraryAccessUpdateManyWithWhereWithoutLibraryInput | LibraryAccessUpdateManyWithWhereWithoutLibraryInput[]
+    deleteMany?: LibraryAccessScalarWhereInput | LibraryAccessScalarWhereInput[]
+  }
+
   export type MediaUncheckedUpdateManyWithoutLibraryNestedInput = {
     create?: XOR<MediaCreateWithoutLibraryInput, MediaUncheckedCreateWithoutLibraryInput> | MediaCreateWithoutLibraryInput[] | MediaUncheckedCreateWithoutLibraryInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutLibraryInput | MediaCreateOrConnectWithoutLibraryInput[]
@@ -11416,6 +13843,20 @@ export namespace Prisma {
     update?: MovieUpdateWithWhereUniqueWithoutLibraryInput | MovieUpdateWithWhereUniqueWithoutLibraryInput[]
     updateMany?: MovieUpdateManyWithWhereWithoutLibraryInput | MovieUpdateManyWithWhereWithoutLibraryInput[]
     deleteMany?: MovieScalarWhereInput | MovieScalarWhereInput[]
+  }
+
+  export type LibraryAccessUncheckedUpdateManyWithoutLibraryNestedInput = {
+    create?: XOR<LibraryAccessCreateWithoutLibraryInput, LibraryAccessUncheckedCreateWithoutLibraryInput> | LibraryAccessCreateWithoutLibraryInput[] | LibraryAccessUncheckedCreateWithoutLibraryInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutLibraryInput | LibraryAccessCreateOrConnectWithoutLibraryInput[]
+    upsert?: LibraryAccessUpsertWithWhereUniqueWithoutLibraryInput | LibraryAccessUpsertWithWhereUniqueWithoutLibraryInput[]
+    createMany?: LibraryAccessCreateManyLibraryInputEnvelope
+    set?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    disconnect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    delete?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    update?: LibraryAccessUpdateWithWhereUniqueWithoutLibraryInput | LibraryAccessUpdateWithWhereUniqueWithoutLibraryInput[]
+    updateMany?: LibraryAccessUpdateManyWithWhereWithoutLibraryInput | LibraryAccessUpdateManyWithWhereWithoutLibraryInput[]
+    deleteMany?: LibraryAccessScalarWhereInput | LibraryAccessScalarWhereInput[]
   }
 
   export type MediaCreateNestedOneWithoutStreamsInput = {
@@ -11784,6 +14225,84 @@ export namespace Prisma {
     update?: XOR<XOR<LibraryUpdateToOneWithWhereWithoutMoviesInput, LibraryUpdateWithoutMoviesInput>, LibraryUncheckedUpdateWithoutMoviesInput>
   }
 
+  export type LibraryAccessCreateNestedManyWithoutUserInput = {
+    create?: XOR<LibraryAccessCreateWithoutUserInput, LibraryAccessUncheckedCreateWithoutUserInput> | LibraryAccessCreateWithoutUserInput[] | LibraryAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutUserInput | LibraryAccessCreateOrConnectWithoutUserInput[]
+    createMany?: LibraryAccessCreateManyUserInputEnvelope
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+  }
+
+  export type LibraryAccessUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<LibraryAccessCreateWithoutUserInput, LibraryAccessUncheckedCreateWithoutUserInput> | LibraryAccessCreateWithoutUserInput[] | LibraryAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutUserInput | LibraryAccessCreateOrConnectWithoutUserInput[]
+    createMany?: LibraryAccessCreateManyUserInputEnvelope
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type LibraryAccessUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LibraryAccessCreateWithoutUserInput, LibraryAccessUncheckedCreateWithoutUserInput> | LibraryAccessCreateWithoutUserInput[] | LibraryAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutUserInput | LibraryAccessCreateOrConnectWithoutUserInput[]
+    upsert?: LibraryAccessUpsertWithWhereUniqueWithoutUserInput | LibraryAccessUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LibraryAccessCreateManyUserInputEnvelope
+    set?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    disconnect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    delete?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    update?: LibraryAccessUpdateWithWhereUniqueWithoutUserInput | LibraryAccessUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LibraryAccessUpdateManyWithWhereWithoutUserInput | LibraryAccessUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LibraryAccessScalarWhereInput | LibraryAccessScalarWhereInput[]
+  }
+
+  export type LibraryAccessUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LibraryAccessCreateWithoutUserInput, LibraryAccessUncheckedCreateWithoutUserInput> | LibraryAccessCreateWithoutUserInput[] | LibraryAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LibraryAccessCreateOrConnectWithoutUserInput | LibraryAccessCreateOrConnectWithoutUserInput[]
+    upsert?: LibraryAccessUpsertWithWhereUniqueWithoutUserInput | LibraryAccessUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LibraryAccessCreateManyUserInputEnvelope
+    set?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    disconnect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    delete?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    connect?: LibraryAccessWhereUniqueInput | LibraryAccessWhereUniqueInput[]
+    update?: LibraryAccessUpdateWithWhereUniqueWithoutUserInput | LibraryAccessUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LibraryAccessUpdateManyWithWhereWithoutUserInput | LibraryAccessUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LibraryAccessScalarWhereInput | LibraryAccessScalarWhereInput[]
+  }
+
+  export type LibraryCreateNestedOneWithoutLibraryAccessInput = {
+    create?: XOR<LibraryCreateWithoutLibraryAccessInput, LibraryUncheckedCreateWithoutLibraryAccessInput>
+    connectOrCreate?: LibraryCreateOrConnectWithoutLibraryAccessInput
+    connect?: LibraryWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserCreateWithoutUserInput, UserUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumLibraryAccessTypeFieldUpdateOperationsInput = {
+    set?: $Enums.LibraryAccessType
+  }
+
+  export type LibraryUpdateOneRequiredWithoutLibraryAccessNestedInput = {
+    create?: XOR<LibraryCreateWithoutLibraryAccessInput, LibraryUncheckedCreateWithoutLibraryAccessInput>
+    connectOrCreate?: LibraryCreateOrConnectWithoutLibraryAccessInput
+    upsert?: LibraryUpsertWithoutLibraryAccessInput
+    connect?: LibraryWhereUniqueInput
+    update?: XOR<XOR<LibraryUpdateToOneWithWhereWithoutLibraryAccessInput, LibraryUpdateWithoutLibraryAccessInput>, LibraryUncheckedUpdateWithoutLibraryAccessInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutUserNestedInput = {
+    create?: XOR<UserCreateWithoutUserInput, UserUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserInput
+    upsert?: UserUpsertWithoutUserInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserInput, UserUpdateWithoutUserInput>, UserUncheckedUpdateWithoutUserInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -11970,6 +14489,36 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLibraryAccessTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LibraryAccessType | EnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLibraryAccessTypeFilter<$PrismaModel> | $Enums.LibraryAccessType
+  }
+
+  export type NestedEnumLibraryAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LibraryAccessType | EnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LibraryAccessType[] | ListEnumLibraryAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLibraryAccessTypeWithAggregatesFilter<$PrismaModel> | $Enums.LibraryAccessType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLibraryAccessTypeFilter<$PrismaModel>
+    _max?: NestedEnumLibraryAccessTypeFilter<$PrismaModel>
+  }
+
   export type MediaCreateWithoutLibraryInput = {
     id?: string
     path: string
@@ -12064,6 +14613,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LibraryAccessCreateWithoutLibraryInput = {
+    id?: string
+    access: $Enums.LibraryAccessType
+    user: UserCreateNestedOneWithoutUserInput
+  }
+
+  export type LibraryAccessUncheckedCreateWithoutLibraryInput = {
+    id?: string
+    userId: string
+    access: $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessCreateOrConnectWithoutLibraryInput = {
+    where: LibraryAccessWhereUniqueInput
+    create: XOR<LibraryAccessCreateWithoutLibraryInput, LibraryAccessUncheckedCreateWithoutLibraryInput>
+  }
+
+  export type LibraryAccessCreateManyLibraryInputEnvelope = {
+    data: LibraryAccessCreateManyLibraryInput | LibraryAccessCreateManyLibraryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type MediaUpsertWithWhereUniqueWithoutLibraryInput = {
     where: MediaWhereUniqueInput
     update: XOR<MediaUpdateWithoutLibraryInput, MediaUncheckedUpdateWithoutLibraryInput>
@@ -12152,6 +14723,32 @@ export namespace Prisma {
     libraryId?: StringFilter<"Movie"> | string
   }
 
+  export type LibraryAccessUpsertWithWhereUniqueWithoutLibraryInput = {
+    where: LibraryAccessWhereUniqueInput
+    update: XOR<LibraryAccessUpdateWithoutLibraryInput, LibraryAccessUncheckedUpdateWithoutLibraryInput>
+    create: XOR<LibraryAccessCreateWithoutLibraryInput, LibraryAccessUncheckedCreateWithoutLibraryInput>
+  }
+
+  export type LibraryAccessUpdateWithWhereUniqueWithoutLibraryInput = {
+    where: LibraryAccessWhereUniqueInput
+    data: XOR<LibraryAccessUpdateWithoutLibraryInput, LibraryAccessUncheckedUpdateWithoutLibraryInput>
+  }
+
+  export type LibraryAccessUpdateManyWithWhereWithoutLibraryInput = {
+    where: LibraryAccessScalarWhereInput
+    data: XOR<LibraryAccessUpdateManyMutationInput, LibraryAccessUncheckedUpdateManyWithoutLibraryInput>
+  }
+
+  export type LibraryAccessScalarWhereInput = {
+    AND?: LibraryAccessScalarWhereInput | LibraryAccessScalarWhereInput[]
+    OR?: LibraryAccessScalarWhereInput[]
+    NOT?: LibraryAccessScalarWhereInput | LibraryAccessScalarWhereInput[]
+    id?: StringFilter<"LibraryAccess"> | string
+    libraryId?: StringFilter<"LibraryAccess"> | string
+    userId?: StringFilter<"LibraryAccess"> | string
+    access?: EnumLibraryAccessTypeFilter<"LibraryAccess"> | $Enums.LibraryAccessType
+  }
+
   export type MediaCreateWithoutStreamsInput = {
     id?: string
     path: string
@@ -12228,6 +14825,7 @@ export namespace Prisma {
     createdAt?: Date | string
     shows?: ShowCreateNestedManyWithoutLibraryInput
     movies?: MovieCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryUncheckedCreateWithoutMediasInput = {
@@ -12238,6 +14836,7 @@ export namespace Prisma {
     createdAt?: Date | string
     shows?: ShowUncheckedCreateNestedManyWithoutLibraryInput
     movies?: MovieUncheckedCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessUncheckedCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryCreateOrConnectWithoutMediasInput = {
@@ -12334,6 +14933,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     shows?: ShowUpdateManyWithoutLibraryNestedInput
     movies?: MovieUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUpdateManyWithoutLibraryNestedInput
   }
 
   export type LibraryUncheckedUpdateWithoutMediasInput = {
@@ -12344,6 +14944,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     shows?: ShowUncheckedUpdateManyWithoutLibraryNestedInput
     movies?: MovieUncheckedUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUncheckedUpdateManyWithoutLibraryNestedInput
   }
 
   export type StreamUpsertWithWhereUniqueWithoutMediaInput = {
@@ -12700,6 +15301,7 @@ export namespace Prisma {
     createdAt?: Date | string
     medias?: MediaCreateNestedManyWithoutLibraryInput
     movies?: MovieCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryUncheckedCreateWithoutShowsInput = {
@@ -12710,6 +15312,7 @@ export namespace Prisma {
     createdAt?: Date | string
     medias?: MediaUncheckedCreateNestedManyWithoutLibraryInput
     movies?: MovieUncheckedCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessUncheckedCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryCreateOrConnectWithoutShowsInput = {
@@ -12764,6 +15367,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     medias?: MediaUpdateManyWithoutLibraryNestedInput
     movies?: MovieUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUpdateManyWithoutLibraryNestedInput
   }
 
   export type LibraryUncheckedUpdateWithoutShowsInput = {
@@ -12774,6 +15378,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     medias?: MediaUncheckedUpdateManyWithoutLibraryNestedInput
     movies?: MovieUncheckedUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUncheckedUpdateManyWithoutLibraryNestedInput
   }
 
   export type MediaCreateWithoutMovieInput = {
@@ -12815,6 +15420,7 @@ export namespace Prisma {
     createdAt?: Date | string
     medias?: MediaCreateNestedManyWithoutLibraryInput
     shows?: ShowCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryUncheckedCreateWithoutMoviesInput = {
@@ -12825,6 +15431,7 @@ export namespace Prisma {
     createdAt?: Date | string
     medias?: MediaUncheckedCreateNestedManyWithoutLibraryInput
     shows?: ShowUncheckedCreateNestedManyWithoutLibraryInput
+    libraryAccess?: LibraryAccessUncheckedCreateNestedManyWithoutLibraryInput
   }
 
   export type LibraryCreateOrConnectWithoutMoviesInput = {
@@ -12888,6 +15495,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     medias?: MediaUpdateManyWithoutLibraryNestedInput
     shows?: ShowUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUpdateManyWithoutLibraryNestedInput
   }
 
   export type LibraryUncheckedUpdateWithoutMoviesInput = {
@@ -12898,6 +15506,149 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     medias?: MediaUncheckedUpdateManyWithoutLibraryNestedInput
     shows?: ShowUncheckedUpdateManyWithoutLibraryNestedInput
+    libraryAccess?: LibraryAccessUncheckedUpdateManyWithoutLibraryNestedInput
+  }
+
+  export type LibraryAccessCreateWithoutUserInput = {
+    id?: string
+    access: $Enums.LibraryAccessType
+    library: LibraryCreateNestedOneWithoutLibraryAccessInput
+  }
+
+  export type LibraryAccessUncheckedCreateWithoutUserInput = {
+    id?: string
+    libraryId: string
+    access: $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessCreateOrConnectWithoutUserInput = {
+    where: LibraryAccessWhereUniqueInput
+    create: XOR<LibraryAccessCreateWithoutUserInput, LibraryAccessUncheckedCreateWithoutUserInput>
+  }
+
+  export type LibraryAccessCreateManyUserInputEnvelope = {
+    data: LibraryAccessCreateManyUserInput | LibraryAccessCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LibraryAccessUpsertWithWhereUniqueWithoutUserInput = {
+    where: LibraryAccessWhereUniqueInput
+    update: XOR<LibraryAccessUpdateWithoutUserInput, LibraryAccessUncheckedUpdateWithoutUserInput>
+    create: XOR<LibraryAccessCreateWithoutUserInput, LibraryAccessUncheckedCreateWithoutUserInput>
+  }
+
+  export type LibraryAccessUpdateWithWhereUniqueWithoutUserInput = {
+    where: LibraryAccessWhereUniqueInput
+    data: XOR<LibraryAccessUpdateWithoutUserInput, LibraryAccessUncheckedUpdateWithoutUserInput>
+  }
+
+  export type LibraryAccessUpdateManyWithWhereWithoutUserInput = {
+    where: LibraryAccessScalarWhereInput
+    data: XOR<LibraryAccessUpdateManyMutationInput, LibraryAccessUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type LibraryCreateWithoutLibraryAccessInput = {
+    id?: string
+    type: $Enums.LibraryType
+    name: string
+    path: string
+    createdAt?: Date | string
+    medias?: MediaCreateNestedManyWithoutLibraryInput
+    shows?: ShowCreateNestedManyWithoutLibraryInput
+    movies?: MovieCreateNestedManyWithoutLibraryInput
+  }
+
+  export type LibraryUncheckedCreateWithoutLibraryAccessInput = {
+    id?: string
+    type: $Enums.LibraryType
+    name: string
+    path: string
+    createdAt?: Date | string
+    medias?: MediaUncheckedCreateNestedManyWithoutLibraryInput
+    shows?: ShowUncheckedCreateNestedManyWithoutLibraryInput
+    movies?: MovieUncheckedCreateNestedManyWithoutLibraryInput
+  }
+
+  export type LibraryCreateOrConnectWithoutLibraryAccessInput = {
+    where: LibraryWhereUniqueInput
+    create: XOR<LibraryCreateWithoutLibraryAccessInput, LibraryUncheckedCreateWithoutLibraryAccessInput>
+  }
+
+  export type UserCreateWithoutUserInput = {
+    id?: string
+    username: string
+    password: string
+    isOwner: boolean
+  }
+
+  export type UserUncheckedCreateWithoutUserInput = {
+    id?: string
+    username: string
+    password: string
+    isOwner: boolean
+  }
+
+  export type UserCreateOrConnectWithoutUserInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUserInput, UserUncheckedCreateWithoutUserInput>
+  }
+
+  export type LibraryUpsertWithoutLibraryAccessInput = {
+    update: XOR<LibraryUpdateWithoutLibraryAccessInput, LibraryUncheckedUpdateWithoutLibraryAccessInput>
+    create: XOR<LibraryCreateWithoutLibraryAccessInput, LibraryUncheckedCreateWithoutLibraryAccessInput>
+    where?: LibraryWhereInput
+  }
+
+  export type LibraryUpdateToOneWithWhereWithoutLibraryAccessInput = {
+    where?: LibraryWhereInput
+    data: XOR<LibraryUpdateWithoutLibraryAccessInput, LibraryUncheckedUpdateWithoutLibraryAccessInput>
+  }
+
+  export type LibraryUpdateWithoutLibraryAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumLibraryTypeFieldUpdateOperationsInput | $Enums.LibraryType
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    medias?: MediaUpdateManyWithoutLibraryNestedInput
+    shows?: ShowUpdateManyWithoutLibraryNestedInput
+    movies?: MovieUpdateManyWithoutLibraryNestedInput
+  }
+
+  export type LibraryUncheckedUpdateWithoutLibraryAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumLibraryTypeFieldUpdateOperationsInput | $Enums.LibraryType
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    medias?: MediaUncheckedUpdateManyWithoutLibraryNestedInput
+    shows?: ShowUncheckedUpdateManyWithoutLibraryNestedInput
+    movies?: MovieUncheckedUpdateManyWithoutLibraryNestedInput
+  }
+
+  export type UserUpsertWithoutUserInput = {
+    update: XOR<UserUpdateWithoutUserInput, UserUncheckedUpdateWithoutUserInput>
+    create: XOR<UserCreateWithoutUserInput, UserUncheckedCreateWithoutUserInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUserInput, UserUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isOwner?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isOwner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MediaCreateManyLibraryInput = {
@@ -12926,6 +15677,12 @@ export namespace Prisma {
     images?: MovieCreateimagesInput | string[]
     tmdbId: number
     mediaId: string
+  }
+
+  export type LibraryAccessCreateManyLibraryInput = {
+    id?: string
+    userId: string
+    access: $Enums.LibraryAccessType
   }
 
   export type MediaUpdateWithoutLibraryInput = {
@@ -13018,6 +15775,24 @@ export namespace Prisma {
     images?: MovieUpdateimagesInput | string[]
     tmdbId?: IntFieldUpdateOperationsInput | number
     mediaId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LibraryAccessUpdateWithoutLibraryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+    user?: UserUpdateOneRequiredWithoutUserNestedInput
+  }
+
+  export type LibraryAccessUncheckedUpdateWithoutLibraryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessUncheckedUpdateManyWithoutLibraryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
   }
 
   export type StreamCreateManyMediaInput = {
@@ -13118,6 +15893,30 @@ export namespace Prisma {
     images?: SeasonUpdateimagesInput | string[]
   }
 
+  export type LibraryAccessCreateManyUserInput = {
+    id?: string
+    libraryId: string
+    access: $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+    library?: LibraryUpdateOneRequiredWithoutLibraryAccessNestedInput
+  }
+
+  export type LibraryAccessUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    libraryId?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+  }
+
+  export type LibraryAccessUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    libraryId?: StringFieldUpdateOperationsInput | string
+    access?: EnumLibraryAccessTypeFieldUpdateOperationsInput | $Enums.LibraryAccessType
+  }
+
 
 
   /**
@@ -13139,6 +15938,10 @@ export namespace Prisma {
      * @deprecated Use ShowCountOutputTypeDefaultArgs instead
      */
     export type ShowCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ShowCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserCountOutputTypeDefaultArgs instead
+     */
+    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use LibraryDefaultArgs instead
      */
@@ -13171,6 +15974,14 @@ export namespace Prisma {
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ServerDefaultArgs instead
+     */
+    export type ServerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ServerDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use LibraryAccessDefaultArgs instead
+     */
+    export type LibraryAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LibraryAccessDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

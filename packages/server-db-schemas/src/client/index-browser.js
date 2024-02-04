@@ -176,7 +176,20 @@ exports.Prisma.MovieScalarFieldEnum = {
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
-  password: 'password'
+  password: 'password',
+  isOwner: 'isOwner'
+};
+
+exports.Prisma.ServerScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.LibraryAccessScalarFieldEnum = {
+  id: 'id',
+  libraryId: 'libraryId',
+  userId: 'userId',
+  access: 'access'
 };
 
 exports.Prisma.SortOrder = {
@@ -205,6 +218,11 @@ exports.StreamType = exports.$Enums.StreamType = {
   attachment: 'attachment'
 };
 
+exports.LibraryAccessType = exports.$Enums.LibraryAccessType = {
+  READ: 'READ',
+  WRITE: 'WRITE'
+};
+
 exports.Prisma.ModelName = {
   Library: 'Library',
   Stream: 'Stream',
@@ -213,7 +231,9 @@ exports.Prisma.ModelName = {
   Season: 'Season',
   Show: 'Show',
   Movie: 'Movie',
-  User: 'User'
+  User: 'User',
+  Server: 'Server',
+  LibraryAccess: 'LibraryAccess'
 };
 
 /**
