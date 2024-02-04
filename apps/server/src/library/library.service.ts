@@ -72,7 +72,7 @@ export class LibraryService {
       this.scanLibraryFiles(library);
       return library;
     } catch {
-      return false;
+      return null;
     }
   }
 

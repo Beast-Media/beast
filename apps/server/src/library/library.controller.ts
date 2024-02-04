@@ -38,9 +38,16 @@ export class LibraryController {
   @IsOwner()
   @TypedRoute.Post('/new')
   public async newLibrary(
+    @User() user: UserSession,
     @TypedBody() body: CreateLibraryDTO,
   ): Promise<Library | false> {
-    return this.libraryService.createLibrary(body);
+    const library = await this.libraryService.createLibrary(body);
+    if (!library) return false;
+    await this.libraryService.addAccess(library.id, [
+      { access: 'READ', userId: user.id },
+      { access: 'WRITE', userId: user.id },
+    ]);
+    return library;
   }
 
   @IsOwner()
