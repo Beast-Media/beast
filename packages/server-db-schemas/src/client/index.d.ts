@@ -12376,6 +12376,7 @@ export namespace Prisma {
 
   export type LibraryAccessWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    libraryId_userId_access?: LibraryAccessLibraryIdUserIdAccessCompoundUniqueInput
     AND?: LibraryAccessWhereInput | LibraryAccessWhereInput[]
     OR?: LibraryAccessWhereInput[]
     NOT?: LibraryAccessWhereInput | LibraryAccessWhereInput[]
@@ -12384,7 +12385,7 @@ export namespace Prisma {
     access?: EnumLibraryAccessTypeFilter<"LibraryAccess"> | $Enums.LibraryAccessType
     library?: XOR<LibraryRelationFilter, LibraryWhereInput>
     user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id" | "id">
+  }, "id" | "id" | "libraryId_userId_access">
 
   export type LibraryAccessOrderByWithAggregationInput = {
     id?: SortOrder
@@ -13646,6 +13647,12 @@ export namespace Prisma {
   export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type LibraryAccessLibraryIdUserIdAccessCompoundUniqueInput = {
+    libraryId: string
+    userId: string
+    access: $Enums.LibraryAccessType
   }
 
   export type LibraryAccessCountOrderByAggregateInput = {

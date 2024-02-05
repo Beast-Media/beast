@@ -28,8 +28,10 @@ git clone https://github.com/loucass003/beast.
 
 Frontend -> http://locahost:5173
 
-Backend Swagger -> http://localhost:3000/api
+Server Swagger -> http://localhost:3000/api
 > We recommend you do go check it, it is really useful to test your endpoints and stuff
+
+Api Swagger -> http://localhost:4000/api
 
 ## Code Style
 

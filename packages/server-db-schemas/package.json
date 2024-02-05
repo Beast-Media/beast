@@ -12,8 +12,8 @@
     "format": "prettier --ignore-path .gitignore -w .",
     "lint": "eslint --ignore-path .gitignore ./**/*.ts",
     "prepare": "ts-patch install && typia patch",
-    "prisma:gen": "prisma generate",
-    "prisma:push": "prisma db push"
+    "prisma:gen": "prisma generate && npm run build",
+    "prisma:push": "prisma db push && npm run build"
   },
   "licence": "MIT",
   "engine": {
