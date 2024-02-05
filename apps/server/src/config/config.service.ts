@@ -15,6 +15,7 @@ export class ConfigService {
       'METADATAS_PATH',
       'TRANSCODE_PATH',
       'AUTH_JWT_SECRET',
+      'SERVER_APP_PATH',
     ];
 
     for (const variable of variables) {
@@ -44,5 +45,9 @@ export class ConfigService {
 
   getTranscodePath() {
     return this.getValueOrThrow('TRANSCODE_PATH');
+  }
+
+  getAppPath() {
+    return this.getValueOrThrow('SERVER_APP_PATH');
   }
 }

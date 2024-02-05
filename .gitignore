@@ -40,3 +40,5 @@ yarn-error.log*
 
 
 volumes/
+
+.env.docker

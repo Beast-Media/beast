@@ -127,8 +127,9 @@ export function Player({ mediaId }: { mediaId: string }) {
     //     "manifest loaded, found " + data.levels.length + " quality level"
     //   );
     // });
-
-    const source = `${import.meta.env.VITE_API_PATH}/public/transcodes/${start.id}/master.m3u8`;
+    const url = new URL(window.origin);
+    const baseUrl = `${url.protocol}//${url.hostname}:${__API_PORT__}`;
+    const source = `${baseUrl}/public/transcodes/${start.id}/master.m3u8`;
     hls.loadSource(source);
     hls.attachMedia(video);
     return {

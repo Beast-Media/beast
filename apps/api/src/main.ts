@@ -65,22 +65,6 @@ async function bootstrap() {
     },
   );
 
-  app.register((instance, opts, next) => {
-    instance.register(fastifyStatic as any, {
-      root: resolve(join(config.getMetadatasPath(), 'images')),
-      prefix: '/public/images',
-    });
-    next();
-  });
-
-  app.register((instance, opts, next) => {
-    instance.register(fastifyStatic as any, {
-      root: resolve(config.getTranscodePath()),
-      prefix: '/public/transcodes',
-    });
-    next();
-  });
-
   initLogger(app);
 
   app.enableShutdownHooks([ShutdownSignal.SIGTERM, ShutdownSignal.SIGINT]);

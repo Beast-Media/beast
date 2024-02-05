@@ -2,7 +2,6 @@ import { Component } from "solid-js";
 import { LogoFull } from "./commons/Logo";
 import { MenuIcon } from "./commons/Icons";
 
-
 export const TopBar: Component = (props) => {
     return (
         <div class="flex h-full w-full justify-between bg-beast-bg-1 items-center shadow-lg">
@@ -14,5 +13,4 @@ export const TopBar: Component = (props) => {
             <div class="">SETTINGS</div>
         </div>
     )
-
 }

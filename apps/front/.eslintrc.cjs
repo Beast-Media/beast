@@ -3,6 +3,7 @@ module.exports = {
     browser: true,
     es2021: true
   },
+  
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   overrides: [
     {
@@ -21,5 +22,5 @@ module.exports = {
     sourceType: "module"
   },
   plugins: ["@typescript-eslint"],
-  rules: {}
+  rules: {},
 };

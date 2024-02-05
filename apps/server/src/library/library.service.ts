@@ -96,10 +96,10 @@ export class LibraryService {
     for (const item of data) {
       await this.prisma.libraryAccess.delete({
         where: {
-          access: item.access,
-          libraryId_userId: {
-            userId: item.userId,
+          libraryId_userId_access: {
+            access: item.access,
             libraryId,
+            userId: item.userId,
           },
         },
       });

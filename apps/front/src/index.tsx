@@ -22,9 +22,9 @@ const WebsocketContextProvider: ParentComponent = (props) => {
 render(
   () => (
     <QueryClientProvider client={queryClient}>
-      <WebsocketContextProvider>
+      {/* <WebsocketContextProvider> */}
         <App />
-      </WebsocketContextProvider>
+      {/* </WebsocketContextProvider> */}
     </QueryClientProvider>
   ),
   root!

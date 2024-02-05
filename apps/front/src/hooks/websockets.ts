@@ -35,19 +35,15 @@ export type MessageEvent = {
   reply: (msg: OutgoingClientMessage['data']) => void;
 }
 
-// export function createWebocket() {
-//   const socket = new WebSocket(import.meta.env.VITE_API_WS_PATH)
-//   socket.binaryType = 'arraybuffer';
-//   return socket;
-// }
-
 export interface SocketInputs {
   request: (data: ArrayBuffer, cb?: (data: ArrayBuffer) => void) => void;
 }
 
 export function provideWebsockets(): WebsocketContext {
   const [state, setState] = createSignal<WebsocketState>({ status: 'open' });
-  const socket: Socket<SocketInputs> = io(import.meta.env.VITE_API_WS_PATH, { transports: ['websocket'] });
+  const url = new URL(window.origin);
+  const baseUrl = `ws://${url.hostname}:${__API_WS_PORT__}`;
+  const socket: Socket<SocketInputs> = io(baseUrl, { transports: ['websocket'] });
   const eventlistener = new EventTarget();
 
   const send = (msg: OutgoingClientMessage['data']) => {

@@ -11,14 +11,14 @@ type LoginForm = Copy<LoginBody>;
 
 export const Login: Component = () => {
   const nav = useNavigate();
-  const { login: websocketLogin, onMessage } = useWebsockets();
+  // const { login: websocketLogin } = useWebsockets();
   const [, { Form, Field }] = createForm<LoginForm>();
 
 
   const submit = async (value: LoginForm) => {
     const res = await logIn(value).catch(() => null);
     if (res) {
-      websocketLogin();
+      // websocketLogin();
       nav('/');
     }
   };
