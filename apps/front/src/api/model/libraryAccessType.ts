@@ -5,10 +5,11 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type LibraryType = (typeof LibraryType)[keyof typeof LibraryType];
+export type LibraryAccessType =
+  (typeof LibraryAccessType)[keyof typeof LibraryAccessType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const LibraryType = {
-  MOVIES: "MOVIES",
-  TV_SHOWS: "TV_SHOWS",
+export const LibraryAccessType = {
+  READ: "READ",
+  WRITE: "WRITE",
 } as const;

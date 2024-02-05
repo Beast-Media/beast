@@ -1,7 +1,7 @@
 import Axios, { AxiosError, AxiosRequestConfig, HttpStatusCode } from 'axios';
 import { logout, refreshAccessToken } from './hooks/auth';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = process.env.VITE_API_PATH ?? 'http://localhost:3000';
 
 export const AXIOS_INSTANCE = Axios.create({ baseURL: baseUrl, withCredentials: true }); // use your own URL here or environment variable
 export const AXIOS_AUTH_INSTANCE = Axios.create({ baseURL: baseUrl, withCredentials: true }); // use your own URL here or environment variable

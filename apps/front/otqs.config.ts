@@ -9,7 +9,7 @@ export default defineConfig({
       client: "solid-query",
       //   mock: true,
       prettier: true,
-      baseUrl: "http://localhost:3000",
+      baseUrl: process.env.VITE_API_PATH ?? "http://localhost:3000",
       override: {
         mutator: {
           path: './src/custom-axios-instance.ts',

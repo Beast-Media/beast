@@ -16,6 +16,7 @@ export class ConfigService {
       'TRANSCODE_PATH',
       'AUTH_JWT_SECRET',
       'TMDB_API_KEY',
+      'API_APP_PATH',
     ];
 
     for (const variable of variables) {
@@ -49,5 +50,9 @@ export class ConfigService {
 
   getTMDBApiKey() {
     return this.getValueOrThrow('TMDB_API_KEY');
+  }
+
+  getAppPath() {
+    return this.getValueOrThrow('API_APP_PATH');
   }
 }

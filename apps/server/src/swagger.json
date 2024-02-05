@@ -260,31 +260,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "libraryId": {
-                        "type": "string"
-                      },
-                      "userId": {
-                        "type": "string"
-                      },
-                      "access": {
-                        "$ref": "#/components/schemas/LibraryAccessType"
-                      }
-                    },
-                    "nullable": false,
-                    "required": [
-                      "id",
-                      "libraryId",
-                      "userId",
-                      "access"
-                    ]
-                  }
+                  "type": "boolean"
                 }
               }
             }
@@ -940,13 +916,6 @@
         "nullable": false,
         "required": [
           "libraryId"
-        ]
-      },
-      "LibraryAccessType": {
-        "type": "string",
-        "enum": [
-          "READ",
-          "WRITE"
         ]
       },
       "QueryLibrary": {

@@ -128,7 +128,7 @@ export function Player({ mediaId }: { mediaId: string }) {
     //   );
     // });
 
-    const source = `http://localhost:3000/public/transcodes/${start.id}/master.m3u8`;
+    const source = `${import.meta.env.VITE_API_PATH}/public/transcodes/${start.id}/master.m3u8`;
     hls.loadSource(source);
     hls.attachMedia(video);
     return {

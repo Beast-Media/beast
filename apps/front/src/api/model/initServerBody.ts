@@ -5,6 +5,6 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type GetMovieParams = {
-  movieId: string;
-};
+export interface InitServerBody {
+  name: string;
+}

@@ -4,13 +4,12 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
+import type { LibraryType } from "./libraryType";
 
-export type LibraryContentMovieData = {
+export type PostLibraryNew201OneOf = {
+  createdAt: string;
   id: string;
-  images: string[];
-  libraryId: string;
-  mediaId: string;
   name: string;
-  overview: string | null;
-  tmdbId: number;
+  path: string;
+  type: LibraryType;
 };

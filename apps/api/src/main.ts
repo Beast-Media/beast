@@ -40,6 +40,8 @@ async function bootstrap() {
     },
   );
 
+  const config = app.get(ConfigService);
+
   SwaggerModule.setup(
     '/api',
     app,
@@ -47,7 +49,7 @@ async function bootstrap() {
       ...(swaggerDocument as any),
       servers: [
         {
-          url: `http://localhost:4000`,
+          url: config.getAppPath(),
           description: 'Main Server',
         },
       ],
@@ -62,8 +64,6 @@ async function bootstrap() {
       },
     },
   );
-
-  const config = app.get(ConfigService);
 
   app.register((instance, opts, next) => {
     instance.register(fastifyStatic as any, {

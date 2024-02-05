@@ -18,7 +18,6 @@ export class PlayerController {
 
   @TypedRoute.Post('/start')
   async startPlayer(
-    // @User() user: UserSession,
     @TypedBody() body: PlayerSettings,
   ): Promise<StartedPlayerInfos> {
     return this.playerService.startPlayer(body);
@@ -30,19 +29,13 @@ export class PlayerController {
    * the server will close the player to save ressources
    */
   @TypedRoute.Post('/keepalive')
-  async keepalive(
-    // @User() user: UserSession,
-    @TypedQuery() query: QueryPlayer,
-  ): Promise<boolean> {
+  async keepalive(@TypedQuery() query: QueryPlayer): Promise<boolean> {
     this.playerService.keepalive(query.id);
     return true;
   }
 
   @TypedRoute.Post('/end')
-  async endPlayer(
-    // @User() user: UserSession,
-    @TypedQuery() query: QueryPlayer,
-  ) {
+  async endPlayer(@TypedQuery() query: QueryPlayer) {
     await this.playerService.endPlayer(query.id);
   }
 }
