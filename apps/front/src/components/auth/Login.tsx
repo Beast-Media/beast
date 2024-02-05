@@ -5,7 +5,6 @@ import { LoginBody } from "../../api/model";
 import { Button } from "../commons/Button";
 import { A, useNavigate } from "@solidjs/router";
 import { logIn } from "../../hooks/auth";
-import { useWebsockets } from "../../hooks/websockets";
 
 type LoginForm = Copy<LoginBody>;
 
