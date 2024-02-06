@@ -23,33 +23,39 @@ export const Login: Component = () => {
   };
 
   return (
-    <Form onSubmit={submit} class="flex flex-col gap-2 m-4">
-      <Field name="username" validate={[required("Please enter your username.")]}>
-        {(field, props) => (
-          <TextInput
-            {...props}
-            type="text"
-            label="Username"
-            value={field.value}
-            error={field.error}
-            required
-          ></TextInput>
-        )}
-      </Field>
-      <Field name="password">
-        {(field, props) => (
-          <TextInput
-            {...props}
-            type="password"
-            label="Password"
-            value={field.value}
-            error={field.error}
-            required
-          ></TextInput>
-        )}
-      </Field>
-      <Button type="submit">Submit</Button>
-      <A href="/register">Register</A>
+    <Form onSubmit={submit} class="flex flex-col gap-4 px-8 py-4 items-center">
+      <div class="text-md px-16">Welcome to Beast!</div>
+      <div class="flex flex-col gap-2 min-w-96">
+        <Field name="username" validate={[required("Please enter your username.")]}>
+          {(field, props) => (
+            <TextInput
+              {...props}
+              type="email"
+              label="Email"
+              placeholder="Enter your email address"
+              value={field.value}
+              error={field.error}
+              required
+            ></TextInput>
+          )}
+        </Field>
+        <Field name="password">
+          {(field, props) => (
+            <TextInput
+              {...props}
+              type="password"
+              label="Password"
+              placeholder="Enter your password"
+              value={field.value}
+              error={field.error}
+              required
+            ></TextInput>
+          )}
+        </Field>
+        <A href="">Forgot your password?</A>
+      </div>
+      <Button type="submit" class="py-4 px-8 text-sm bg-beast-main hover:bg-beast-main-2">Sign In</Button>
+      <span>You dont't have an account? <A href="/register" class="text-beast-main">Sign Up</A></span>
     </Form>
   );
 };

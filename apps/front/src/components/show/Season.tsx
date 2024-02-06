@@ -6,9 +6,9 @@ import { Card } from "../commons/Card";
 import { createGetShowSeason } from "../../api/endpoints/beast-endpoints";
 
 export const Season: Component = () => {
-    const { id } = useParams<{ id: string }>();
+    const params = useParams<{ id: string }>();
 
-    const season = createGetShowSeason(() => ({ params: { seasonId: id } }))
+    const season = createGetShowSeason(() => ({ params: { seasonId: params.id } }))
 
     return (
         <div>

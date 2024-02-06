@@ -4,9 +4,9 @@ import { Card } from "../commons/Card";
 import { createGetShow } from "../../api/endpoints/beast-endpoints";
 
 export const TVShow: Component = () => {
-    const { id } = useParams<{ id: string }>();
+    const params = useParams<{ id: string }>();
 
-    const show = createGetShow(() => ({ params: { showId: id } }))
+    const show = createGetShow(() => ({ params: { showId: params.id } }))
 
     return (
         <div>

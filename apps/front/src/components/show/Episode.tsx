@@ -4,9 +4,8 @@ import { Button } from "../commons/Button";
 import { createGetShowEpisode } from "../../api/endpoints/beast-endpoints";
 
 export const Episode: Component = () => {
-    const { id } = useParams<{ id: string }>();
-
-    const episode = createGetShowEpisode(() => ({ params: { episodeId: id } }))
+    const params = useParams<{ id: string }>();
+    const episode = createGetShowEpisode(() => ({ params: { episodeId: params.id } }))
 
     return (
         <div>

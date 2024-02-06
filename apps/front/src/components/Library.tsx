@@ -4,10 +4,12 @@ import { createGetLibrary, createGetLibraryContent, } from "../api/endpoints/bea
 import { Card } from "./commons/Card";
 
 export const Library: Component = () => {
-    const { id } = useParams<{ id: string }>();
+    const params = useParams<{ id: string }>();
 
-    const library = createGetLibrary(() => ({ params: { libraryId: id } }))
-    const libraryContent = createGetLibraryContent(() => ({ params: { libraryId: id } }))
+
+    const library = createGetLibrary(() => ({ params: { libraryId: params.id } }))
+    const libraryContent = createGetLibraryContent(() => ({ params: { libraryId: params.id } }))
+
 
     return (
         <div>

@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-export const LogoFull: Component = () => {
+export const LogoFull: Component<{ width?: number; height?: number }> = ({ width = 159 }) => {
   return (
     <svg
-      width="159"
-      height="46"
+      width={width}
+      height={width * 46 / 159 }
       viewBox="0 0 159 46"
       xmlns="http://www.w3.org/2000/svg"
     >

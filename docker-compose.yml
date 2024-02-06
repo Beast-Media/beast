@@ -11,39 +11,19 @@ services:
       - 1111:5432
     volumes:
       - database-volume:/var/lib/postgresql/data
-  beast:
-    build:
-      args:
-        - API_PORT=3000
-        - API_WS_PORT=3001
-      context: .
-    ports:
-      - 1000:80
-      - 3000:3000
-    env_file: .env.docker
-    volumes:
-      - ./volumes:/volumes
-      - /mnt/share:/mnt/share
-  #   command: npm run dev
-  #   restart: always  
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "50m"
+  # beast:
+  #   build:
+  #     args:
+  #       - API_PORT=3000
+  #       - API_WS_PORT=3001
+  #     context: .
   #   ports:
+  #     - 1000:80
   #     - 3000:3000
-  #     - 3001:3001
-  #   depends_on:
-  #     - beast-database
+  #   env_file: .env.docker
   #   volumes:
-  #     - ./packages/src:/app/packages
-  #     - ./apps/src:/app/apps
-  #     - ./volumes/metadatas:/metadatas
-  #     - "/mnt/g/Videos:/media"
-  #   environment:
-  #     METADATAS_PATH: /metadatas
-  #     DATABASE_URL: ${DATABASE_URL}
-  #     AUTH_JWT_SECRET: ${AUTH_JWT_SECRET}
+  #     - ./volumes:/volumes
+  #     - /mnt/share:/mnt/share
 
 volumes:
   database-volume:

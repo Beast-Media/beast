@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { JSX, splitProps } from "solid-js";
 
 type TextInputProps = {
@@ -17,7 +18,7 @@ type TextInputProps = {
 export function TextInput(props: TextInputProps) {
   const [, inputProps] = splitProps(props, ["value", "label", "error"]);
   return (
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-1 py-1">
       {props.label && (
         <label for={props.name}>
           {props.label} {props.required && <span>*</span>}
@@ -25,13 +26,13 @@ export function TextInput(props: TextInputProps) {
       )}
       <input
         {...inputProps}
-        class="bg-beast-bg-1 rounded-md p-2"
+        class={clsx("bg-beast-bg rounded-md p-2 placeholder:text-beast-bg-2", props.error && 'outline-1 outline outline-beast-accent-error')}
         id={props.name}
         value={props.value || ""}
         aria-invalid={!!props.error}
         aria-errormessage={`${props.name}-error`}
       />
-      {props.error && <div id={`${props.name}-error`}>{props.error}</div>}
+      {props.error && <div id={`${props.name}-error`} class="text-beast-accent-error">{props.error}</div>}
     </div>
   );
 }

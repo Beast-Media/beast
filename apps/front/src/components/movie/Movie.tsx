@@ -4,8 +4,8 @@ import { createGetMovie } from "../../api/endpoints/beast-endpoints";
 import { Button } from "../commons/Button";
 
 export const Movie: Component = () => {
-    const { id } = useParams<{ id: string }>();
-    const movie = createGetMovie(() => ({ params: { movieId: id } }));
+    const params = useParams<{ id: string }>();
+    const movie = createGetMovie(() => ({ params: { movieId: params.id } }));
 
     return (
         <>

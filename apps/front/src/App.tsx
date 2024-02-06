@@ -1,7 +1,7 @@
 import { Router, Route, useNavigate } from "@solidjs/router";
 import { Home } from "./components/Home";
 import { MainLayout } from "./components/layouts/MainLayout";
-import { AuthLayout } from "./components/layouts/AuthLayout";
+import { CenterLayout } from "./components/layouts/CenterLayout";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
 import { ParentComponent, createEffect } from "solid-js";
@@ -103,17 +103,17 @@ export default function App() {
           <Route
             path="/login"
             component={() => (
-              <AuthLayout>
+              <CenterLayout>
                 <Login />
-              </AuthLayout>
+              </CenterLayout>
             )}
           />
           <Route
             path="/register"
             component={() => (
-              <AuthLayout>
+              <CenterLayout>
                 <Register />
-              </AuthLayout>
+              </CenterLayout>
             )}
           />
         </Route>
