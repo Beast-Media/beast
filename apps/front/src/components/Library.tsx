@@ -1,7 +1,9 @@
 import { useParams } from "@solidjs/router";
 import { Component, For, Show, Suspense } from "solid-js";
-import { createGetLibrary, createGetLibraryContent, } from "../api/endpoints/beast-endpoints";
+import { createGetLibrary, createGetLibraryContent, getLibraryScan, } from "../api/endpoints/beast-endpoints";
 import { Card } from "./commons/Card";
+import { SyncIcon } from "./commons/Icons";
+import { Button } from "./commons/Button";
 
 export const Library: Component = () => {
     const params = useParams<{ id: string }>();
@@ -10,12 +12,15 @@ export const Library: Component = () => {
     const library = createGetLibrary(() => ({ params: { libraryId: params.id } }))
     const libraryContent = createGetLibraryContent(() => ({ params: { libraryId: params.id } }))
 
+    const sync = async () => {
+        await getLibraryScan({ libraryId: params.id });
+    }
 
     return (
         <div>
             <Suspense fallback="Loading" >
                 <div class="flex flex-col w-full px-2">
-                    <div class="text-md">{library.data?.name}</div>
+                    <div class="text-md flex justify-between">{library.data?.name} <Button variant="icon" onClick={sync}><SyncIcon/></Button></div>
                     <div class="flex flex-wrap gap-3">
                         <Show when={libraryContent.data} fallback="Loading">
                             {(libContent) => 
