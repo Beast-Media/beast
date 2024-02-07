@@ -11,7 +11,7 @@
     "dev": "npm run copy-client && tsc  -b ./tsconfig.json --watch",
     "format": "prettier --ignore-path .gitignore -w .",
     "lint": "eslint --ignore-path .gitignore ./**/*.ts",
-    "prepare": "ts-patch install && typia patch",
+    "prepare": "ts-patch install && typia patch && pnpm run build",
     "prisma:gen": "prisma generate && npm run build",
     "prisma:push": "prisma db push && npm run build",
     "prisma:push:force": "prisma db push --force-reset && npm run build"
@@ -32,12 +32,12 @@
     "prettier": "^2.7.1",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.1.2",
-    "tsx": "^3"
+    "tsx": "^3",
+    "typescript": "^5.3.2"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.1",
     "@nestjs/core": "^10.3.1",
-    "typia": "^5.3.12",
-    "typescript": "^5.3.2"
+    "typia": "^5.3.12"
   }
 }

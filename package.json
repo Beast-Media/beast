@@ -2,31 +2,23 @@
   "name": "beast-turbo",
   "private": true,
   "scripts": {
-    "build": "dotenv -- turbo build",
-    "dev": "dotenv -- turbo dev",
-    "lint": "dotenv -- turbo lint",
-    "prisma:gen": "dotenv -- turbo prisma:gen",
-    "prisma:push": "dotenv -- turbo prisma:push",
-    "prisma:push:force": "dotenv -- turbo prisma:push:force",
-    "swagger": "dotenv -- turbo run swagger",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev": "dotenv -- pnpm --recursive --parallel dev",
+    "build": "dotenv -- pnpm --recursive --parallel --filter './apps/*' build"
   },
   "devDependencies": {
+    "dotenv": "^16.3.2",
+    "dotenv-cli": "^7.3.0",
+    "pnpm": "^8.15.1",
     "prettier": "^3.1.1",
-    "prisma": "^5.9.0",
-    "turbo": "latest"
+    "prisma": "^5.9.0"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@10.2.4",
+  "packageManager": "pnpm@8.15.1+sha256.245fe901f8e7fa8782d7f17d32b6a83995e2ae03984cb5b62b8949bfdc27c7b5",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "dotenv": "^16.3.2",
-    "dotenv-cli": "^7.3.0",
-    "typescript": "^5.3.2"
-  }
+  ]
 }

@@ -24,6 +24,7 @@ export const customInstance = <T>(
     const newUrl = new URL(baseUrl);
     newUrl.pathname = oldUrl.pathname
     config.url = newUrl.toString();
+    console.log(newUrl.toString())
 
     const promise = (options?.useAuthInstance ? AXIOS_AUTH_INSTANCE : AXIOS_INSTANCE)({
         ...config,

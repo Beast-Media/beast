@@ -91,9 +91,9 @@ export default function App() {
             <Route path="/libraries/new" component={CreateLibrary}></Route>
           </Route>
           <Route path="/media/:id" component={Media} />
-          <Route path="/init" component={() => (
+          <Route path="/init" component={(props) => (
             <ServerInitGuard>
-              <CenterLayout></CenterLayout>
+              <CenterLayout>{props.children}</CenterLayout>
             </ServerInitGuard>
           )}>
             <Route
@@ -104,9 +104,9 @@ export default function App() {
         </Route>
         <Route
           path="/"
-          component={() => (
+          component={(props) => (
             <LoginGuard>
-              <CenterLayout></CenterLayout>
+              <CenterLayout>{props.children}</CenterLayout>
             </LoginGuard>
           )}
         >

@@ -10,7 +10,7 @@
     "dev": "tsc  -b ./tsconfig.json --watch",
     "format": "prettier --ignore-path .gitignore -w .",
     "lint": "eslint --ignore-path .gitignore ./**/*.ts",
-    "prepare": "ts-patch install && typia patch"
+    "prepare": "ts-patch install && typia patch && pnpm run build"
   },
   "licence": "MIT",
   "engine": {
@@ -28,7 +28,8 @@
     "prettier": "^3.0.0",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.1.2",
-    "tsx": "^3"
+    "tsx": "^3",
+    "typescript": "^5.3.2"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.1",
@@ -38,7 +39,6 @@
     "nestjs-pino": "^4.0.0",
     "pino-http": "^9.0.0",
     "pino-pretty": "^10.3.1",
-    "typia": "^5.4.4",
-    "typescript": "^5.3.2"
+    "typia": "^5.4.4"
   }
 }

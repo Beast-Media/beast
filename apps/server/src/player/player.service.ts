@@ -32,7 +32,9 @@ export class PlayerService
   ) {}
 
   async onApplicationBootstrap() {
-    const folders = await readdir(this.configService.getTranscodePath());
+    const folders = await readdir(this.configService.getTranscodePath()).catch(
+      () => [],
+    );
     for (const folder of folders) {
       await rm(join(this.configService.getTranscodePath(), folder), {
         recursive: true,

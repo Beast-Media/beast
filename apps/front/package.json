@@ -10,7 +10,7 @@
     "swagger": "otqs"
   },
   "dependencies": {
-    "@beast/sockets": "^1.0.0",
+    "@beast/sockets": "workspace:*",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@modular-forms/solid": "^0.20.0",
     "@solid-primitives/scheduled": "^1.4.2",

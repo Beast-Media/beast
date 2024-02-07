@@ -1,22 +1,4 @@
-FROM node:20-buster-slim as building
-WORKDIR /app
-
-ARG API_PORT
-ENV API_PORT=$API_PORT
-
-ARG API_WS_PORT
-ENV API_WS_PORT=$API_WS_PORT
-
-COPY . .
-RUN npm install
-RUN npm run build
-RUN mkdir -p ./build/front ./build/server
-RUN cp -r -L ./node_modules ./build/server
-RUN cp -r apps/front/dist/* ./build/front
-RUN cp -r apps/server/dist/* ./build/server
-
-
-FROM node:20-buster-slim
+FROM node:20-slim AS base
 
 RUN set -ex; \
     apt-get update -y; \
@@ -27,10 +9,24 @@ RUN set -ex; \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
     :
 
-WORKDIR /app
 
-COPY --from=building /app/build/front /app/front
-COPY --from=building /app/build/server /app/server
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+ARG API_PORT
+ENV API_PORT=$API_PORT
+
+ARG API_WS_PORT
+ENV API_WS_PORT=$API_WS_PORT
+
+RUN pnpm run -r --filter='./apps/*' build
+RUN pnpm deploy --filter=server --prod /prod/server
+RUN cp -r /usr/src/app/apps/front/dist /prod/front
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
