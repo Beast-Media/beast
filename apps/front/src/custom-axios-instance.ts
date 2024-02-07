@@ -2,11 +2,8 @@ import Axios, { AxiosError, AxiosRequestConfig, HttpStatusCode } from 'axios';
 import { logout, refreshAccessToken } from './hooks/auth';
 
 
-console.log(__API_PORT__)
 const url = new URL(window.origin);
-
 const baseUrl = `${url.protocol}//${url.hostname}:${__API_PORT__}`;
-
 export const AXIOS_INSTANCE = Axios.create({ baseURL: baseUrl, withCredentials: true }); // use your own URL here or environment variable
 export const AXIOS_AUTH_INSTANCE = Axios.create({ baseURL: baseUrl, withCredentials: true }); // use your own URL here or environment variable
 
@@ -22,6 +19,11 @@ export const customInstance = <T>(
     if (config.params?.query) {
         config.params = config.params.query;
     }
+
+    const oldUrl = new URL(config.url ?? baseUrl);
+    const newUrl = new URL(baseUrl);
+    newUrl.pathname = oldUrl.pathname
+    config.url = newUrl.toString();
 
     const promise = (options?.useAuthInstance ? AXIOS_AUTH_INSTANCE : AXIOS_INSTANCE)({
         ...config,

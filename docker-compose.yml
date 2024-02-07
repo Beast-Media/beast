@@ -11,19 +11,20 @@ services:
       - 1111:5432
     volumes:
       - database-volume:/var/lib/postgresql/data
-  # beast:
-  #   build:
-  #     args:
-  #       - API_PORT=3000
-  #       - API_WS_PORT=3001
-  #     context: .
-  #   ports:
-  #     - 1000:80
-  #     - 3000:3000
-  #   env_file: .env.docker
-  #   volumes:
-  #     - ./volumes:/volumes
-  #     - /mnt/share:/mnt/share
+  beast:
+    build:
+      args:
+        - API_PORT=3000
+        - API_WS_PORT=3001
+      context: .
+      dockerfile: beast.Dockerfile
+    ports:
+      - 1000:80
+      - 3000:3000
+    env_file: .env.docker
+    volumes:
+      - ./volumes:/volumes
+      - /mnt/libraries:/mnt/libraries
 
 volumes:
   database-volume:

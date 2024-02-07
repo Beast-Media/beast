@@ -50,7 +50,3 @@ body {
   background: theme('colors.beast-bg-3');
 }
 
-@font-face {
-  font-family: 'Ubuntu';
-  src: url('/fonts/Ubuntu-R.woff2') format('woff2');
-}
