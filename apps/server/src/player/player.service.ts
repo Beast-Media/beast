@@ -147,7 +147,7 @@ export class PlayerService
     await mkdir(playerFolder, { recursive: true });
     const ffpmegProcess = await this.spawnTranscoder(
       settings,
-      media.path,
+      join(this.configService.getLibrariesRoot(), media.path),
       playerFolder,
     );
 

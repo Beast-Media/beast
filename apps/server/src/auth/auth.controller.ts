@@ -34,7 +34,7 @@ export class AuthController {
   @TypedRoute.Post('login')
   async login(@TypedBody() body: LoginBody): Promise<AuthTokens> {
     const foundUser = await this.prisma.user.findFirst({
-      where: { username: body.username },
+      where: { email: body.email },
     });
     if (!foundUser)
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -71,7 +71,7 @@ export class AuthController {
   @TypedRoute.Post('register')
   async register(@TypedBody() body: RegisterBody): Promise<boolean> {
     const foundUser = await this.prisma.user.findFirst({
-      where: { username: body.username },
+      where: { email: body.email },
     });
     if (foundUser) return false;
 
@@ -80,7 +80,7 @@ export class AuthController {
     try {
       await this.prisma.user.create({
         data: {
-          username: body.username,
+          email: body.email,
           password: await hash(body.password),
           isOwner: isFisrtUser,
         },

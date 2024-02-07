@@ -5,6 +5,7 @@ import { LoginBody } from "../../api/model";
 import { Button } from "../commons/Button";
 import { A, useNavigate } from "@solidjs/router";
 import { logIn } from "../../hooks/auth";
+import { getSettingsInitialized } from "../../api/endpoints/beast-endpoints";
 
 type LoginForm = Copy<LoginBody>;
 
@@ -18,7 +19,9 @@ export const Login: Component = () => {
     const res = await logIn(value).catch(() => null);
     if (res) {
       // websocketLogin();
-      nav('/');
+      const isInitialized = await getSettingsInitialized();
+      if (isInitialized) nav('/');
+      else nav('/init');
     }
   };
 
@@ -26,7 +29,7 @@ export const Login: Component = () => {
     <Form onSubmit={submit} class="flex flex-col gap-4 px-8 py-4 items-center">
       <div class="text-md px-16">Welcome to Beast!</div>
       <div class="flex flex-col gap-2 min-w-96">
-        <Field name="username" validate={[required("Please enter your username.")]}>
+        <Field name="email" validate={[required("Please enter your username.")]}>
           {(field, props) => (
             <TextInput
               {...props}

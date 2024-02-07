@@ -3,12 +3,15 @@ import { Media, ServerDBService } from '@beast/server-db-schemas';
 import { CreateMedia, IndexingMedia, MediaWithStreams } from './dto/media.dto';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
+import { ConfigService } from 'src/config/config.service';
+import { join } from 'path';
 
 @Injectable()
 export class MediaService {
   constructor(
     private prisma: ServerDBService,
     private ffmpegService: FFmpegService,
+    private configService: ConfigService,
   ) {}
 
   async getMedia(id: Media['id']): Promise<Media> {
@@ -25,7 +28,9 @@ export class MediaService {
   }
 
   async createMediaFromIndexing(media: IndexingMedia): Promise<Media> {
-    const probeData = await this.ffmpegService.probeFile(media.path);
+    const probeData = await this.ffmpegService.probeFile(
+      join(this.configService.getLibrariesRoot(), media.path),
+    );
 
     if (!probeData) throw new Error('unable to probe file');
 

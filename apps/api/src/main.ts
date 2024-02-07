@@ -7,9 +7,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { HttpException, HttpStatus, ShutdownSignal } from '@nestjs/common';
-import { join, resolve } from 'path';
 import { ConfigService } from './config/config.service';
-import { fastifyStatic } from '@fastify/static';
 import { initLogger } from '@beast/nestjs-commons';
 
 async function bootstrap() {

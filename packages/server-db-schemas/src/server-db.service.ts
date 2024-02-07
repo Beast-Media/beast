@@ -6,6 +6,7 @@ export class ServerDBService extends PrismaClient implements OnModuleInit {
   constructor() {
     super({
       log: ['error', 'warn', 'info', 'query'],
+      // datasourceUrl: config.database_url,
     });
   }
 

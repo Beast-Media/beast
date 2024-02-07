@@ -159,7 +159,10 @@ export class ShowService {
 
   async scanShow(showPath: string, library: Pick<Library, 'id' | 'path'>) {
     const metadataFolder = this.configService.getMetadatasPath();
-    const files = await readdir(showPath, { recursive: true });
+    const files = await readdir(
+      join(this.configService.getLibrariesRoot(), showPath),
+      { recursive: true },
+    );
 
     let composedShow: ComposedShow | null = null;
 
@@ -308,7 +311,9 @@ export class ShowService {
     const metadataFolder = this.configService.getMetadatasPath();
     await mkdir(join(metadataFolder, 'images'), { recursive: true });
 
-    const showFolders = await readdir(library.path);
+    const showFolders = await readdir(
+      join(this.configService.getLibrariesRoot(), library.path),
+    );
     for (const showFolder of showFolders) {
       this.tasksService.queueTask({
         name: 'index_show',

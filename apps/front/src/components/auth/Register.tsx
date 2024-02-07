@@ -7,7 +7,7 @@ import { object, string } from "zod";
 import { A, useNavigate } from "@solidjs/router";
 
 const registerSchema = object({
-  username: string().email("Invalid email address").min(1, "Email is required"),
+  email: string().email("Invalid email address").min(1, "Email is required"),
   password: string().length(8, "You password must have 8 characters or more."),
   confirm: string(),
 }).refine((data) => data?.password === data.confirm, {
@@ -34,7 +34,7 @@ export const Register: Component = () => {
     <Form onSubmit={submit} class="flex flex-col gap-4 px-8 py-4 items-center">
       <div class="text-md px-16">Welcome to Beast!</div>
       <div class="flex flex-col gap-2 min-w-96">
-        <Field name="username">
+        <Field name="email">
           {(field, props) => (
             <TextInput
               {...props}

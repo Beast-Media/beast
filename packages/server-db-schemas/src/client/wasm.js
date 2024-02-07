@@ -175,7 +175,7 @@ exports.Prisma.MovieScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  username: 'username',
+  email: 'email',
   password: 'password',
   isOwner: 'isOwner'
 };

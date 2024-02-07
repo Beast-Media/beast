@@ -237,6 +237,79 @@
         ]
       }
     },
+    "/library": {
+      "delete": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "deleteLibrary",
+        "parameters": [
+          {
+            "name": "libraryId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "delete a library",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "getLibrary",
+        "parameters": [
+          {
+            "name": "libraryId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryDTO"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the Library data from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/library/access": {
       "post": {
         "tags": [
@@ -309,42 +382,6 @@
         ]
       }
     },
-    "/library": {
-      "get": {
-        "tags": [
-          "library"
-        ],
-        "operationId": "getLibrary",
-        "parameters": [
-          {
-            "name": "libraryId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LibraryDTO"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get the Library data from its id",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/library/content": {
       "get": {
         "tags": [
@@ -374,6 +411,45 @@
           }
         },
         "description": "Get the Library data from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/library/show-filesystem": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "operationId": "getLibraryShowFilesystem",
+        "parameters": [
+          {
+            "name": "root",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Show filesystem\n\nI do not like this endpoint, but i do not know any other way yet",
         "security": [
           {
             "bearer": []
@@ -619,6 +695,33 @@
         ]
       }
     },
+    "/settings/initialized": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "getSettingsInitialized",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "description": "Is the current server initialized",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/show": {
       "get": {
         "tags": [
@@ -769,7 +872,7 @@
       "LoginBody": {
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string"
           },
           "password": {
@@ -778,7 +881,7 @@
         },
         "nullable": false,
         "required": [
-          "username",
+          "email",
           "password"
         ]
       },
@@ -813,7 +916,7 @@
       "RegisterBody": {
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string",
             "maxLength": 64
           },
@@ -825,7 +928,7 @@
         },
         "nullable": false,
         "required": [
-          "username",
+          "email",
           "password"
         ]
       },
@@ -858,6 +961,18 @@
           "type",
           "name",
           "path"
+        ]
+      },
+      "QueryLibrary": {
+        "type": "object",
+        "properties": {
+          "libraryId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "libraryId"
         ]
       },
       "EditLibraryPermissions": {
@@ -911,18 +1026,6 @@
                 "access"
               ]
             }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "libraryId"
-        ]
-      },
-      "QueryLibrary": {
-        "type": "object",
-        "properties": {
-          "libraryId": {
-            "type": "string"
           }
         },
         "nullable": false,
@@ -1085,6 +1188,18 @@
         "required": [
           "type",
           "data"
+        ]
+      },
+      "QueryFilesystem": {
+        "type": "object",
+        "properties": {
+          "root": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "root"
         ]
       },
       "QueryMedia": {

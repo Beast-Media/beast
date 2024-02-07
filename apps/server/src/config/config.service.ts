@@ -16,6 +16,8 @@ export class ConfigService {
       'TRANSCODE_PATH',
       'AUTH_JWT_SECRET',
       'SERVER_APP_PATH',
+      'SERVER_LIBRARIES_ROOT',
+      'API_APP_PATH',
     ];
 
     for (const variable of variables) {
@@ -49,5 +51,13 @@ export class ConfigService {
 
   getAppPath() {
     return this.getValueOrThrow('SERVER_APP_PATH');
+  }
+
+  getLibrariesRoot() {
+    return this.getValueOrThrow('SERVER_LIBRARIES_ROOT');
+  }
+
+  getApiAppPath() {
+    return this.getValueOrThrow('API_APP_PATH');
   }
 }

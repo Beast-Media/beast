@@ -225,6 +225,7 @@ export const SyncIcon: Component<IconProps> = (props) => {
     </IconBase>
   );
 };
+
 export const ExpandIcon: Component<IconProps> = (props) => {
   props = mergeProps({ size: 30 }, props);
   return (
@@ -238,6 +239,24 @@ export const ExpandIcon: Component<IconProps> = (props) => {
         <path
           d="M54.5 69.8281L27.25 42.5781L33.6083 36.2197L54.5 57.1114L75.3917 36.2197L81.75 42.5781L54.5 69.8281Z"
           fill="white"
+        />
+      </svg>
+    </IconBase>
+  );
+};
+
+export const DeleteIcon: Component<IconProps> = (props) => {
+  props = mergeProps({ size: 30 }, props);
+  return (
+    <IconBase {...props}>
+      <svg
+        width={props.size}
+        height={props.size}
+        viewBox="0 0 109 109"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M31.7917 95.375C29.2937 95.375 27.1554 94.4856 25.3766 92.7068C23.5977 90.928 22.7083 88.7896 22.7083 86.2917V27.25H18.1667V18.1667H40.875V13.625H68.125V18.1667H90.8333V27.25H86.2917V86.2917C86.2917 88.7896 85.4022 90.928 83.6234 92.7068C81.8446 94.4856 79.7062 95.375 77.2083 95.375H31.7917ZM77.2083 27.25H31.7917V86.2917H77.2083V27.25ZM40.875 77.2083H49.9583V36.3333H40.875V77.2083ZM59.0417 77.2083H68.125V36.3333H59.0417V77.2083Z"
         />
       </svg>
     </IconBase>

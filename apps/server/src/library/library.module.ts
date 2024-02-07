@@ -4,9 +4,10 @@ import { LibraryController } from './library.controller';
 import { ShowModule } from 'src/show/show.module';
 import { MovieModule } from 'src/movie/movie.module';
 import { ServerDBModule } from '@beast/server-db-schemas';
+import { ConfigModule } from 'src/config/config.module';
 
 @Module({
-  imports: [ServerDBModule, ShowModule, MovieModule],
+  imports: [ConfigModule, ServerDBModule, ShowModule, MovieModule],
   providers: [LibraryService],
   exports: [LibraryService],
   controllers: [LibraryController],

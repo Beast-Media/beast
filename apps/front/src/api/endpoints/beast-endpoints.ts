@@ -16,12 +16,14 @@ import type {
 import type {
   AuthTokens,
   CreateLibraryDTO,
+  DeleteLibraryParams,
   EditLibraryPermissions,
   EpisodeDTO,
   GetLibraryAll200Item,
   GetLibraryContentParams,
   GetLibraryParams,
   GetLibraryScanParams,
+  GetLibraryShowFilesystemParams,
   GetMediaDetailParams,
   GetMediaParams,
   GetMovieParams,
@@ -419,6 +421,151 @@ export const createPostLibraryNew = <
   });
 };
 
+/**
+ * delete a library
+ */
+export const deleteLibrary = (
+  params: DeleteLibraryParams,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<boolean>(
+    { url: `http://localhost:3000/library`, method: "DELETE", params },
+    options,
+  );
+};
+
+export const getDeleteLibraryMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof deleteLibrary>>,
+    TError,
+    { params: DeleteLibraryParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof deleteLibrary>>,
+  TError,
+  { params: DeleteLibraryParams },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteLibrary>>,
+    { params: DeleteLibraryParams }
+  > = (props) => {
+    const { params } = props ?? {};
+
+    return deleteLibrary(params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteLibraryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteLibrary>>
+>;
+
+export type DeleteLibraryMutationError = ErrorType<unknown>;
+
+export const createDeleteLibrary = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof deleteLibrary>>,
+      TError,
+      { params: DeleteLibraryParams },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getDeleteLibraryMutationOptions(opts);
+  });
+};
+
+/**
+ * Get the Library data from its id
+ */
+export const getLibrary = (
+  params: GetLibraryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<LibraryDTO>(
+    { url: `http://localhost:3000/library`, method: "GET", params, signal },
+    options,
+  );
+};
+
+export const getGetLibraryQueryKey = (params: GetLibraryParams) => {
+  return [
+    `http://localhost:3000/library`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetLibraryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLibrary>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetLibraryParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<Awaited<ReturnType<typeof getLibrary>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLibraryQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLibrary>>> = ({
+    signal,
+  }) => getLibrary(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getLibrary>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetLibraryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLibrary>>
+>;
+export type GetLibraryQueryError = ErrorType<unknown>;
+
+export const createGetLibrary = <
+  TData = Awaited<ReturnType<typeof getLibrary>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetLibraryParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<Awaited<ReturnType<typeof getLibrary>>, TError, TData>
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetLibraryQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
 export const postLibraryAccess = (
   editLibraryPermissions: BodyType<EditLibraryPermissions>,
   options?: SecondParameter<typeof customInstance>,
@@ -582,81 +729,6 @@ export const createGetLibraryScan = <
 /**
  * Get the Library data from its id
  */
-export const getLibrary = (
-  params: GetLibraryParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<LibraryDTO>(
-    { url: `http://localhost:3000/library`, method: "GET", params, signal },
-    options,
-  );
-};
-
-export const getGetLibraryQueryKey = (params: GetLibraryParams) => {
-  return [
-    `http://localhost:3000/library`,
-    ...(params ? [params] : []),
-  ] as const;
-};
-
-export const getGetLibraryQueryOptions = <
-  TData = Awaited<ReturnType<typeof getLibrary>>,
-  TError = ErrorType<unknown>,
->(
-  params: GetLibraryParams,
-  options?: {
-    query?: Partial<
-      SolidQueryOptions<Awaited<ReturnType<typeof getLibrary>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetLibraryQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLibrary>>> = ({
-    signal,
-  }) => getLibrary(params, requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getLibrary>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetLibraryQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getLibrary>>
->;
-export type GetLibraryQueryError = ErrorType<unknown>;
-
-export const createGetLibrary = <
-  TData = Awaited<ReturnType<typeof getLibrary>>,
-  TError = ErrorType<unknown>,
->(
-  options: () => {
-    params: GetLibraryParams;
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<Awaited<ReturnType<typeof getLibrary>>, TError, TData>
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetLibraryQueryOptions(opts["params"], opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-/**
- * Get the Library data from its id
- */
 export const getLibraryContent = (
   params: GetLibraryContentParams,
   options?: SecondParameter<typeof customInstance>,
@@ -740,6 +812,102 @@ export const createGetLibraryContent = <
   const query = createQuery(() => {
     const opts = options?.() || {};
     return getGetLibraryContentQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+/**
+ * Show filesystem
+
+I do not like this endpoint, but i do not know any other way yet
+ */
+export const getLibraryShowFilesystem = (
+  params: GetLibraryShowFilesystemParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<string[]>(
+    {
+      url: `http://localhost:3000/library/show-filesystem`,
+      method: "GET",
+      params,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetLibraryShowFilesystemQueryKey = (
+  params: GetLibraryShowFilesystemParams,
+) => {
+  return [
+    `http://localhost:3000/library/show-filesystem`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetLibraryShowFilesystemQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLibraryShowFilesystem>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetLibraryShowFilesystemParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<
+        Awaited<ReturnType<typeof getLibraryShowFilesystem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetLibraryShowFilesystemQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getLibraryShowFilesystem>>
+  > = ({ signal }) => getLibraryShowFilesystem(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getLibraryShowFilesystem>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetLibraryShowFilesystemQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLibraryShowFilesystem>>
+>;
+export type GetLibraryShowFilesystemQueryError = ErrorType<unknown>;
+
+export const createGetLibraryShowFilesystem = <
+  TData = Awaited<ReturnType<typeof getLibraryShowFilesystem>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetLibraryShowFilesystemParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<
+          Awaited<ReturnType<typeof getLibraryShowFilesystem>>,
+          TError,
+          TData
+        >
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetLibraryShowFilesystemQueryOptions(
+      opts["params"],
+      opts["options"],
+    );
   }) as CreateQueryResult<TData, TError>;
 
   return query;
@@ -1261,6 +1429,86 @@ export const createPostSettingsInit = <
     const opts = options?.();
     return getPostSettingsInitMutationOptions(opts);
   });
+};
+
+/**
+ * Is the current server initialized
+ */
+export const getSettingsInitialized = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<boolean>(
+    {
+      url: `http://localhost:3000/settings/initialized`,
+      method: "GET",
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetSettingsInitializedQueryKey = () => {
+  return [`http://localhost:3000/settings/initialized`] as const;
+};
+
+export const getGetSettingsInitializedQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSettingsInitialized>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    SolidQueryOptions<
+      Awaited<ReturnType<typeof getSettingsInitialized>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSettingsInitializedQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSettingsInitialized>>
+  > = ({ signal }) => getSettingsInitialized(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getSettingsInitialized>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetSettingsInitializedQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSettingsInitialized>>
+>;
+export type GetSettingsInitializedQueryError = ErrorType<unknown>;
+
+export const createGetSettingsInitialized = <
+  TData = Awaited<ReturnType<typeof getSettingsInitialized>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: () => {
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<
+          Awaited<ReturnType<typeof getSettingsInitialized>>,
+          TError,
+          TData
+        >
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetSettingsInitializedQueryOptions(opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
 };
 
 /**

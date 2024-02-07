@@ -7,4 +7,5 @@ import { ServerDBService } from './server-db.service';
   providers: [ServerDBService],
   exports: [ServerDBService],
 })
-export class ServerDBModule {}
+export class ServerDBModule {
+}

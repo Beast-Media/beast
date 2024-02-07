@@ -5,7 +5,6 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export interface RegisterBody {
-  email: string;
-  password: string;
-}
+export type DeleteLibraryParams = {
+  libraryId: string;
+};

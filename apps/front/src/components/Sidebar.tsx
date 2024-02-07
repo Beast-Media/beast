@@ -7,7 +7,7 @@ export const Sidebar: Component = () => {
   const libraries = createGetLibraryAll(() => ({}));
 
   return (
-    <div class="w-full h-full p-2 bg-beast-bg-1 flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
       Libraries
       <Suspense fallback="Loading">
         <For each={libraries.data}>

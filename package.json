@@ -7,6 +7,7 @@
     "lint": "dotenv -- turbo lint",
     "prisma:gen": "dotenv -- turbo prisma:gen",
     "prisma:push": "dotenv -- turbo prisma:push",
+    "prisma:push:force": "dotenv -- turbo prisma:push:force",
     "swagger": "dotenv -- turbo run swagger",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

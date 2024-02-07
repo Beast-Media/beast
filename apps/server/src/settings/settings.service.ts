@@ -7,14 +7,19 @@ export class SettingsService {
   constructor(private prisma: ServerDBService) {}
 
   public async initServer(init: InitServerBody) {
-    const hasServer = (await this.prisma.server.count()) !== 0;
+    const initialized = await this.isInitialized();
 
-    if (hasServer) throw new Error('Server already initialised');
+    if (initialized) throw new Error('Server already initialised');
 
     await this.prisma.server.create({
       data: {
         name: init.name,
       },
     });
+  }
+
+  public async isInitialized(): Promise<boolean> {
+    const hasServer = (await this.prisma.server.count()) !== 0;
+    return !!hasServer;
   }
 }

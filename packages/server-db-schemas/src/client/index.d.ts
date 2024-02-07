@@ -8853,21 +8853,21 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: string | null
-    username: string | null
+    email: string | null
     password: string | null
     isOwner: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
-    username: string | null
+    email: string | null
     password: string | null
     isOwner: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
-    username: number
+    email: number
     password: number
     isOwner: number
     _all: number
@@ -8876,21 +8876,21 @@ export namespace Prisma {
 
   export type UserMinAggregateInputType = {
     id?: true
-    username?: true
+    email?: true
     password?: true
     isOwner?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
-    username?: true
+    email?: true
     password?: true
     isOwner?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
-    username?: true
+    email?: true
     password?: true
     isOwner?: true
     _all?: true
@@ -8970,7 +8970,7 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
-    username: string
+    email: string
     password: string
     isOwner: boolean
     _count: UserCountAggregateOutputType | null
@@ -8994,7 +8994,7 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    username?: boolean
+    email?: boolean
     password?: boolean
     isOwner?: boolean
     user?: boolean | User$userArgs<ExtArgs>
@@ -9003,7 +9003,7 @@ export namespace Prisma {
 
   export type UserSelectScalar = {
     id?: boolean
-    username?: boolean
+    email?: boolean
     password?: boolean
     isOwner?: boolean
   }
@@ -9021,7 +9021,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      username: string
+      email: string
       password: string
       isOwner: boolean
     }, ExtArgs["result"]["user"]>
@@ -9420,7 +9420,7 @@ export namespace Prisma {
    */ 
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
-    readonly username: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly isOwner: FieldRef<"User", 'Boolean'>
   }
@@ -11623,7 +11623,7 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    username: 'username',
+    email: 'email',
     password: 'password',
     isOwner: 'isOwner'
   };
@@ -12271,7 +12271,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
-    username?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     isOwner?: BoolFilter<"User"> | boolean
     user?: LibraryAccessListRelationFilter
@@ -12279,7 +12279,7 @@ export namespace Prisma {
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    username?: SortOrder
+    email?: SortOrder
     password?: SortOrder
     isOwner?: SortOrder
     user?: LibraryAccessOrderByRelationAggregateInput
@@ -12287,18 +12287,18 @@ export namespace Prisma {
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    username?: string
+    email?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     isOwner?: BoolFilter<"User"> | boolean
     user?: LibraryAccessListRelationFilter
-  }, "id" | "id" | "username">
+  }, "id" | "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    username?: SortOrder
+    email?: SortOrder
     password?: SortOrder
     isOwner?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -12311,7 +12311,7 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
-    username?: StringWithAggregatesFilter<"User"> | string
+    email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     isOwner?: BoolWithAggregatesFilter<"User"> | boolean
   }
@@ -12899,7 +12899,7 @@ export namespace Prisma {
 
   export type UserCreateInput = {
     id?: string
-    username: string
+    email: string
     password: string
     isOwner: boolean
     user?: LibraryAccessCreateNestedManyWithoutUserInput
@@ -12907,7 +12907,7 @@ export namespace Prisma {
 
   export type UserUncheckedCreateInput = {
     id?: string
-    username: string
+    email: string
     password: string
     isOwner: boolean
     user?: LibraryAccessUncheckedCreateNestedManyWithoutUserInput
@@ -12915,7 +12915,7 @@ export namespace Prisma {
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isOwner?: BoolFieldUpdateOperationsInput | boolean
     user?: LibraryAccessUpdateManyWithoutUserNestedInput
@@ -12923,7 +12923,7 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isOwner?: BoolFieldUpdateOperationsInput | boolean
     user?: LibraryAccessUncheckedUpdateManyWithoutUserNestedInput
@@ -12931,21 +12931,21 @@ export namespace Prisma {
 
   export type UserCreateManyInput = {
     id?: string
-    username: string
+    email: string
     password: string
     isOwner: boolean
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isOwner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isOwner?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -13595,21 +13595,21 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
+    email?: SortOrder
     password?: SortOrder
     isOwner?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
+    email?: SortOrder
     password?: SortOrder
     isOwner?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
+    email?: SortOrder
     password?: SortOrder
     isOwner?: SortOrder
   }
@@ -15583,14 +15583,14 @@ export namespace Prisma {
 
   export type UserCreateWithoutUserInput = {
     id?: string
-    username: string
+    email: string
     password: string
     isOwner: boolean
   }
 
   export type UserUncheckedCreateWithoutUserInput = {
     id?: string
-    username: string
+    email: string
     password: string
     isOwner: boolean
   }
@@ -15646,14 +15646,14 @@ export namespace Prisma {
 
   export type UserUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isOwner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isOwner?: BoolFieldUpdateOperationsInput | boolean
   }

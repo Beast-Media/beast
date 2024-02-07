@@ -123,7 +123,7 @@ model Movie {
 model User {
   id            String @id @unique @default(uuid())
 
-  username      String @unique
+  email         String @unique
   password      String
   isOwner       Boolean
 

@@ -1,12 +1,12 @@
 import { MaxLength, MinLength } from 'typia/lib/tags';
 
 export interface LoginBody {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface RegisterBody {
-  username: string & MaxLength<64>;
+  email: string & MaxLength<64>;
   password: string & MaxLength<64> & MinLength<8>;
 }
 

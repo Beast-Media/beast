@@ -5,6 +5,11 @@ It organizes movie and television content and adds posters, plot summaries, cast
 Beast is also capable of transcoding files if the codec is incompatible with the device playing the media.
 It can run on any linux system and supports docker.
 
+# Prerequisites
+
+You need to already have a media library managed by Sonarr or Radarr. 
+This is required to index the library and load the required metadatas as Beast will curently not index the library by itself.
+
 # Building & Contributing
 
 For information on building and contributing to the codebase, see [CONTRIBUTING.md](https://github.com/loucass003/beast/blob/main/CONTRIBUTING.md).

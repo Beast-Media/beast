@@ -23,4 +23,13 @@ export class SettingsController {
   public async init(@TypedBody() body: InitServerBody) {
     this.settingsService.initServer(body);
   }
+
+  /**
+   * Is the current server initialized
+   */
+  @TypedRoute.Get('/initialized')
+  @IsOwner()
+  public async initialized() {
+    return this.settingsService.isInitialized();
+  }
 }

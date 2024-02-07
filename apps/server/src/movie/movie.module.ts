@@ -23,9 +23,9 @@ import { TMDBModule } from '@beast/tmdb';
         }),
         ConfigModule,
       ],
-      useFactory: () => {
+      useFactory: (config: ConfigService) => {
         return {
-          endpointUrl: 'http://localhost:4000/tmdb/',
+          endpointUrl: `${config.getApiAppPath()}/tmdb/`,
         };
       },
       inject: [ConfigService],

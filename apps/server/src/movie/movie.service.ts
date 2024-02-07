@@ -76,7 +76,10 @@ export class MovieService {
 
   async scanMovie(moviePath: string, library: Pick<Library, 'id' | 'path'>) {
     const metadataFolder = this.configService.getMetadatasPath();
-    const files = await readdir(moviePath, { recursive: true });
+    const files = await readdir(
+      join(this.configService.getLibrariesRoot(), moviePath),
+      { recursive: true },
+    );
 
     for (const file of files) {
       const match = this.matchMovieFile(file.split('/').reverse()[0]);
@@ -124,7 +127,9 @@ export class MovieService {
     const metadataFolder = this.configService.getMetadatasPath();
     await mkdir(join(metadataFolder, 'images'), { recursive: true });
 
-    const movieFolders = await readdir(library.path);
+    const movieFolders = await readdir(
+      join(this.configService.getLibrariesRoot(), library.path),
+    );
     for (const movieFolder of movieFolders) {
       this.tasksService.queueTask({
         name: 'index_movie',

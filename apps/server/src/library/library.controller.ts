@@ -1,10 +1,11 @@
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
-import { Controller } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus } from '@nestjs/common';
 import {
   CreateLibraryDTO,
   EditLibraryPermissions,
   LibraryContent,
   LibraryDTO,
+  QueryFilesystem,
   QueryLibrary,
 } from './dto/library.dto';
 import { LibraryService } from './library.service';
@@ -48,6 +49,16 @@ export class LibraryController {
       { access: 'WRITE', userId: user.id },
     ]);
     return library;
+  }
+
+  /**
+   * delete a library
+   */
+  @IsOwner()
+  @TypedRoute.Delete('/')
+  public async deleteLibrary(@TypedQuery() query: QueryLibrary): Promise<true> {
+    await this.libraryService.deleteLibrary(query.libraryId);
+    return true;
   }
 
   @IsOwner()
@@ -104,5 +115,22 @@ export class LibraryController {
     @TypedQuery() query: QueryLibrary,
   ): Promise<LibraryContent> {
     return this.libraryService.getLibraryContent(query.libraryId);
+  }
+
+  /**
+   * Show filesystem
+   *
+   * I do not like this endpoint, but i do not know any other way yet
+   */
+  @TypedRoute.Get('/show-filesystem')
+  @IsOwner()
+  public async showFilesystem(
+    @TypedQuery() query: QueryFilesystem,
+  ): Promise<string[]> {
+    try {
+      return await this.libraryService.listFolders(query.root);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }

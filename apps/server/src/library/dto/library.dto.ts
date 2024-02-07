@@ -29,3 +29,7 @@ export interface EditLibraryPermissions {
   add?: { userId: User['id']; access: LibraryAccessType }[];
   remove?: { userId: User['id']; access: LibraryAccessType }[];
 }
+
+export interface QueryFilesystem {
+  root: string;
+}
