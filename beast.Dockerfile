@@ -9,7 +9,6 @@ RUN set -ex; \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
     :
 
-
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable

@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@beast/nestjs-commons": "workspace:*",
-    "@beast/server-db-schemas": "workspace:*",
     "@beast/sockets": "workspace:*",
     "@beast/tmdb": "workspace:*",
     "@fastify/cors": "^8.5.0",
@@ -41,6 +40,7 @@
     "@nestjs/platform-fastify": "^10.3.1",
     "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.2.0",
+    "@nestjs/typeorm": "^10.0.2",
     "@openapitools/openapi-generator-cli": "^2.8.0",
     "@prisma/client": "^5.8.0",
     "argon2": "^0.31.2",
@@ -58,8 +58,10 @@
     "rxjs": "^7.8.1",
     "sharp": "^0.33.2",
     "socket.io": "^4.7.4",
+    "sqlite3": "^5.1.7",
     "striptags": "^3.2.0",
     "tslib": "^2.6.2",
+    "typeorm": "^0.3.20",
     "typia": "^5.3.11"
   },
   "devDependencies": {

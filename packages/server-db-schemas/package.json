@@ -14,6 +14,7 @@
     "prepare": "ts-patch install && typia patch && pnpm run build",
     "prisma:gen": "prisma generate && npm run build",
     "prisma:push": "prisma db push && npm run build",
+    "prisma:migrate": "prisma migrate",
     "prisma:push:force": "prisma db push --force-reset && npm run build"
   },
   "licence": "MIT",
@@ -38,6 +39,8 @@
   "dependencies": {
     "@nestjs/common": "^10.3.1",
     "@nestjs/core": "^10.3.1",
+    "@prisma/client": "5.9.1",
+    "prisma": "^5.9.1",
     "typia": "^5.3.12"
   }
 }

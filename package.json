@@ -4,7 +4,10 @@
   "scripts": {
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "dev": "dotenv -- pnpm --recursive --parallel dev",
-    "build": "dotenv -- pnpm --recursive --parallel --filter './apps/*' build"
+    "build": "dotenv -- pnpm --recursive --parallel --filter './apps/*' build",
+    "prisma:gen": "dotenv -- pnpm --filter server-db-schemas prisma:gen",
+    "prisma:migrate": "dotenv -- pnpm --filter server-db-schemas prisma:migrate",
+    "prisma:push": "dotenv -- pnpm --filter server-db-schemas prisma:push"
   },
   "devDependencies": {
     "dotenv": "^16.3.2",
