@@ -12,13 +12,19 @@ import { WebsocketModule } from './websockets/websockets.module';
 import { PlayerModule } from './player/player.module';
 import { TasksModule } from './tasks/tasks.module';
 import { OwnerGuard } from './auth/owner.guard';
-import { ServerDBModule } from '@beast/server-db-schemas';
 import { SettingsModule } from './settings/settings.module';
 import { LibraryAccessGuard } from './library/library-access.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    ServerDBModule,
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'test',
+      entities: [],
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
     ConfigModule,
     RequestContextModule,
     AppLoggerModule,

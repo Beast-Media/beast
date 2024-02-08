@@ -1,10 +1,10 @@
-import { LibraryAccessType, LibraryType } from '@beast/server-db-schemas';
 import { SetMetadata, applyDecorators } from '@nestjs/common';
+import { Library, LibraryAccess } from './dto/library.dto';
 
 export interface LibraryAccessGuardData<T> {
-  type: LibraryAccessType;
+  type: LibraryAccess['access'];
   watchQuery:
-    | { from: LibraryType; id: keyof T }
+    | { from: Library['type']; id: keyof T }
     | { from: 'LIBRARY'; id: keyof T }
     | { from: 'MEDIA'; id: keyof T };
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Library, Movie, ServerDBService } from '@beast/server-db-schemas';
 import { ConfigService } from 'src/config/config.service';
-import { MovieDTO } from './dto/movie.dto';
+import { MovieDTO } from './dto/movie.query';
 import { mkdir, readdir } from 'fs/promises';
 import { join } from 'path';
 import { TasksService } from 'src/tasks/tasks.service';

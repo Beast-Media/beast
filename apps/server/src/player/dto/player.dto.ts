@@ -1,5 +1,5 @@
-import { Media } from '@beast/server-db-schemas';
 import { ChildProcessWithoutNullStreams } from 'child_process';
+import { Media } from 'src/media/dto/media.dto';
 
 export type PlayerId = string;
 

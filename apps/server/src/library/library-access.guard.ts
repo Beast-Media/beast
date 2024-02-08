@@ -12,26 +12,41 @@ import {
   LibraryAccessGuardData,
 } from './library-access.decorator';
 import { UserSession } from 'src/auth/dto/session';
-import { LibraryType, ServerDBService } from '@beast/server-db-schemas';
+import { MovieEntity } from 'src/movie/dto/movie.dto';
+import { ShowEntity } from 'src/show/dto/show.dto';
+import { MediaEntity } from 'src/media/dto/media.dto';
+import { LibraryAccessEntity } from './dto/library.dto';
 
 @Injectable()
 export class LibraryAccessGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private prisma: ServerDBService,
-  ) {}
+  constructor(private reflector: Reflector) {}
 
   async getLibraryId(
     request: Record<string, string>,
     query: LibraryAccessGuardData<any>['watchQuery'],
   ): Promise<string | undefined> {
     const id = request[query.id.toString()];
-    if (query.from === LibraryType.MOVIES)
-      return (await this.prisma.movie.findFirst({ where: { id } }))?.libraryId;
-    if (query.from === LibraryType.TV_SHOWS)
-      return (await this.prisma.show.findFirst({ where: { id } }))?.libraryId;
+    if (query.from === 'MOVIES')
+      return (
+        await MovieEntity.findOne({
+          where: { id },
+          relations: { library: true },
+        })
+      )?.library?.id;
+    if (query.from === 'TV_SHOWS')
+      return (
+        await ShowEntity.findOne({
+          where: { id },
+          relations: { library: true },
+        })
+      )?.library?.id;
     if (query.from === 'MEDIA')
-      return (await this.prisma.media.findFirst({ where: { id } }))?.libraryId;
+      return (
+        await MediaEntity.findOne({
+          where: { id },
+          relations: { library: true },
+        })
+      )?.library?.id;
     if (query.from === 'LIBRARY') return id;
   }
 
@@ -59,10 +74,10 @@ export class LibraryAccessGuard implements CanActivate {
         HttpStatus.BAD_REQUEST,
       );
 
-    const libraryAccess = await this.prisma.libraryAccess.findFirst({
+    const libraryAccess = await LibraryAccessEntity.findOne({
       where: {
-        userId: request.user.id,
-        libraryId,
+        user: { id: request.user.id },
+        library: { id: libraryId },
         access: libraryAccessDecorator.type,
       },
     });

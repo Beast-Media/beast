@@ -38,7 +38,6 @@ yarn-error.log*
 *.pem
 
 
-
 volumes/
-
 .env.docker
+package-lock.json

@@ -1,9 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import {
-  SeasonWithEpisodes,
-  ShowWithLibrary,
-  ShowWithSeasons,
-} from './dto/show.dto';
 import { mkdir, readdir, writeFile } from 'fs/promises';
 import { assertEquals } from 'typia';
 import { join } from 'path';
@@ -11,16 +6,12 @@ import { TVMazeService } from 'src/tvmaze/tvmaze.service';
 import { ConfigService } from 'src/config/config.service';
 import { createHash } from 'crypto';
 import { MediaService } from 'src/media/media.service';
-import { IndexingMedia } from 'src/media/dto/media.dto';
 import { TasksService } from 'src/tasks/tasks.service';
 import sharp, { ResizeOptions } from 'sharp';
-import {
-  Episode,
-  Library,
-  Season,
-  ServerDBService,
-  Show,
-} from '@beast/server-db-schemas';
+import { Episode, Season, Show, ShowEntity } from './dto/show.dto';
+import { IndexingMedia } from 'src/media/dto/media.queries';
+import { Library } from 'src/library/dto/library.dto';
+import { WithoutAppRelations } from 'src/database/relations.dto';
 
 interface TvShowMatch {
   seriesTitle: string;
@@ -53,7 +44,6 @@ interface ComposedShow {
 @Injectable()
 export class ShowService {
   constructor(
-    private prisma: ServerDBService,
     private tvmaze: TVMazeService,
     private configService: ConfigService,
     private mediaService: MediaService,
@@ -61,10 +51,16 @@ export class ShowService {
   ) {}
 
   async getShow(id: Show['id']): Promise<ShowWithSeasons> {
-    return this.prisma.show.findFirstOrThrow({
+    const res = await ShowEntity.findOne({
       where: { id },
-      include: { seasons: true },
+      relations: { library: true },
     });
+
+    const a: WithoutAppRelations<Show> = new ShowEntity();
+
+    console.log(a.);
+
+    return res;
   }
 
   async getShowWithLibrary(id: Show['id']): Promise<ShowWithLibrary> {

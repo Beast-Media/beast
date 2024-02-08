@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Media, ServerDBService } from '@beast/server-db-schemas';
-import { CreateMedia, IndexingMedia, MediaWithStreams } from './dto/media.dto';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
 import { ConfigService } from 'src/config/config.service';
 import { join } from 'path';
+import { Media } from '../../../../packages/server-db-schemas/dist';
+import { CreateMedia, IndexingMedia } from './dto/media.queries';
 
 @Injectable()
 export class MediaService {
   constructor(
-    private prisma: ServerDBService,
     private ffmpegService: FFmpegService,
     private configService: ConfigService,
   ) {}
@@ -54,7 +53,7 @@ export class MediaService {
       bitrate: Number(probeData.format.bit_rate), // need check
       height: videoStream.height,
       width: videoStream.width,
-    } as CreateMedia;
+    } satisfies CreateMedia;
 
     const mediaDb = await this.prisma.media.upsert({
       where: { path: media.path },

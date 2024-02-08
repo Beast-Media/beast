@@ -1,35 +1,58 @@
+import { User, UserEntity } from 'src/auth/dto/user.dto';
+import { Show, ShowEntity } from 'src/show/dto/show.dto';
 import {
-  Library,
-  LibraryAccessType,
-  Movie,
-  Show,
-  User,
-} from '@beast/server-db-schemas';
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-export interface CreateLibraryDTO extends Omit<Library, 'id' | 'createdAt'> {}
+export interface Library {
+  id: string;
+  type: 'MOVIES' | 'TV_SHOWS';
+  name: string;
+  path: string;
 
-export interface LibraryDTO extends Library {}
+  shows: Show[];
 
-export interface LibraryContentShow {
-  type: 'TV_SHOWS';
-  data: Show;
-}
-export interface LibraryContentMovie {
-  type: 'MOVIES';
-  data: Movie;
-}
-export type LibraryContent = LibraryContentShow[] | LibraryContentMovie[];
-
-export interface QueryLibrary {
-  libraryId: Library['id'];
+  libraryAccesses: LibraryAccess[];
 }
 
-export interface EditLibraryPermissions {
-  libraryId: Library['id'];
-  add?: { userId: User['id']; access: LibraryAccessType }[];
-  remove?: { userId: User['id']; access: LibraryAccessType }[];
+export interface LibraryAccess {
+  user?: User;
+  access: 'READ' | 'WRITE';
 }
 
-export interface QueryFilesystem {
-  root: string;
+@Entity()
+export class LibraryEntity extends BaseEntity implements Library {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  type: 'MOVIES' | 'TV_SHOWS';
+
+  @Column()
+  name: string;
+
+  @Column()
+  path: string;
+
+  @OneToMany(() => ShowEntity, (show) => show.library)
+  shows: ShowEntity[];
+
+  @OneToMany(() => LibraryAccessEntity, (access) => access.library)
+  libraryAccesses: LibraryAccessEntity[];
+}
+
+@Entity()
+export class LibraryAccessEntity extends BaseEntity implements LibraryAccess {
+  @ManyToOne(() => UserEntity, (user) => user.libraryAccesses)
+  user: UserEntity;
+
+  @ManyToOne(() => LibraryEntity, (library) => library.libraryAccesses)
+  library: LibraryEntity;
+
+  access: 'READ' | 'WRITE';
 }

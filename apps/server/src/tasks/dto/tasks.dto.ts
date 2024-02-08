@@ -1,4 +1,4 @@
-import { Library } from '@beast/server-db-schemas';
+import { Library } from 'src/library/dto/library.dto';
 
 export interface IndexShowTask {
   name: 'index_show';

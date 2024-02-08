@@ -10,7 +10,7 @@ import {
   QueryShow,
   SeasonWithEpisodes,
   ShowWithSeasons,
-} from './dto/show.dto';
+} from './dto/show.queries';
 import { TasksService } from 'src/tasks/tasks.service';
 import { LibraryAccessType, LibraryType } from '@beast/server-db-schemas';
 import { HasLibraryAccess } from 'src/library/library-access.decorator';
