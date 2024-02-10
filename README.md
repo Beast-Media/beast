@@ -12,17 +12,17 @@ This is required to index the library and load the required metadatas as Beast w
 
 # Building & Contributing
 
-For information on building and contributing to the codebase, see [CONTRIBUTING.md](https://github.com/Beast-Media-Player/beast/blob/main/CONTRIBUTING.md).
+For information on building and contributing to the codebase, see [CONTRIBUTING.md](https://github.com/Beast-Media/beast/blob/main/CONTRIBUTING.md).
 
 # Contributions
 
 Any contributions submitted for inclusion in this repository will be licensed under:
 
-- MIT License ([LICENSE](https://github.com/Beast-Media-Player/beast/blob/main/LICENSE))
+- MIT License ([LICENSE](https://github.com/Beast-Media/beast/blob/main/LICENSE))
 
 
 # In Progress
 
 This project is still in active developpement and is not usable as is.
 
-Check https://github.com/Beast-Media-Player/beast/projects/1 to see the current progress and roadmap.
+Check https://github.com/Beast-Media/beast/projects/1 to see the current progress and roadmap.
