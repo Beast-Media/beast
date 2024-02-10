@@ -9,7 +9,7 @@ import {
   onMount,
 } from "solid-js";
 import {
-  MediaWithStreamsStreamsItem,
+  MediaStream,
   PlayerResolution,
   PlayerSettings,
 } from "../../api/model";
@@ -68,7 +68,7 @@ const SettingItem: ParentComponent<ComponentProps<"div">> = (props) => {
 
 export const SettingsControl: Component<{
   settings: PlayerSettings;
-  streams: MediaWithStreamsStreamsItem[];
+  streams: MediaStream[];
   availableResolutions: PlayerResolution[];
   updateSettings: (settings: PlayerSettings) => void;
 }> = (props) => {
@@ -109,7 +109,7 @@ export const SettingsControl: Component<{
 
   const closeSetting = () => setSelectedSetting(null);
 
-  const chooseStream = (stream: MediaWithStreamsStreamsItem) => {
+  const chooseStream = (stream: MediaStream) => {
     const foundStream = props.settings.streams.findIndex(
       ({ type }) => stream.type === type
     );

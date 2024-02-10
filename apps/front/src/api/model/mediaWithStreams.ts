@@ -4,16 +4,14 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
-import type { MediaWithStreamsStreamsItem } from "./mediaWithStreamsStreamsItem";
+import type { MediaStream } from "./mediaStream";
 
 export interface MediaWithStreams {
   bitrate: number;
-  createdAt: string;
   duration: number;
   height: number;
   id: string;
-  libraryId: string;
   path: string;
-  streams: MediaWithStreamsStreamsItem[];
+  streams: MediaStream[];
   width: number;
 }

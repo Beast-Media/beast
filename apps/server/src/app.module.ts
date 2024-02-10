@@ -12,13 +12,13 @@ import { WebsocketModule } from './websockets/websockets.module';
 import { PlayerModule } from './player/player.module';
 import { TasksModule } from './tasks/tasks.module';
 import { OwnerGuard } from './auth/owner.guard';
-import { ServerDBModule } from '@beast/server-db-schemas';
 import { SettingsModule } from './settings/settings.module';
 import { LibraryAccessGuard } from './library/library-access.guard';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-    ServerDBModule,
+    DatabaseModule,
     ConfigModule,
     RequestContextModule,
     AppLoggerModule,

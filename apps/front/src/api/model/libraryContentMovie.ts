@@ -4,10 +4,10 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
-import type { LibraryContentMovieData } from "./libraryContentMovieData";
+import type { Movie } from "./movie";
 import type { LibraryContentMovieType } from "./libraryContentMovieType";
 
 export interface LibraryContentMovie {
-  data: LibraryContentMovieData;
+  data: Movie;
   type: LibraryContentMovieType;
 }

@@ -4,14 +4,13 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
-import type { SeasonWithEpisodesEpisodesItem } from "./seasonWithEpisodesEpisodesItem";
+import type { Episode } from "./episode";
 
 export interface SeasonWithEpisodes {
-  episodes: SeasonWithEpisodesEpisodesItem[];
+  episodes: Episode[];
   id: string;
   images: string[];
   name: string;
   overview: string | null;
   season_number: number;
-  showId: string;
 }

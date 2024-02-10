@@ -123,33 +123,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "type": {
-                        "$ref": "#/components/schemas/LibraryType"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "path": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      }
-                    },
-                    "nullable": false,
-                    "required": [
-                      "id",
-                      "type",
-                      "name",
-                      "path",
-                      "createdAt"
-                    ]
+                    "$ref": "#/components/schemas/Library"
                   }
                 }
               }
@@ -175,7 +149,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateLibraryDTO"
+                "$ref": "#/components/schemas/CreateLibrary"
               }
             }
           },
@@ -195,33 +169,7 @@
                       ]
                     },
                     {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "$ref": "#/components/schemas/LibraryType"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
-                        }
-                      },
-                      "nullable": false,
-                      "required": [
-                        "id",
-                        "type",
-                        "name",
-                        "path",
-                        "createdAt"
-                      ]
+                      "$ref": "#/components/schemas/Library"
                     }
                   ]
                 }
@@ -296,7 +244,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LibraryDTO"
+                  "$ref": "#/components/schemas/Library"
                 }
               }
             }
@@ -479,7 +427,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MediaDTO"
+                  "$ref": "#/components/schemas/Media"
                 }
               }
             }
@@ -551,7 +499,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MovieDTO"
+                  "$ref": "#/components/schemas/Movie"
                 }
               }
             }
@@ -852,7 +800,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EpisodeDTO"
+                  "$ref": "#/components/schemas/Episode"
                 }
               }
             }
@@ -932,14 +880,128 @@
           "password"
         ]
       },
-      "LibraryType": {
-        "type": "string",
-        "enum": [
-          "MOVIES",
-          "TV_SHOWS"
+      "Library": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOVIES",
+              "TV_SHOWS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "shows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Show"
+            }
+          },
+          "libraryAccesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LibraryAccess"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "type",
+          "name",
+          "path",
+          "shows",
+          "libraryAccesses"
         ]
       },
-      "CreateLibraryDTO": {
+      "Show": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tvmazeId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "tvmazeId",
+          "name",
+          "path",
+          "overview",
+          "images"
+        ]
+      },
+      "LibraryAccess": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "READ",
+              "WRITE"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "access"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "isOwner": {
+            "type": "boolean"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "email",
+          "password",
+          "isOwner"
+        ]
+      },
+      "CreateLibrary": {
         "type": "object",
         "properties": {
           "type": {
@@ -1033,35 +1095,6 @@
           "libraryId"
         ]
       },
-      "LibraryDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "type": {
-            "$ref": "#/components/schemas/LibraryType"
-          },
-          "name": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "type",
-          "name",
-          "path",
-          "createdAt"
-        ]
-      },
       "LibraryContent": {
         "oneOf": [
           {
@@ -1088,44 +1121,7 @@
             ]
           },
           "data": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "tvmazeId": {
-                "type": "number"
-              },
-              "name": {
-                "type": "string"
-              },
-              "path": {
-                "type": "string"
-              },
-              "overview": {
-                "type": "string",
-                "nullable": true
-              },
-              "images": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "libraryId": {
-                "type": "string"
-              }
-            },
-            "nullable": false,
-            "required": [
-              "id",
-              "tvmazeId",
-              "name",
-              "path",
-              "overview",
-              "images",
-              "libraryId"
-            ]
+            "$ref": "#/components/schemas/Show"
           }
         },
         "nullable": false,
@@ -1144,50 +1140,49 @@
             ]
           },
           "data": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "overview": {
-                "type": "string",
-                "nullable": true
-              },
-              "images": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "tmdbId": {
-                "type": "number"
-              },
-              "mediaId": {
-                "type": "string"
-              },
-              "libraryId": {
-                "type": "string"
-              }
-            },
-            "nullable": false,
-            "required": [
-              "id",
-              "name",
-              "overview",
-              "images",
-              "tmdbId",
-              "mediaId",
-              "libraryId"
-            ]
+            "$ref": "#/components/schemas/Movie"
           }
         },
         "nullable": false,
         "required": [
           "type",
           "data"
+        ]
+      },
+      "Movie": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "tmdbId": {
+            "type": "number"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mediaId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name",
+          "overview",
+          "tmdbId",
+          "images",
+          "mediaId"
         ]
       },
       "QueryFilesystem": {
@@ -1214,7 +1209,7 @@
           "mediaId"
         ]
       },
-      "MediaDTO": {
+      "Media": {
         "type": "object",
         "properties": {
           "id": {
@@ -1222,13 +1217,6 @@
           },
           "path": {
             "type": "string"
-          },
-          "libraryId": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "width": {
             "type": "number"
@@ -1247,8 +1235,6 @@
         "required": [
           "id",
           "path",
-          "libraryId",
-          "createdAt",
           "width",
           "height",
           "bitrate",
@@ -1258,50 +1244,11 @@
       "MediaWithStreams": {
         "type": "object",
         "properties": {
-          "streams": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "streamIndex": {
-                  "type": "number"
-                },
-                "type": {
-                  "$ref": "#/components/schemas/StreamType"
-                },
-                "mediaId": {
-                  "type": "string",
-                  "nullable": true
-                }
-              },
-              "nullable": false,
-              "required": [
-                "id",
-                "name",
-                "streamIndex",
-                "type",
-                "mediaId"
-              ]
-            }
-          },
           "id": {
             "type": "string"
           },
           "path": {
             "type": "string"
-          },
-          "libraryId": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
           },
           "width": {
             "type": "number"
@@ -1314,28 +1261,49 @@
           },
           "duration": {
             "type": "number"
+          },
+          "streams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaStream"
+            }
           }
         },
         "nullable": false,
         "required": [
-          "streams",
           "id",
           "path",
-          "libraryId",
-          "createdAt",
           "width",
           "height",
           "bitrate",
-          "duration"
+          "duration",
+          "streams"
         ]
       },
-      "StreamType": {
-        "type": "string",
-        "enum": [
-          "video",
-          "audio",
-          "subtitle",
-          "attachment"
+      "MediaStream": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "streamIndex": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "video",
+              "audio",
+              "subtitle",
+              "attachment"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "streamIndex",
+          "type"
         ]
       },
       "QueryMovie": {
@@ -1348,46 +1316,6 @@
         "nullable": false,
         "required": [
           "movieId"
-        ]
-      },
-      "MovieDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "overview": {
-            "type": "string",
-            "nullable": true
-          },
-          "images": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "tmdbId": {
-            "type": "number"
-          },
-          "mediaId": {
-            "type": "string"
-          },
-          "libraryId": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "name",
-          "overview",
-          "images",
-          "tmdbId",
-          "mediaId",
-          "libraryId"
         ]
       },
       "PlayerSettings": {
@@ -1518,45 +1446,6 @@
       "ShowWithSeasons": {
         "type": "object",
         "properties": {
-          "seasons": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "season_number": {
-                  "type": "number"
-                },
-                "overview": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "showId": {
-                  "type": "string"
-                },
-                "images": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "nullable": false,
-              "required": [
-                "id",
-                "name",
-                "season_number",
-                "overview",
-                "showId",
-                "images"
-              ]
-            }
-          },
           "id": {
             "type": "string"
           },
@@ -1579,20 +1468,54 @@
               "type": "string"
             }
           },
-          "libraryId": {
-            "type": "string"
+          "seasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Season"
+            }
           }
         },
         "nullable": false,
         "required": [
-          "seasons",
           "id",
           "tvmazeId",
           "name",
           "path",
           "overview",
           "images",
-          "libraryId"
+          "seasons"
+        ]
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "season_number": {
+            "type": "number"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name",
+          "season_number",
+          "overview",
+          "images"
         ]
       },
       "QuerySeason": {
@@ -1610,50 +1533,6 @@
       "SeasonWithEpisodes": {
         "type": "object",
         "properties": {
-          "episodes": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "mediaId": {
-                  "type": "string"
-                },
-                "seasonId": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "overview": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "name": {
-                  "type": "string"
-                },
-                "episode_number": {
-                  "type": "number"
-                },
-                "images": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "nullable": false,
-              "required": [
-                "id",
-                "mediaId",
-                "seasonId",
-                "overview",
-                "name",
-                "episode_number",
-                "images"
-              ]
-            }
-          },
           "id": {
             "type": "string"
           },
@@ -1667,25 +1546,63 @@
             "type": "string",
             "nullable": true
           },
-          "showId": {
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "episodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Episode"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name",
+          "season_number",
+          "overview",
+          "images",
+          "episodes"
+        ]
+      },
+      "Episode": {
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "episode_number": {
+            "type": "number"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
           },
           "images": {
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "mediaId": {
+            "type": "string"
           }
         },
         "nullable": false,
         "required": [
-          "episodes",
           "id",
           "name",
-          "season_number",
+          "episode_number",
           "overview",
-          "showId",
-          "images"
+          "images",
+          "mediaId"
         ]
       },
       "QueryEpisode": {
@@ -1698,47 +1615,6 @@
         "nullable": false,
         "required": [
           "episodeId"
-        ]
-      },
-      "EpisodeDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "mediaId": {
-            "type": "string"
-          },
-          "seasonId": {
-            "type": "string",
-            "nullable": true
-          },
-          "overview": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string"
-          },
-          "episode_number": {
-            "type": "number"
-          },
-          "images": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "mediaId",
-          "seasonId",
-          "overview",
-          "name",
-          "episode_number",
-          "images"
         ]
       }
     },

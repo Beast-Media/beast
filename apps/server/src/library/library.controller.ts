@@ -1,19 +1,18 @@
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, HttpException, HttpStatus } from '@nestjs/common';
-import {
-  CreateLibraryDTO,
-  EditLibraryPermissions,
-  LibraryContent,
-  LibraryDTO,
-  QueryFilesystem,
-  QueryLibrary,
-} from './dto/library.dto';
 import { LibraryService } from './library.service';
 import { Authenticated, User, IsOwner } from 'src/auth/auth.decorator';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { Library, LibraryAccessType } from '@beast/server-db-schemas';
 import { UserSession } from 'src/auth/dto/session';
 import { HasLibraryAccess } from './library-access.decorator';
+import { Library } from './dto/library.dto';
+import {
+  CreateLibrary,
+  EditLibraryPermissions,
+  LibraryContent,
+  QueryFilesystem,
+  QueryLibrary,
+} from './dto/library.queries';
 
 /**
  * Controller for the Libraries
@@ -40,7 +39,7 @@ export class LibraryController {
   @TypedRoute.Post('/new')
   public async newLibrary(
     @User() user: UserSession,
-    @TypedBody() body: CreateLibraryDTO,
+    @TypedBody() body: CreateLibrary,
   ): Promise<Library | false> {
     const library = await this.libraryService.createLibrary(body);
     if (!library) return false;
@@ -76,7 +75,7 @@ export class LibraryController {
    * Scan library, check and update missing metadatas or medias
    */
   @TypedRoute.Get('scan')
-  @HasLibraryAccess<QueryLibrary>(LibraryAccessType.WRITE, {
+  @HasLibraryAccess<QueryLibrary>('WRITE', {
     from: 'LIBRARY',
     id: 'libraryId',
   })
@@ -95,11 +94,11 @@ export class LibraryController {
    * Get the Library data from its id
    */
   @TypedRoute.Get('/')
-  @HasLibraryAccess<QueryLibrary>(LibraryAccessType.READ, {
+  @HasLibraryAccess<QueryLibrary>('READ', {
     from: 'LIBRARY',
     id: 'libraryId',
   })
-  public async library(@TypedQuery() query: QueryLibrary): Promise<LibraryDTO> {
+  public async library(@TypedQuery() query: QueryLibrary): Promise<Library> {
     return this.libraryService.getLibrary(query.libraryId);
   }
 
@@ -107,7 +106,7 @@ export class LibraryController {
    * Get the Library data from its id
    */
   @TypedRoute.Get('/content')
-  @HasLibraryAccess<QueryLibrary>(LibraryAccessType.READ, {
+  @HasLibraryAccess<QueryLibrary>('READ', {
     from: 'LIBRARY',
     id: 'libraryId',
   })

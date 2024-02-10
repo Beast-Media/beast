@@ -4,7 +4,6 @@ import { ConfigModule } from 'src/config/config.module';
 import { MediaModule } from 'src/media/media.module';
 import { TasksModule } from 'src/tasks/tasks.module';
 import { MovieController } from './movie.controller';
-import { ServerDBModule } from '@beast/server-db-schemas';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigService } from 'src/config/config.service';
 import { TMDBModule } from '@beast/tmdb';
@@ -12,7 +11,6 @@ import { TMDBModule } from '@beast/tmdb';
 @Module({
   imports: [
     forwardRef(() => TasksModule),
-    ServerDBModule,
     MediaModule,
     ConfigModule,
     TMDBModule.registerAsync({

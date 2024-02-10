@@ -3,6 +3,7 @@ import { TasksService } from './tasks.service';
 import { ShowModule } from 'src/show/show.module';
 import { MovieModule } from 'src/movie/movie.module';
 import { AppLoggerModule } from '@beast/nestjs-commons';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Global()
 @Module({
@@ -12,7 +13,7 @@ import { AppLoggerModule } from '@beast/nestjs-commons';
 export class TasksModule {}
 
 @Module({
-  imports: [AppLoggerModule, ShowModule, MovieModule],
+  imports: [DatabaseModule, AppLoggerModule, ShowModule, MovieModule],
   providers: [],
   exports: [],
 })

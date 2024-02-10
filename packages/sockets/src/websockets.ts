@@ -1,4 +1,3 @@
-import { Media } from '@beast/server-db-schemas';
 import typia from 'typia';
 
 export interface MessageBase {
@@ -14,7 +13,7 @@ export type MessageTypeToDataMap<Data extends MessageBase> = {
 
 export interface ClientPlayerStart extends MessageBase {
     type: 'client/player/start';
-    mediaId: Media['id'];
+    mediaId: string;
 }
 
 export interface ClientPlayerAction extends MessageBase {
@@ -56,7 +55,7 @@ export const decodeOutgoingClientMessage = typia.protobuf.createDecode<OutgoingC
 
 export interface ServerPlayerPosition extends MessageBase {
     type: 'server/player/position';
-    mediaId: Media['id'];
+    mediaId: string;
     seek: number;
 }
 

@@ -1,33 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { Media, ServerDBService } from '@beast/server-db-schemas';
-import { CreateMedia, IndexingMedia, MediaWithStreams } from './dto/media.dto';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
 import { ConfigService } from 'src/config/config.service';
 import { join } from 'path';
+import { CreateMedia, IndexingMedia } from './dto/media.queries';
+import {
+  Media,
+  MediaEntity,
+  MediaStreamEntity,
+  MediaWithStreams,
+} from './dto/media.dto';
 
 @Injectable()
 export class MediaService {
   constructor(
-    private prisma: ServerDBService,
     private ffmpegService: FFmpegService,
     private configService: ConfigService,
   ) {}
 
   async getMedia(id: Media['id']): Promise<Media> {
-    return this.prisma.media.findFirstOrThrow({
+    return MediaEntity.findOneOrFail({
       where: { id },
     });
   }
 
   async getMediaWithStreams(id: Media['id']): Promise<MediaWithStreams> {
-    return this.prisma.media.findFirstOrThrow({
+    return MediaEntity.findOneOrFail({
       where: { id },
-      include: { streams: true },
+      relations: { streams: true },
     });
   }
 
-  async createMediaFromIndexing(media: IndexingMedia): Promise<Media> {
+  async createMediaFromIndexing(media: IndexingMedia): Promise<MediaEntity> {
     const probeData = await this.ffmpegService.probeFile(
       join(this.configService.getLibrariesRoot(), media.path),
     );
@@ -54,13 +58,13 @@ export class MediaService {
       bitrate: Number(probeData.format.bit_rate), // need check
       height: videoStream.height,
       width: videoStream.width,
-    } as CreateMedia;
+    } satisfies CreateMedia;
 
-    const mediaDb = await this.prisma.media.upsert({
-      where: { path: media.path },
-      create: createMedia,
-      update: createMedia,
-    });
+    const mediaDb = await MediaEntity.create({
+      ...(await MediaEntity.findOne({ where: { path: media.path } })),
+      ...createMedia,
+      library: { id: media.libraryId },
+    }).save();
 
     const getStreamName = (stream: MediaStream) => {
       switch (stream.codec_type) {
@@ -88,26 +92,15 @@ export class MediaService {
 
       const name = getStreamName(stream);
 
-      await this.prisma.stream.upsert({
-        where: {
-          mediaId_streamIndex: {
-            mediaId: mediaDb.id,
-            streamIndex: stream.index,
-          },
-        },
-        create: {
-          name: name,
-          streamIndex: stream.index,
-          mediaId: mediaDb.id,
-          type: stream.codec_type,
-        },
-        update: {
-          name: name,
-          streamIndex: stream.index,
-          mediaId: mediaDb.id,
-          type: stream.codec_type,
-        },
-      });
+      await MediaStreamEntity.create({
+        ...(await MediaStreamEntity.findOne({
+          where: { media: { id: mediaDb.id }, streamIndex: stream.index },
+        })),
+        name: name,
+        streamIndex: stream.index,
+        media: { id: mediaDb.id },
+        type: stream.codec_type,
+      }).save();
     }
 
     return mediaDb;

@@ -6,15 +6,12 @@ import { ConfigService } from 'src/config/config.service';
 import { AuthTokens } from './dto/responses';
 import { LoginBody, RefreshBody, RegisterBody } from './dto/bodies';
 import { ApiTags } from '@nestjs/swagger';
-import { ServerDBService, User } from '@beast/server-db-schemas';
+import { User, UserEntity } from './dto/user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private prisma: ServerDBService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private configService: ConfigService) {}
 
   private createTokens(userId: User['id']) {
     return {
@@ -33,7 +30,7 @@ export class AuthController {
 
   @TypedRoute.Post('login')
   async login(@TypedBody() body: LoginBody): Promise<AuthTokens> {
-    const foundUser = await this.prisma.user.findFirst({
+    const foundUser = await UserEntity.findOne({
       where: { email: body.email },
     });
     if (!foundUser)
@@ -53,7 +50,7 @@ export class AuthController {
         this.configService.getAuthJWTSecret(),
       ) as { user: { id: string } };
 
-      const foundUser = await this.prisma.user.findFirst({
+      const foundUser = await UserEntity.findOne({
         where: { id: res.user.id },
       });
       if (!foundUser)
@@ -70,21 +67,19 @@ export class AuthController {
 
   @TypedRoute.Post('register')
   async register(@TypedBody() body: RegisterBody): Promise<boolean> {
-    const foundUser = await this.prisma.user.findFirst({
+    const foundUser = await UserEntity.findOne({
       where: { email: body.email },
     });
     if (foundUser) return false;
 
-    const isFisrtUser = (await this.prisma.user.count()) === 0;
+    const isFisrtUser = (await UserEntity.count()) === 0;
 
     try {
-      await this.prisma.user.create({
-        data: {
-          email: body.email,
-          password: await hash(body.password),
-          isOwner: isFisrtUser,
-        },
-      });
+      await UserEntity.create({
+        email: body.email,
+        password: await hash(body.password),
+        isOwner: isFisrtUser,
+      }).save();
 
       return true;
     } catch {

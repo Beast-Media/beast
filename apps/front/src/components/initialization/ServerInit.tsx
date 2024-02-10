@@ -22,6 +22,7 @@ export const ServerInit: Component = () => {
     });
 
     const submit = async (value: ServerInitForm) => {
+        console.log('a', value)
         await postSettingsInit({ name: value.name })
         nav('/')
     }  
@@ -44,7 +45,7 @@ export const ServerInit: Component = () => {
                     )}
                 </Field>
             </div>
-            <Button>
+            <Button type="submit">
                 Next Step
             </Button>
         </Form> 

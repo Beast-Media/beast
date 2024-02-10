@@ -5,16 +5,13 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "dev": "dotenv -- pnpm --recursive --parallel dev",
     "build": "dotenv -- pnpm --recursive --parallel --filter './apps/*' build",
-    "prisma:gen": "dotenv -- pnpm --filter server-db-schemas prisma:gen",
-    "prisma:migrate": "dotenv -- pnpm --filter server-db-schemas prisma:migrate",
-    "prisma:push": "dotenv -- pnpm --filter server-db-schemas prisma:push"
+    "swagger": "dotenv -- pnpm --filter './apps/server' swagger && pnpm --filter './apps/front' swagger"
   },
   "devDependencies": {
     "dotenv": "^16.3.2",
     "dotenv-cli": "^7.3.0",
     "pnpm": "^8.15.1",
-    "prettier": "^3.1.1",
-    "prisma": "^5.9.0"
+    "prettier": "^3.1.1"
   },
   "engines": {
     "node": ">=18"

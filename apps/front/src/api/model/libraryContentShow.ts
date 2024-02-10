@@ -4,10 +4,10 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
-import type { LibraryContentShowData } from "./libraryContentShowData";
+import type { Show } from "./show";
 import type { LibraryContentShowType } from "./libraryContentShowType";
 
 export interface LibraryContentShow {
-  data: LibraryContentShowData;
+  data: Show;
   type: LibraryContentShowType;
 }

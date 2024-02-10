@@ -1,26 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import {
-  SeasonWithEpisodes,
-  ShowWithLibrary,
-  ShowWithSeasons,
-} from './dto/show.dto';
 import { mkdir, readdir, writeFile } from 'fs/promises';
 import { assertEquals } from 'typia';
 import { join } from 'path';
 import { TVMazeService } from 'src/tvmaze/tvmaze.service';
 import { ConfigService } from 'src/config/config.service';
 import { createHash } from 'crypto';
-import { MediaService } from 'src/media/media.service';
-import { IndexingMedia } from 'src/media/dto/media.dto';
 import { TasksService } from 'src/tasks/tasks.service';
 import sharp, { ResizeOptions } from 'sharp';
 import {
-  Episode,
-  Library,
-  Season,
-  ServerDBService,
   Show,
-} from '@beast/server-db-schemas';
+  ShowEntity,
+  ShowWithLibray,
+  ShowWithSeasons,
+} from './dto/show.dto';
+import { Library } from 'src/library/dto/library.dto';
+import { Season, SeasonEntity, SeasonWithEpisodes } from './dto/season.dto';
+import { Episode, EpisodeEntity } from './dto/episode.dto';
+import { MediaService } from 'src/media/media.service';
+import { TVMazeEpisode, TVMazeSeason } from 'src/tvmaze/tvmaze.dto';
 
 interface TvShowMatch {
   seriesTitle: string;
@@ -31,58 +28,72 @@ interface TvShowMatch {
   tvmazeId: number;
 }
 
-type MapValue<T> = T extends Map<any, infer V> ? V : never;
-
-interface ComposedShow {
-  show: Omit<Show, 'id'>;
-  seasons: Map<
-    number,
-    {
-      season: Omit<Season, 'id' | 'showId'>;
-      episodes: Map<
-        number,
-        {
-          episode: Omit<Episode, 'id' | 'mediaId' | 'seasonId'>;
-          media: IndexingMedia;
-        }
-      >;
-    }
-  >;
+interface FileMatch {
+  match: TvShowMatch;
+  path: string;
 }
+
+interface MatchedSeason {
+  file: FileMatch;
+  meta: TVMazeSeason;
+}
+
+interface MatchedEpisode {
+  file: FileMatch;
+  meta: TVMazeEpisode;
+}
+
+// type MapValue<T> = T extends Map<any, infer V> ? V : never;
+
+// interface ComposedShow {
+//   show: Omit<Show, 'id'>;
+//   seasons: Map<
+//     number,
+//     {
+//       season: Omit<Season, 'id'>;
+//       episodes: Map<
+//         number,
+//         {
+//           episode: Omit<Episode, 'id' | 'mediaId'>;
+//           media: IndexingMedia;
+//         }
+//       >;
+//     }
+//   >;
+// }
 
 @Injectable()
 export class ShowService {
   constructor(
-    private prisma: ServerDBService,
     private tvmaze: TVMazeService,
     private configService: ConfigService,
-    private mediaService: MediaService,
     private tasksService: TasksService,
+    private mediaService: MediaService,
   ) {}
 
   async getShow(id: Show['id']): Promise<ShowWithSeasons> {
-    return this.prisma.show.findFirstOrThrow({
+    return ShowEntity.findOneOrFail({
       where: { id },
-      include: { seasons: true },
+      relations: { seasons: true },
     });
   }
 
-  async getShowWithLibrary(id: Show['id']): Promise<ShowWithLibrary> {
-    return this.prisma.show.findFirstOrThrow({
+  async getShowWithLibrary(id: Show['id']): Promise<ShowWithLibray> {
+    return ShowEntity.findOneOrFail({
       where: { id },
-      include: { library: true },
+      relations: { library: true },
     });
   }
 
   async getSeason(id: Season['id']): Promise<SeasonWithEpisodes> {
-    return this.prisma.season.findFirstOrThrow({
+    return SeasonEntity.findOneOrFail({
       where: { id },
-      include: { episodes: true },
+      relations: { episodes: true },
     });
   }
 
   async getEpisode(id: Episode['id']): Promise<Episode> {
-    return this.prisma.episode.findFirstOrThrow({
+    return EpisodeEntity.findOneOrFail({
       where: { id },
     });
   }
@@ -106,18 +117,10 @@ export class ShowService {
     if (match.groups.tvmazeId)
       newGroup.tvmazeId = Number(match.groups.tvmazeId);
 
-    return assertEquals<TvShowMatch>(newGroup);
-  }
-
-  async markAsUnmatched({
-    reason,
-    file,
-  }: {
-    reason: 'filename' | 'tvShow' | 'season' | 'episode';
-    file: string;
-    library: Library['id'];
-  }) {
-    // console.log('not matched', reason, file);
+    return {
+      match: assertEquals<TvShowMatch>(newGroup),
+      path,
+    };
   }
 
   async storeImage(
@@ -164,145 +167,121 @@ export class ShowService {
       { recursive: true },
     );
 
-    let composedShow: ComposedShow | null = null;
+    const filesMatchs = files
+      .map((file) => this.matchTvShowFile(file))
+      .filter((match) => !!match) as FileMatch[];
 
-    for (const file of files) {
-      const match = this.matchTvShowFile(file.split('/').reverse()[0]);
-      if (!match) {
-        this.markAsUnmatched({
-          reason: 'filename',
-          file: file.split('/').reverse()[0],
-          library: library.id,
-        });
-        continue;
-      }
+    if (filesMatchs.length == 0) return;
 
-      const showMeta = await this.tvmaze.getTVShowMeta(match.tvmazeId);
-      if (!showMeta) {
-        this.markAsUnmatched({ reason: 'tvShow', file, library: library.id });
-        continue;
-      }
+    const foundShow = filesMatchs[0].match;
+    const showMeta = await this.tvmaze.getTVShowMeta(foundShow.tvmazeId);
+    if (!showMeta) return;
 
-      const seasonsMeta = await this.tvmaze.getTVShowSeasonsMeta(showMeta.id);
-      const episodesMeta = await this.tvmaze.getTVShowEpisodesMeta(showMeta.id);
+    const [seasonsMeta, episodesMeta] = await Promise.all([
+      this.tvmaze.getTVShowSeasonsMeta(showMeta.id),
+      this.tvmaze.getTVShowEpisodesMeta(showMeta.id),
+    ]);
 
-      const seasonMeta = seasonsMeta.find(
-        ({ number }) => number === match.season,
-      );
-      const episodeMeta = episodesMeta.find(
-        ({ number, season }) =>
-          number === match.episode && season == match.season,
-      );
-      if (!episodeMeta || !seasonMeta) {
-        this.markAsUnmatched({
-          reason: !episodeMeta ? 'episode' : 'season',
-          file,
-          library: library.id,
-        });
-        continue;
-      }
+    const matchedSeasons = seasonsMeta
+      .map((meta) => ({
+        file: filesMatchs.find(
+          ({ match: { season } }) => meta.number === season,
+        ),
+        meta,
+      }))
+      .filter(({ file }) => !!file) as MatchedSeason[];
 
-      if (!composedShow) {
-        composedShow = {
-          show: {
-            path: showPath,
-            name: showMeta.name,
-            tvmazeId: match.tvmazeId,
-            libraryId: library.id,
-            overview: showMeta.summary,
-            images: showMeta.image?.original
-              ? await this.storeImage(showMeta.image.original, metadataFolder, {
-                  medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
-                  small: { width: 160, height: 234, fit: 'cover' },
-                })
-              : [],
+    if (matchedSeasons.length === 0) return;
+
+    const matchedEpisodes = episodesMeta
+      .map((meta) => ({
+        file: filesMatchs.find(
+          ({ match: { episode, season: s2 } }) =>
+            meta.season === s2 && meta.number === episode,
+        ),
+        meta,
+      }))
+      .filter(({ file }) => !!file) as MatchedEpisode[];
+
+    if (matchedEpisodes.length === 0) return;
+
+    const showDb = await ShowEntity.create({
+      ...(await ShowEntity.findOne({
+        where: { tvmazeId: foundShow.tvmazeId },
+      })),
+      path: showPath,
+      name: showMeta.name,
+      tvmazeId: foundShow.tvmazeId,
+      overview: showMeta.summary,
+      images: showMeta.image?.original
+        ? await this.storeImage(showMeta.image.original, metadataFolder, {
+            medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
+            small: { width: 160, height: 234, fit: 'cover' },
+          })
+        : [],
+      library: { id: library.id },
+    }).save();
+
+    for (const matchedSeason of matchedSeasons) {
+      const seasonDb = await SeasonEntity.create({
+        ...(await SeasonEntity.findOne({
+          where: {
+            season_number: matchedSeason.meta.number,
+            show: { id: showDb.id },
           },
-          seasons: new Map() as ComposedShow['seasons'],
-        };
-      }
-
-      const composedSeason = composedShow.seasons.get(match.season) ?? {
-        episodes: new Map() as MapValue<ComposedShow['seasons']>['episodes'],
-        season: {
-          season_number: match.season,
-          name:
-            seasonMeta.name.length > 0
-              ? seasonMeta.name
-              : `Season ${match.season}`,
-          overview: seasonMeta.summary,
-          images: seasonMeta.image?.original
-            ? await this.storeImage(seasonMeta.image.original, metadataFolder, {
+        })),
+        show: { id: showDb.id },
+        season_number: matchedSeason.meta.number,
+        name:
+          matchedSeason.meta.name.length > 0
+            ? matchedSeason.meta.name
+            : `Season ${matchedSeason.meta.number}`,
+        overview: matchedSeason.meta.summary,
+        images: matchedSeason.meta.image?.original
+          ? await this.storeImage(
+              matchedSeason.meta.image.original,
+              metadataFolder,
+              {
                 medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
                 small: { width: 160, height: 234, fit: 'cover' },
-              })
+              },
+            )
+          : [],
+      }).save();
+
+      const sesonEpisodes = matchedEpisodes.filter(
+        ({ meta: { season } }) => season === matchedSeason.meta.number,
+      );
+
+      for (const episode of sesonEpisodes) {
+        const media = await this.mediaService.createMediaFromIndexing({
+          libraryId: library.id,
+          path: join(showPath, episode.file.path),
+        });
+
+        await EpisodeEntity.create({
+          ...(await EpisodeEntity.findOne({
+            where: {
+              season: { id: seasonDb.id },
+              episode_number: episode.meta.number,
+            },
+          })),
+          episode_number: episode.meta.number,
+          name: episode.meta.name ?? `Episode ${episode.meta.number}`,
+          overview: episode.meta.summary,
+          images: episode.meta.image?.original
+            ? await this.storeImage(
+                episode.meta.image.original,
+                metadataFolder,
+                {
+                  medium: { width: 256 * 2, height: 160 * 2, fit: 'cover' },
+                  small: { width: 256, height: 160, fit: 'cover' },
+                },
+              )
             : [],
-        },
-      };
-
-      if (!composedSeason.episodes.has(match.episode)) {
-        composedSeason.episodes.set(match.episode, {
-          episode: {
-            episode_number: match.episode,
-            name: episodeMeta.name ?? `Episode ${match.episode}`,
-            overview: episodeMeta.summary,
-            images: episodeMeta.image?.original
-              ? await this.storeImage(
-                  episodeMeta.image.original,
-                  metadataFolder,
-                  {
-                    medium: { width: 256 * 2, height: 160 * 2, fit: 'cover' },
-                    small: { width: 256, height: 160, fit: 'cover' },
-                  },
-                )
-              : [],
-          },
-          media: {
-            path: join(showPath, file),
-            libraryId: library.id,
-          },
-        });
-      }
-
-      composedShow.seasons.set(match.season, composedSeason);
-    }
-
-    if (!composedShow) return;
-
-    const dbShow = await this.prisma.show.upsert({
-      where: { tvmazeId: composedShow.show.tvmazeId },
-      create: composedShow.show,
-      update: composedShow.show,
-    });
-
-    for (const composedSeason of composedShow.seasons.values()) {
-      const dbSeason = await this.prisma.season.upsert({
-        where: {
-          showId_season_number: {
-            showId: dbShow.id,
-            season_number: composedSeason.season.season_number,
-          },
-        },
-        create: { ...composedSeason.season, showId: dbShow.id },
-        update: composedSeason.season,
-      });
-
-      for (const episodeAndMedia of composedSeason.episodes.values()) {
-        const media = await this.mediaService.createMediaFromIndexing(
-          episodeAndMedia.media,
-        );
-
-        const episodeData = {
-          ...episodeAndMedia.episode,
-          seasonId: dbSeason.id,
-          mediaId: media.id,
-        };
-        await this.prisma.episode.upsert({
-          where: {
-            mediaId: media.id,
-          },
-          create: episodeData,
-          update: episodeData,
-        });
+          media: { id: media.id },
+          season: { id: seasonDb.id },
+        }).save();
       }
     }
   }

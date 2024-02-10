@@ -2,10 +2,10 @@ import { TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Authenticated } from 'src/auth/auth.decorator';
-import { MovieDTO, QueryMovie } from './dto/movie.dto';
+import { QueryMovie } from './dto/movie.query';
 import { MovieService } from './movie.service';
-import { LibraryAccessType, LibraryType } from '@beast/server-db-schemas';
 import { HasLibraryAccess } from 'src/library/library-access.decorator';
+import { Movie } from './dto/movie.dto';
 
 /**
  * Controller for the Movies
@@ -21,11 +21,11 @@ export class MovieController {
    * Get the informations of a movie
    */
   @TypedRoute.Get('/')
-  @HasLibraryAccess<QueryMovie>(LibraryAccessType.READ, {
-    from: LibraryType.MOVIES,
+  @HasLibraryAccess<QueryMovie>('READ', {
+    from: 'MOVIES',
     id: 'movieId',
   })
-  public async show(@TypedQuery() query: QueryMovie): Promise<MovieDTO> {
+  public async show(@TypedQuery() query: QueryMovie): Promise<Movie> {
     return this.movieService.getMovie(query.movieId);
   }
 }
