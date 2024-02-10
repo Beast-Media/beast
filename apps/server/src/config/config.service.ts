@@ -1,22 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import dotenv from 'dotenv';
+import { readFile, stat, writeFile } from 'fs/promises';
+import { join } from 'path';
+import crypto from 'crypto';
 
 dotenv.config();
 
 @Injectable()
-export class ConfigService {
+export class ConfigService implements OnModuleInit {
+  private jwtSecret: string;
+
   constructor() {
     this.ensureVariables();
   }
 
+  async onModuleInit() {
+    const file = join(this.getServerDataPath(), 'auth-secret');
+
+    if (!(await stat(file).catch(() => null))?.isFile()) {
+      this.jwtSecret = crypto.randomBytes(32).toString('hex');
+      await writeFile(file, this.jwtSecret, {
+        encoding: 'utf8',
+      });
+    } else {
+      this.jwtSecret = await readFile(file, { encoding: 'utf8' });
+    }
+  }
+
   ensureVariables() {
     const variables = [
-      'DATABASE_URL',
-      'METADATAS_PATH',
-      'TRANSCODE_PATH',
-      'AUTH_JWT_SECRET',
-      'SERVER_APP_PATH',
+      'SERVER_DATA_PATH',
       'SERVER_LIBRARIES_ROOT',
+      'SERVER_APP_PATH',
       'API_APP_PATH',
     ];
 
@@ -33,20 +48,16 @@ export class ConfigService {
     return val;
   }
 
-  getDatabaseUrl() {
-    return this.getValueOrThrow('DATABASE_URL');
-  }
-
   getAuthJWTSecret() {
-    return this.getValueOrThrow('AUTH_JWT_SECRET');
+    return this.jwtSecret;
   }
 
   getMetadatasPath() {
-    return this.getValueOrThrow('METADATAS_PATH');
+    return join(this.getServerDataPath(), 'metadatas');
   }
 
   getTranscodePath() {
-    return this.getValueOrThrow('TRANSCODE_PATH');
+    return join(this.getServerDataPath(), 'transcode');
   }
 
   getAppPath() {
@@ -55,6 +66,10 @@ export class ConfigService {
 
   getLibrariesRoot() {
     return this.getValueOrThrow('SERVER_LIBRARIES_ROOT');
+  }
+
+  getServerDataPath() {
+    return this.getValueOrThrow('SERVER_DATA_PATH');
   }
 
   getApiAppPath() {
