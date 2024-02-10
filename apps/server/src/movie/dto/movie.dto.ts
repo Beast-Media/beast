@@ -53,7 +53,7 @@ export class MovieEntity extends BaseEntity implements Movie, MovieRelations {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  library?: LibraryEntity;
+  library: LibraryEntity;
 
   @Column({ type: 'simple-array' })
   images: string[];

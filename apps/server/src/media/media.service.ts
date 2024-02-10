@@ -86,21 +86,37 @@ export class MediaService {
       }
     };
 
+    const streamsDb = await MediaStreamEntity.find({
+      where: { media: { id: mediaDb.id } },
+    });
+
     for (const stream of probeData.streams) {
       if (stream.codec_type === 'attachment' || stream.codec_type === 'data')
         continue; // DO not store attachments or data for now. Not needed;
 
+      const existingStream = streamsDb.find(
+        ({ streamIndex }) => streamIndex === stream.index,
+      );
+
       const name = getStreamName(stream);
 
-      await MediaStreamEntity.create({
-        ...(await MediaStreamEntity.findOne({
-          where: { media: { id: mediaDb.id }, streamIndex: stream.index },
-        })),
+      const newMediaStream = MediaStreamEntity.create({
         name: name,
         streamIndex: stream.index,
         media: { id: mediaDb.id },
         type: stream.codec_type,
-      }).save();
+      });
+
+      if (existingStream) {
+        await MediaStreamEntity.update(
+          {
+            id: existingStream.id,
+          },
+          newMediaStream,
+        );
+      } else {
+        await MediaStreamEntity.insert(newMediaStream);
+      }
     }
 
     return mediaDb;
