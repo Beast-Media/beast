@@ -58,67 +58,67 @@ type SecondParameter<T extends (...args: any) => any> = T extends (
   ? P
   : never;
 
-export const postAuthLogin = (
-  loginBody: BodyType<LoginBody>,
+export const postPlayerStart = (
+  playerSettings: BodyType<PlayerSettings>,
   options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<AuthTokens>(
+  return customInstance<StartedPlayerInfos>(
     {
-      url: `http://localhost:3000/auth/login`,
+      url: `http://localhost:3000/api/player/start`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: loginBody,
+      data: playerSettings,
     },
     options,
   );
 };
 
-export const getPostAuthLoginMutationOptions = <
+export const getPostPlayerStartMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postAuthLogin>>,
+    Awaited<ReturnType<typeof postPlayerStart>>,
     TError,
-    { data: BodyType<LoginBody> },
+    { data: BodyType<PlayerSettings> },
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): SolidMutationOptions<
-  Awaited<ReturnType<typeof postAuthLogin>>,
+  Awaited<ReturnType<typeof postPlayerStart>>,
   TError,
-  { data: BodyType<LoginBody> },
+  { data: BodyType<PlayerSettings> },
   TContext
 > => {
   const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthLogin>>,
-    { data: BodyType<LoginBody> }
+    Awaited<ReturnType<typeof postPlayerStart>>,
+    { data: BodyType<PlayerSettings> }
   > = (props) => {
     const { data } = props ?? {};
 
-    return postAuthLogin(data, requestOptions);
+    return postPlayerStart(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type PostAuthLoginMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthLogin>>
+export type PostPlayerStartMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPlayerStart>>
 >;
-export type PostAuthLoginMutationBody = BodyType<LoginBody>;
-export type PostAuthLoginMutationError = ErrorType<unknown>;
+export type PostPlayerStartMutationBody = BodyType<PlayerSettings>;
+export type PostPlayerStartMutationError = ErrorType<unknown>;
 
-export const createPostAuthLogin = <
+export const createPostPlayerStart = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(
   options?: () => {
     mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postAuthLogin>>,
+      Awaited<ReturnType<typeof postPlayerStart>>,
       TError,
-      { data: BodyType<LoginBody> },
+      { data: BodyType<PlayerSettings> },
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -126,143 +126,75 @@ export const createPostAuthLogin = <
 ) => {
   return createMutation(() => {
     const opts = options?.();
-    return getPostAuthLoginMutationOptions(opts);
+    return getPostPlayerStartMutationOptions(opts);
   });
 };
 
-export const postAuthRefresh = (
-  refreshBody: BodyType<RefreshBody>,
-  options?: SecondParameter<typeof customInstance>,
-) => {
-  return customInstance<AuthTokens>(
-    {
-      url: `http://localhost:3000/auth/refresh`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: refreshBody,
-    },
-    options,
-  );
-};
-
-export const getPostAuthRefreshMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postAuthRefresh>>,
-    TError,
-    { data: BodyType<RefreshBody> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): SolidMutationOptions<
-  Awaited<ReturnType<typeof postAuthRefresh>>,
-  TError,
-  { data: BodyType<RefreshBody> },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthRefresh>>,
-    { data: BodyType<RefreshBody> }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return postAuthRefresh(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type PostAuthRefreshMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthRefresh>>
->;
-export type PostAuthRefreshMutationBody = BodyType<RefreshBody>;
-export type PostAuthRefreshMutationError = ErrorType<unknown>;
-
-export const createPostAuthRefresh = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: () => {
-    mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postAuthRefresh>>,
-      TError,
-      { data: BodyType<RefreshBody> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  return createMutation(() => {
-    const opts = options?.();
-    return getPostAuthRefreshMutationOptions(opts);
-  });
-};
-
-export const postAuthRegister = (
-  registerBody: BodyType<RegisterBody>,
+/**
+ * Used to tell the server that the user is still watching
+if the server does not receive this call within a 10s window,
+the server will close the player to save ressources
+ */
+export const postPlayerKeepalive = (
+  params: PostPlayerKeepaliveParams,
   options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<boolean>(
     {
-      url: `http://localhost:3000/auth/register`,
+      url: `http://localhost:3000/api/player/keepalive`,
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: registerBody,
+      params,
     },
     options,
   );
 };
 
-export const getPostAuthRegisterMutationOptions = <
+export const getPostPlayerKeepaliveMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postAuthRegister>>,
+    Awaited<ReturnType<typeof postPlayerKeepalive>>,
     TError,
-    { data: BodyType<RegisterBody> },
+    { params: PostPlayerKeepaliveParams },
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): SolidMutationOptions<
-  Awaited<ReturnType<typeof postAuthRegister>>,
+  Awaited<ReturnType<typeof postPlayerKeepalive>>,
   TError,
-  { data: BodyType<RegisterBody> },
+  { params: PostPlayerKeepaliveParams },
   TContext
 > => {
   const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthRegister>>,
-    { data: BodyType<RegisterBody> }
+    Awaited<ReturnType<typeof postPlayerKeepalive>>,
+    { params: PostPlayerKeepaliveParams }
   > = (props) => {
-    const { data } = props ?? {};
+    const { params } = props ?? {};
 
-    return postAuthRegister(data, requestOptions);
+    return postPlayerKeepalive(params, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type PostAuthRegisterMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthRegister>>
+export type PostPlayerKeepaliveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPlayerKeepalive>>
 >;
-export type PostAuthRegisterMutationBody = BodyType<RegisterBody>;
-export type PostAuthRegisterMutationError = ErrorType<unknown>;
 
-export const createPostAuthRegister = <
+export type PostPlayerKeepaliveMutationError = ErrorType<unknown>;
+
+export const createPostPlayerKeepalive = <
   TError = ErrorType<unknown>,
   TContext = unknown,
 >(
   options?: () => {
     mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postAuthRegister>>,
+      Awaited<ReturnType<typeof postPlayerKeepalive>>,
       TError,
-      { data: BodyType<RegisterBody> },
+      { params: PostPlayerKeepaliveParams },
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -270,8 +202,238 @@ export const createPostAuthRegister = <
 ) => {
   return createMutation(() => {
     const opts = options?.();
-    return getPostAuthRegisterMutationOptions(opts);
+    return getPostPlayerKeepaliveMutationOptions(opts);
   });
+};
+
+export const postPlayerEnd = (
+  params: PostPlayerEndParams,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    { url: `http://localhost:3000/api/player/end`, method: "POST", params },
+    options,
+  );
+};
+
+export const getPostPlayerEndMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postPlayerEnd>>,
+    TError,
+    { params: PostPlayerEndParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postPlayerEnd>>,
+  TError,
+  { params: PostPlayerEndParams },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postPlayerEnd>>,
+    { params: PostPlayerEndParams }
+  > = (props) => {
+    const { params } = props ?? {};
+
+    return postPlayerEnd(params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostPlayerEndMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPlayerEnd>>
+>;
+
+export type PostPlayerEndMutationError = ErrorType<unknown>;
+
+export const createPostPlayerEnd = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postPlayerEnd>>,
+      TError,
+      { params: PostPlayerEndParams },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostPlayerEndMutationOptions(opts);
+  });
+};
+
+/**
+ * Get a media from its id
+ */
+export const getMedia = (
+  params: GetMediaParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<Media>(
+    { url: `http://localhost:3000/api/media`, method: "GET", params, signal },
+    options,
+  );
+};
+
+export const getGetMediaQueryKey = (params: GetMediaParams) => {
+  return [
+    `http://localhost:3000/api/media`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMediaQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMedia>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMediaParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMediaQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMedia>>> = ({
+    signal,
+  }) => getMedia(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMedia>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMediaQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMedia>>
+>;
+export type GetMediaQueryError = ErrorType<unknown>;
+
+export const createGetMedia = <
+  TData = Awaited<ReturnType<typeof getMedia>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMediaParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMediaQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+/**
+ * Get a media details from its id
+ */
+export const getMediaDetail = (
+  params: GetMediaDetailParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MediaWithStreams>(
+    {
+      url: `http://localhost:3000/api/media/detail`,
+      method: "GET",
+      params,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetMediaDetailQueryKey = (params: GetMediaDetailParams) => {
+  return [
+    `http://localhost:3000/api/media/detail`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMediaDetailQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMediaDetail>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMediaDetailParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<
+        Awaited<ReturnType<typeof getMediaDetail>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMediaDetailQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMediaDetail>>> = ({
+    signal,
+  }) => getMediaDetail(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMediaDetail>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMediaDetailQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMediaDetail>>
+>;
+export type GetMediaDetailQueryError = ErrorType<unknown>;
+
+export const createGetMediaDetail = <
+  TData = Awaited<ReturnType<typeof getMediaDetail>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMediaDetailParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<
+          Awaited<ReturnType<typeof getMediaDetail>>,
+          TError,
+          TData
+        >
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMediaDetailQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
 };
 
 /**
@@ -282,13 +444,13 @@ export const getLibraryAll = (
   signal?: AbortSignal,
 ) => {
   return customInstance<Library[]>(
-    { url: `http://localhost:3000/library/all`, method: "GET", signal },
+    { url: `http://localhost:3000/api/library/all`, method: "GET", signal },
     options,
   );
 };
 
 export const getGetLibraryAllQueryKey = () => {
-  return [`http://localhost:3000/library/all`] as const;
+  return [`http://localhost:3000/api/library/all`] as const;
 };
 
 export const getGetLibraryAllQueryOptions = <
@@ -354,7 +516,7 @@ export const postLibraryNew = (
 ) => {
   return customInstance<PostLibraryNew201>(
     {
-      url: `http://localhost:3000/library/new`,
+      url: `http://localhost:3000/api/library/new`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       data: createLibrary,
@@ -428,7 +590,7 @@ export const deleteLibrary = (
   options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<boolean>(
-    { url: `http://localhost:3000/library`, method: "DELETE", params },
+    { url: `http://localhost:3000/api/library`, method: "DELETE", params },
     options,
   );
 };
@@ -499,14 +661,14 @@ export const getLibrary = (
   signal?: AbortSignal,
 ) => {
   return customInstance<Library>(
-    { url: `http://localhost:3000/library`, method: "GET", params, signal },
+    { url: `http://localhost:3000/api/library`, method: "GET", params, signal },
     options,
   );
 };
 
 export const getGetLibraryQueryKey = (params: GetLibraryParams) => {
   return [
-    `http://localhost:3000/library`,
+    `http://localhost:3000/api/library`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -571,7 +733,7 @@ export const postLibraryAccess = (
 ) => {
   return customInstance<boolean>(
     {
-      url: `http://localhost:3000/library/access`,
+      url: `http://localhost:3000/api/library/access`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       data: editLibraryPermissions,
@@ -647,7 +809,7 @@ export const getLibraryScan = (
 ) => {
   return customInstance<boolean>(
     {
-      url: `http://localhost:3000/library/scan`,
+      url: `http://localhost:3000/api/library/scan`,
       method: "GET",
       params,
       signal,
@@ -658,7 +820,7 @@ export const getLibraryScan = (
 
 export const getGetLibraryScanQueryKey = (params: GetLibraryScanParams) => {
   return [
-    `http://localhost:3000/library/scan`,
+    `http://localhost:3000/api/library/scan`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -735,7 +897,7 @@ export const getLibraryContent = (
 ) => {
   return customInstance<LibraryContent>(
     {
-      url: `http://localhost:3000/library/content`,
+      url: `http://localhost:3000/api/library/content`,
       method: "GET",
       params,
       signal,
@@ -748,7 +910,7 @@ export const getGetLibraryContentQueryKey = (
   params: GetLibraryContentParams,
 ) => {
   return [
-    `http://localhost:3000/library/content`,
+    `http://localhost:3000/api/library/content`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -828,7 +990,7 @@ export const getLibraryShowFilesystem = (
 ) => {
   return customInstance<string[]>(
     {
-      url: `http://localhost:3000/library/show-filesystem`,
+      url: `http://localhost:3000/api/library/show-filesystem`,
       method: "GET",
       params,
       signal,
@@ -841,7 +1003,7 @@ export const getGetLibraryShowFilesystemQueryKey = (
   params: GetLibraryShowFilesystemParams,
 ) => {
   return [
-    `http://localhost:3000/library/show-filesystem`,
+    `http://localhost:3000/api/library/show-filesystem`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -913,604 +1075,6 @@ export const createGetLibraryShowFilesystem = <
 };
 
 /**
- * Get a media from its id
- */
-export const getMedia = (
-  params: GetMediaParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<Media>(
-    { url: `http://localhost:3000/media`, method: "GET", params, signal },
-    options,
-  );
-};
-
-export const getGetMediaQueryKey = (params: GetMediaParams) => {
-  return [`http://localhost:3000/media`, ...(params ? [params] : [])] as const;
-};
-
-export const getGetMediaQueryOptions = <
-  TData = Awaited<ReturnType<typeof getMedia>>,
-  TError = ErrorType<unknown>,
->(
-  params: GetMediaParams,
-  options?: {
-    query?: Partial<
-      SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetMediaQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMedia>>> = ({
-    signal,
-  }) => getMedia(params, requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getMedia>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetMediaQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getMedia>>
->;
-export type GetMediaQueryError = ErrorType<unknown>;
-
-export const createGetMedia = <
-  TData = Awaited<ReturnType<typeof getMedia>>,
-  TError = ErrorType<unknown>,
->(
-  options: () => {
-    params: GetMediaParams;
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<Awaited<ReturnType<typeof getMedia>>, TError, TData>
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetMediaQueryOptions(opts["params"], opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-/**
- * Get a media details from its id
- */
-export const getMediaDetail = (
-  params: GetMediaDetailParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<MediaWithStreams>(
-    {
-      url: `http://localhost:3000/media/detail`,
-      method: "GET",
-      params,
-      signal,
-    },
-    options,
-  );
-};
-
-export const getGetMediaDetailQueryKey = (params: GetMediaDetailParams) => {
-  return [
-    `http://localhost:3000/media/detail`,
-    ...(params ? [params] : []),
-  ] as const;
-};
-
-export const getGetMediaDetailQueryOptions = <
-  TData = Awaited<ReturnType<typeof getMediaDetail>>,
-  TError = ErrorType<unknown>,
->(
-  params: GetMediaDetailParams,
-  options?: {
-    query?: Partial<
-      SolidQueryOptions<
-        Awaited<ReturnType<typeof getMediaDetail>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetMediaDetailQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMediaDetail>>> = ({
-    signal,
-  }) => getMediaDetail(params, requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getMediaDetail>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetMediaDetailQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getMediaDetail>>
->;
-export type GetMediaDetailQueryError = ErrorType<unknown>;
-
-export const createGetMediaDetail = <
-  TData = Awaited<ReturnType<typeof getMediaDetail>>,
-  TError = ErrorType<unknown>,
->(
-  options: () => {
-    params: GetMediaDetailParams;
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<
-          Awaited<ReturnType<typeof getMediaDetail>>,
-          TError,
-          TData
-        >
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetMediaDetailQueryOptions(opts["params"], opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-/**
- * Get the informations of a movie
- */
-export const getMovie = (
-  params: GetMovieParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<Movie>(
-    { url: `http://localhost:3000/movie`, method: "GET", params, signal },
-    options,
-  );
-};
-
-export const getGetMovieQueryKey = (params: GetMovieParams) => {
-  return [`http://localhost:3000/movie`, ...(params ? [params] : [])] as const;
-};
-
-export const getGetMovieQueryOptions = <
-  TData = Awaited<ReturnType<typeof getMovie>>,
-  TError = ErrorType<unknown>,
->(
-  params: GetMovieParams,
-  options?: {
-    query?: Partial<
-      SolidQueryOptions<Awaited<ReturnType<typeof getMovie>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetMovieQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMovie>>> = ({
-    signal,
-  }) => getMovie(params, requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getMovie>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetMovieQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getMovie>>
->;
-export type GetMovieQueryError = ErrorType<unknown>;
-
-export const createGetMovie = <
-  TData = Awaited<ReturnType<typeof getMovie>>,
-  TError = ErrorType<unknown>,
->(
-  options: () => {
-    params: GetMovieParams;
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<Awaited<ReturnType<typeof getMovie>>, TError, TData>
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetMovieQueryOptions(opts["params"], opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-export const postPlayerStart = (
-  playerSettings: BodyType<PlayerSettings>,
-  options?: SecondParameter<typeof customInstance>,
-) => {
-  return customInstance<StartedPlayerInfos>(
-    {
-      url: `http://localhost:3000/player/start`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: playerSettings,
-    },
-    options,
-  );
-};
-
-export const getPostPlayerStartMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postPlayerStart>>,
-    TError,
-    { data: BodyType<PlayerSettings> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): SolidMutationOptions<
-  Awaited<ReturnType<typeof postPlayerStart>>,
-  TError,
-  { data: BodyType<PlayerSettings> },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postPlayerStart>>,
-    { data: BodyType<PlayerSettings> }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return postPlayerStart(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type PostPlayerStartMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postPlayerStart>>
->;
-export type PostPlayerStartMutationBody = BodyType<PlayerSettings>;
-export type PostPlayerStartMutationError = ErrorType<unknown>;
-
-export const createPostPlayerStart = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: () => {
-    mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postPlayerStart>>,
-      TError,
-      { data: BodyType<PlayerSettings> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  return createMutation(() => {
-    const opts = options?.();
-    return getPostPlayerStartMutationOptions(opts);
-  });
-};
-
-/**
- * Used to tell the server that the user is still watching
-if the server does not receive this call within a 10s window,
-the server will close the player to save ressources
- */
-export const postPlayerKeepalive = (
-  params: PostPlayerKeepaliveParams,
-  options?: SecondParameter<typeof customInstance>,
-) => {
-  return customInstance<boolean>(
-    { url: `http://localhost:3000/player/keepalive`, method: "POST", params },
-    options,
-  );
-};
-
-export const getPostPlayerKeepaliveMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postPlayerKeepalive>>,
-    TError,
-    { params: PostPlayerKeepaliveParams },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): SolidMutationOptions<
-  Awaited<ReturnType<typeof postPlayerKeepalive>>,
-  TError,
-  { params: PostPlayerKeepaliveParams },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postPlayerKeepalive>>,
-    { params: PostPlayerKeepaliveParams }
-  > = (props) => {
-    const { params } = props ?? {};
-
-    return postPlayerKeepalive(params, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type PostPlayerKeepaliveMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postPlayerKeepalive>>
->;
-
-export type PostPlayerKeepaliveMutationError = ErrorType<unknown>;
-
-export const createPostPlayerKeepalive = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: () => {
-    mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postPlayerKeepalive>>,
-      TError,
-      { params: PostPlayerKeepaliveParams },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  return createMutation(() => {
-    const opts = options?.();
-    return getPostPlayerKeepaliveMutationOptions(opts);
-  });
-};
-
-export const postPlayerEnd = (
-  params: PostPlayerEndParams,
-  options?: SecondParameter<typeof customInstance>,
-) => {
-  return customInstance<void>(
-    { url: `http://localhost:3000/player/end`, method: "POST", params },
-    options,
-  );
-};
-
-export const getPostPlayerEndMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postPlayerEnd>>,
-    TError,
-    { params: PostPlayerEndParams },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): SolidMutationOptions<
-  Awaited<ReturnType<typeof postPlayerEnd>>,
-  TError,
-  { params: PostPlayerEndParams },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postPlayerEnd>>,
-    { params: PostPlayerEndParams }
-  > = (props) => {
-    const { params } = props ?? {};
-
-    return postPlayerEnd(params, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type PostPlayerEndMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postPlayerEnd>>
->;
-
-export type PostPlayerEndMutationError = ErrorType<unknown>;
-
-export const createPostPlayerEnd = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: () => {
-    mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postPlayerEnd>>,
-      TError,
-      { params: PostPlayerEndParams },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  return createMutation(() => {
-    const opts = options?.();
-    return getPostPlayerEndMutationOptions(opts);
-  });
-};
-
-/**
- * Save the minimum required informations to use this server
- */
-export const postSettingsInit = (
-  initServerBody: BodyType<InitServerBody>,
-  options?: SecondParameter<typeof customInstance>,
-) => {
-  return customInstance<void>(
-    {
-      url: `http://localhost:3000/settings/init`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: initServerBody,
-    },
-    options,
-  );
-};
-
-export const getPostSettingsInitMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: SolidMutationOptions<
-    Awaited<ReturnType<typeof postSettingsInit>>,
-    TError,
-    { data: BodyType<InitServerBody> },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): SolidMutationOptions<
-  Awaited<ReturnType<typeof postSettingsInit>>,
-  TError,
-  { data: BodyType<InitServerBody> },
-  TContext
-> => {
-  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postSettingsInit>>,
-    { data: BodyType<InitServerBody> }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return postSettingsInit(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type PostSettingsInitMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postSettingsInit>>
->;
-export type PostSettingsInitMutationBody = BodyType<InitServerBody>;
-export type PostSettingsInitMutationError = ErrorType<unknown>;
-
-export const createPostSettingsInit = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: () => {
-    mutation?: SolidMutationOptions<
-      Awaited<ReturnType<typeof postSettingsInit>>,
-      TError,
-      { data: BodyType<InitServerBody> },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-) => {
-  return createMutation(() => {
-    const opts = options?.();
-    return getPostSettingsInitMutationOptions(opts);
-  });
-};
-
-/**
- * Is the current server initialized
- */
-export const getSettingsInitialized = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<boolean>(
-    {
-      url: `http://localhost:3000/settings/initialized`,
-      method: "GET",
-      signal,
-    },
-    options,
-  );
-};
-
-export const getGetSettingsInitializedQueryKey = () => {
-  return [`http://localhost:3000/settings/initialized`] as const;
-};
-
-export const getGetSettingsInitializedQueryOptions = <
-  TData = Awaited<ReturnType<typeof getSettingsInitialized>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    SolidQueryOptions<
-      Awaited<ReturnType<typeof getSettingsInitialized>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getGetSettingsInitializedQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getSettingsInitialized>>
-  > = ({ signal }) => getSettingsInitialized(requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
-    Awaited<ReturnType<typeof getSettingsInitialized>>,
-    TError,
-    TData
-  > & { initialData?: undefined };
-};
-
-export type GetSettingsInitializedQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getSettingsInitialized>>
->;
-export type GetSettingsInitializedQueryError = ErrorType<unknown>;
-
-export const createGetSettingsInitialized = <
-  TData = Awaited<ReturnType<typeof getSettingsInitialized>>,
-  TError = ErrorType<unknown>,
->(
-  options?: () => {
-    options?: {
-      query?: Partial<
-        SolidQueryOptions<
-          Awaited<ReturnType<typeof getSettingsInitialized>>,
-          TError,
-          TData
-        >
-      >;
-      request?: SecondParameter<typeof customInstance>;
-    };
-  },
-): CreateQueryResult<TData, TError> => {
-  const query = createQuery(() => {
-    const opts = options?.() || {};
-    return getGetSettingsInitializedQueryOptions(opts["options"]);
-  }) as CreateQueryResult<TData, TError>;
-
-  return query;
-};
-
-/**
  * Get the informations of a show
  */
 export const getShow = (
@@ -1519,13 +1083,16 @@ export const getShow = (
   signal?: AbortSignal,
 ) => {
   return customInstance<ShowWithSeasons>(
-    { url: `http://localhost:3000/show`, method: "GET", params, signal },
+    { url: `http://localhost:3000/api/show`, method: "GET", params, signal },
     options,
   );
 };
 
 export const getGetShowQueryKey = (params: GetShowParams) => {
-  return [`http://localhost:3000/show`, ...(params ? [params] : [])] as const;
+  return [
+    `http://localhost:3000/api/show`,
+    ...(params ? [params] : []),
+  ] as const;
 };
 
 export const getGetShowQueryOptions = <
@@ -1590,7 +1157,7 @@ export const postShowScan = (
   options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<boolean>(
-    { url: `http://localhost:3000/show/scan`, method: "POST", params },
+    { url: `http://localhost:3000/api/show/scan`, method: "POST", params },
     options,
   );
 };
@@ -1661,14 +1228,19 @@ export const getShowSeason = (
   signal?: AbortSignal,
 ) => {
   return customInstance<SeasonWithEpisodes>(
-    { url: `http://localhost:3000/show/season`, method: "GET", params, signal },
+    {
+      url: `http://localhost:3000/api/show/season`,
+      method: "GET",
+      params,
+      signal,
+    },
     options,
   );
 };
 
 export const getGetShowSeasonQueryKey = (params: GetShowSeasonParams) => {
   return [
-    `http://localhost:3000/show/season`,
+    `http://localhost:3000/api/show/season`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -1745,7 +1317,7 @@ export const getShowEpisode = (
 ) => {
   return customInstance<Episode>(
     {
-      url: `http://localhost:3000/show/episode`,
+      url: `http://localhost:3000/api/show/episode`,
       method: "GET",
       params,
       signal,
@@ -1756,7 +1328,7 @@ export const getShowEpisode = (
 
 export const getGetShowEpisodeQueryKey = (params: GetShowEpisodeParams) => {
   return [
-    `http://localhost:3000/show/episode`,
+    `http://localhost:3000/api/show/episode`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -1818,6 +1390,452 @@ export const createGetShowEpisode = <
   const query = createQuery(() => {
     const opts = options?.() || {};
     return getGetShowEpisodeQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+/**
+ * Get the informations of a movie
+ */
+export const getMovie = (
+  params: GetMovieParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<Movie>(
+    { url: `http://localhost:3000/api/movie`, method: "GET", params, signal },
+    options,
+  );
+};
+
+export const getGetMovieQueryKey = (params: GetMovieParams) => {
+  return [
+    `http://localhost:3000/api/movie`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMovieQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMovie>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMovieParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<Awaited<ReturnType<typeof getMovie>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMovieQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMovie>>> = ({
+    signal,
+  }) => getMovie(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMovie>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMovieQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMovie>>
+>;
+export type GetMovieQueryError = ErrorType<unknown>;
+
+export const createGetMovie = <
+  TData = Awaited<ReturnType<typeof getMovie>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMovieParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<Awaited<ReturnType<typeof getMovie>>, TError, TData>
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMovieQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+export const postAuthLogin = (
+  loginBody: BodyType<LoginBody>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<AuthTokens>(
+    {
+      url: `http://localhost:3000/api/auth/login`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: loginBody,
+    },
+    options,
+  );
+};
+
+export const getPostAuthLoginMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postAuthLogin>>,
+    TError,
+    { data: BodyType<LoginBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postAuthLogin>>,
+  TError,
+  { data: BodyType<LoginBody> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthLogin>>,
+    { data: BodyType<LoginBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postAuthLogin(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostAuthLoginMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthLogin>>
+>;
+export type PostAuthLoginMutationBody = BodyType<LoginBody>;
+export type PostAuthLoginMutationError = ErrorType<unknown>;
+
+export const createPostAuthLogin = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postAuthLogin>>,
+      TError,
+      { data: BodyType<LoginBody> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostAuthLoginMutationOptions(opts);
+  });
+};
+
+export const postAuthRefresh = (
+  refreshBody: BodyType<RefreshBody>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<AuthTokens>(
+    {
+      url: `http://localhost:3000/api/auth/refresh`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: refreshBody,
+    },
+    options,
+  );
+};
+
+export const getPostAuthRefreshMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postAuthRefresh>>,
+    TError,
+    { data: BodyType<RefreshBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postAuthRefresh>>,
+  TError,
+  { data: BodyType<RefreshBody> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthRefresh>>,
+    { data: BodyType<RefreshBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postAuthRefresh(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostAuthRefreshMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthRefresh>>
+>;
+export type PostAuthRefreshMutationBody = BodyType<RefreshBody>;
+export type PostAuthRefreshMutationError = ErrorType<unknown>;
+
+export const createPostAuthRefresh = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postAuthRefresh>>,
+      TError,
+      { data: BodyType<RefreshBody> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostAuthRefreshMutationOptions(opts);
+  });
+};
+
+export const postAuthRegister = (
+  registerBody: BodyType<RegisterBody>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<boolean>(
+    {
+      url: `http://localhost:3000/api/auth/register`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: registerBody,
+    },
+    options,
+  );
+};
+
+export const getPostAuthRegisterMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postAuthRegister>>,
+    TError,
+    { data: BodyType<RegisterBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postAuthRegister>>,
+  TError,
+  { data: BodyType<RegisterBody> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthRegister>>,
+    { data: BodyType<RegisterBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postAuthRegister(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostAuthRegisterMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthRegister>>
+>;
+export type PostAuthRegisterMutationBody = BodyType<RegisterBody>;
+export type PostAuthRegisterMutationError = ErrorType<unknown>;
+
+export const createPostAuthRegister = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postAuthRegister>>,
+      TError,
+      { data: BodyType<RegisterBody> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostAuthRegisterMutationOptions(opts);
+  });
+};
+
+/**
+ * Save the minimum required informations to use this server
+ */
+export const postSettingsInit = (
+  initServerBody: BodyType<InitServerBody>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3000/api/settings/init`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: initServerBody,
+    },
+    options,
+  );
+};
+
+export const getPostSettingsInitMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: SolidMutationOptions<
+    Awaited<ReturnType<typeof postSettingsInit>>,
+    TError,
+    { data: BodyType<InitServerBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): SolidMutationOptions<
+  Awaited<ReturnType<typeof postSettingsInit>>,
+  TError,
+  { data: BodyType<InitServerBody> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postSettingsInit>>,
+    { data: BodyType<InitServerBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postSettingsInit(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostSettingsInitMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postSettingsInit>>
+>;
+export type PostSettingsInitMutationBody = BodyType<InitServerBody>;
+export type PostSettingsInitMutationError = ErrorType<unknown>;
+
+export const createPostSettingsInit = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: () => {
+    mutation?: SolidMutationOptions<
+      Awaited<ReturnType<typeof postSettingsInit>>,
+      TError,
+      { data: BodyType<InitServerBody> },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  return createMutation(() => {
+    const opts = options?.();
+    return getPostSettingsInitMutationOptions(opts);
+  });
+};
+
+/**
+ * Is the current server initialized
+ */
+export const getSettingsInitialized = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<boolean>(
+    {
+      url: `http://localhost:3000/api/settings/initialized`,
+      method: "GET",
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetSettingsInitializedQueryKey = () => {
+  return [`http://localhost:3000/api/settings/initialized`] as const;
+};
+
+export const getGetSettingsInitializedQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSettingsInitialized>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    SolidQueryOptions<
+      Awaited<ReturnType<typeof getSettingsInitialized>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSettingsInitializedQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSettingsInitialized>>
+  > = ({ signal }) => getSettingsInitialized(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getSettingsInitialized>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetSettingsInitializedQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSettingsInitialized>>
+>;
+export type GetSettingsInitializedQueryError = ErrorType<unknown>;
+
+export const createGetSettingsInitialized = <
+  TData = Awaited<ReturnType<typeof getSettingsInitialized>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: () => {
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<
+          Awaited<ReturnType<typeof getSettingsInitialized>>,
+          TError,
+          TData
+        >
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetSettingsInitializedQueryOptions(opts["options"]);
   }) as CreateQueryResult<TData, TError>;
 
   return query;

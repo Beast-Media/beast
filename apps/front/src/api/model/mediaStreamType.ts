@@ -10,8 +10,8 @@ export type MediaStreamType =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MediaStreamType = {
-  video: "video",
   audio: "audio",
   subtitle: "subtitle",
+  video: "video",
   attachment: "attachment",
 } as const;

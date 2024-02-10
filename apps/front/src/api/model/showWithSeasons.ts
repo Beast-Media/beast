@@ -9,6 +9,7 @@ import type { Season } from "./season";
 export interface ShowWithSeasons {
   id: string;
   images: string[];
+  libraryId: string;
   name: string;
   overview: string | null;
   path: string;

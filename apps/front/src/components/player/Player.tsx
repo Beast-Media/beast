@@ -24,6 +24,7 @@ import { VolumeControl } from "./PlayerVolume";
 import { Slider } from "./PlayerSlider";
 import { debounce } from "@solid-primitives/scheduled";
 import { Logo } from "../commons/Logo";
+import { getApiUrl } from "../../hooks/url";
 
 interface PlayerStatusBase<T extends string> {
   status: T;
@@ -127,8 +128,7 @@ export function Player({ mediaId }: { mediaId: string }) {
     //     "manifest loaded, found " + data.levels.length + " quality level"
     //   );
     // });
-    const url = new URL(window.origin);
-    const baseUrl = `${url.protocol}//${url.hostname}:${__API_PORT__}`;
+    const baseUrl = getApiUrl();
     const source = `${baseUrl}/public/transcodes/${start.id}/master.m3u8`;
     hls.loadSource(source);
     hls.attachMedia(video);

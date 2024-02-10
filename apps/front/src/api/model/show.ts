@@ -8,6 +8,7 @@
 export interface Show {
   id: string;
   images: string[];
+  libraryId: string;
   name: string;
   overview: string | null;
   path: string;

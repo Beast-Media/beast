@@ -1,9 +1,9 @@
 import Axios, { AxiosError, AxiosRequestConfig, HttpStatusCode } from 'axios';
 import { logout, refreshAccessToken } from './hooks/auth';
+import { getApiUrl } from './hooks/url';
 
 
-const url = new URL(window.origin);
-const baseUrl = `${url.protocol}//${url.hostname}:${__API_PORT__}`;
+const baseUrl = getApiUrl();
 export const AXIOS_INSTANCE = Axios.create({ baseURL: baseUrl, withCredentials: true }); // use your own URL here or environment variable
 export const AXIOS_AUTH_INSTANCE = Axios.create({ baseURL: baseUrl, withCredentials: true }); // use your own URL here or environment variable
 

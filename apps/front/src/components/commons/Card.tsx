@@ -1,10 +1,10 @@
 import { A } from "@solidjs/router";
 import clsx from "clsx";
 import { Component, Show } from "solid-js";
+import { getApiUrl } from "../../hooks/url";
 
 export const Card: Component<{ name: string; to: string, picture?: string | null, aspect?: 'portrait' | 'landscape'}> = ({ name, to, picture, aspect = 'portrait' }) => {
-    const url = new URL(window.origin);
-    const baseUrl = `${url.protocol}//${url.hostname}:${__API_PORT__}`;
+    const baseUrl = getApiUrl();
     
     return (
         <A href={to} class={clsx("flex flex-col group ", aspect == 'landscape' && 'w-64 h-40', aspect == 'portrait' && 'w-40 h-64')}>

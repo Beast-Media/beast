@@ -3,12 +3,12 @@ import { Button } from "../../commons/Button";
 import { createGetLibraryAll, deleteLibrary } from "../../../api/endpoints/beast-endpoints";
 import { Match } from "solid-js";
 import { DeleteIcon, MovieIcon, TVIcon } from "../../commons/Icons";
-import { LibraryDTO } from "../../../api/model";
+import { Library } from "../../../api/model";
 
 export const Libraries: Component = () => {
   const libraries = createGetLibraryAll(() => ({}));
 
-  const onDeleteLib = async (libraryId: LibraryDTO['id']) => {
+  const onDeleteLib = async (libraryId: Library['id']) => {
     await deleteLibrary({ libraryId });
     libraries.refetch();
   }

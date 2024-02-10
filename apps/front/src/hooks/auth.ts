@@ -27,7 +27,7 @@ export async function register(values: RegisterBody) {
 export async function refreshAccessToken() {
   const refresh_token = window.localStorage.getItem("refresh_token");
   if (!refresh_token) return false;
-  const res = await postAuthRefresh({ refresh_token }, { useAuthInstance: true })
+  const res = await postAuthRefresh({ refresh_token })
   window.localStorage.setItem('access_token', res.access_token)
   window.localStorage.setItem('refresh_token', res.refresh_token)
 }

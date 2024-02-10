@@ -9,10 +9,7 @@
   "info": {
     "version": "0.0.1",
     "title": "@beast/api",
-    "description": "",
-    "license": {
-      "name": "UNLICENSED"
-    }
+    "description": ""
   },
   "paths": {
     "/tmdb/movie/{id}": {

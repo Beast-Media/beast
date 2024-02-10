@@ -9,24 +9,21 @@
   "info": {
     "version": "0.0.1",
     "title": "@beast/server",
-    "description": "",
-    "license": {
-      "name": "UNLICENSED"
-    }
+    "description": ""
   },
   "paths": {
-    "/auth/login": {
+    "/api/player/start": {
       "post": {
         "tags": [
-          "auth"
+          "player"
         ],
-        "operationId": "postAuthLogin",
+        "operationId": "postPlayerStart",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginBody"
+                "$ref": "#/components/schemas/PlayerSettings"
               }
             }
           },
@@ -38,62 +35,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthTokens"
+                  "$ref": "#/components/schemas/StartedPlayerInfos"
                 }
               }
             }
           }
-        }
-      }
-    },
-    "/auth/refresh": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "operationId": "postAuthRefresh",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RefreshBody"
-              }
-            }
-          },
-          "required": true
         },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthTokens"
-                }
-              }
-            }
+        "security": [
+          {
+            "bearer": []
           }
-        }
+        ]
       }
     },
-    "/auth/register": {
+    "/api/player/keepalive": {
       "post": {
         "tags": [
-          "auth"
+          "player"
         ],
-        "operationId": "postAuthRegister",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterBody"
-              }
-            }
-          },
-          "required": true
-        },
+        "operationId": "postPlayerKeepalive",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "201": {
             "description": "",
@@ -105,10 +75,116 @@
               }
             }
           }
-        }
+        },
+        "description": "Used to tell the server that the user is still watching\nif the server does not receive this call within a 10s window,\nthe server will close the player to save ressources",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
-    "/library/all": {
+    "/api/player/end": {
+      "post": {
+        "tags": [
+          "player"
+        ],
+        "operationId": "postPlayerEnd",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/media": {
+      "get": {
+        "tags": [
+          "media"
+        ],
+        "operationId": "getMedia",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Media"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a media from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/media/detail": {
+      "get": {
+        "tags": [
+          "media"
+        ],
+        "operationId": "getMediaDetail",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaWithStreams"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a media details from its id",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/library/all": {
       "get": {
         "tags": [
           "library"
@@ -138,7 +214,7 @@
         ]
       }
     },
-    "/library/new": {
+    "/api/library/new": {
       "post": {
         "tags": [
           "library"
@@ -185,7 +261,7 @@
         ]
       }
     },
-    "/library": {
+    "/api/library": {
       "delete": {
         "tags": [
           "library"
@@ -258,7 +334,7 @@
         ]
       }
     },
-    "/library/access": {
+    "/api/library/access": {
       "post": {
         "tags": [
           "library"
@@ -294,7 +370,7 @@
         ]
       }
     },
-    "/library/scan": {
+    "/api/library/scan": {
       "get": {
         "tags": [
           "library"
@@ -330,7 +406,7 @@
         ]
       }
     },
-    "/library/content": {
+    "/api/library/content": {
       "get": {
         "tags": [
           "library"
@@ -366,7 +442,7 @@
         ]
       }
     },
-    "/library/show-filesystem": {
+    "/api/library/show-filesystem": {
       "get": {
         "tags": [
           "library"
@@ -405,272 +481,7 @@
         ]
       }
     },
-    "/media": {
-      "get": {
-        "tags": [
-          "media"
-        ],
-        "operationId": "getMedia",
-        "parameters": [
-          {
-            "name": "mediaId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Media"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get a media from its id",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/media/detail": {
-      "get": {
-        "tags": [
-          "media"
-        ],
-        "operationId": "getMediaDetail",
-        "parameters": [
-          {
-            "name": "mediaId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MediaWithStreams"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get a media details from its id",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/movie": {
-      "get": {
-        "tags": [
-          "movie"
-        ],
-        "operationId": "getMovie",
-        "parameters": [
-          {
-            "name": "movieId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Movie"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get the informations of a movie",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/player/start": {
-      "post": {
-        "tags": [
-          "player"
-        ],
-        "operationId": "postPlayerStart",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PlayerSettings"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StartedPlayerInfos"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/player/keepalive": {
-      "post": {
-        "tags": [
-          "player"
-        ],
-        "operationId": "postPlayerKeepalive",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "description": "Used to tell the server that the user is still watching\nif the server does not receive this call within a 10s window,\nthe server will close the player to save ressources",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/player/end": {
-      "post": {
-        "tags": [
-          "player"
-        ],
-        "operationId": "postPlayerEnd",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/settings/init": {
-      "post": {
-        "tags": [
-          "settings"
-        ],
-        "operationId": "postSettingsInit",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InitServerBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "description": "Save the minimum required informations to use this server",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/settings/initialized": {
-      "get": {
-        "tags": [
-          "settings"
-        ],
-        "operationId": "getSettingsInitialized",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "description": "Is the current server initialized",
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/show": {
+    "/api/show": {
       "get": {
         "tags": [
           "show"
@@ -706,7 +517,7 @@
         ]
       }
     },
-    "/show/scan": {
+    "/api/show/scan": {
       "post": {
         "tags": [
           "show"
@@ -742,7 +553,7 @@
         ]
       }
     },
-    "/show/season": {
+    "/api/show/season": {
       "get": {
         "tags": [
           "show"
@@ -778,7 +589,7 @@
         ]
       }
     },
-    "/show/episode": {
+    "/api/show/episode": {
       "get": {
         "tags": [
           "show"
@@ -813,71 +624,404 @@
           }
         ]
       }
+    },
+    "/api/movie": {
+      "get": {
+        "tags": [
+          "movie"
+        ],
+        "operationId": "getMovie",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Movie"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the informations of a movie",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "postAuthLogin",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokens"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "postAuthRefresh",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokens"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "postAuthRegister",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/settings/init": {
+      "post": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "postSettingsInit",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitServerBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "description": "Save the minimum required informations to use this server",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/settings/initialized": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "operationId": "getSettingsInitialized",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "description": "Is the current server initialized",
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
-      "LoginBody": {
+      "PlayerSettings": {
         "type": "object",
         "properties": {
-          "email": {
+          "mediaId": {
             "type": "string"
           },
-          "password": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "email",
-          "password"
-        ]
-      },
-      "AuthTokens": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
+          "seek": {
+            "type": "number"
           },
-          "refresh_token": {
-            "type": "string"
+          "streams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerSettingStream"
+            }
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/PlayerResolution"
           }
         },
         "nullable": false,
         "required": [
-          "access_token",
-          "refresh_token"
+          "mediaId",
+          "seek",
+          "streams"
         ]
       },
-      "RefreshBody": {
+      "PlayerSettingStream": {
         "type": "object",
         "properties": {
-          "refresh_token": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "refresh_token"
-        ]
-      },
-      "RegisterBody": {
-        "type": "object",
-        "properties": {
-          "email": {
+          "type": {
             "type": "string",
-            "maxLength": 64
+            "enum": [
+              "audio",
+              "subtitle",
+              "video"
+            ]
           },
-          "password": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 8
+          "index": {
+            "type": "number"
           }
         },
         "nullable": false,
         "required": [
-          "email",
-          "password"
+          "type",
+          "index"
+        ]
+      },
+      "PlayerResolution": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bitrate": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "width",
+          "height"
+        ]
+      },
+      "StartedPlayerInfos": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/PlayerSettings"
+          },
+          "availableResolutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerResolution"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "settings",
+          "availableResolutions"
+        ]
+      },
+      "QueryPlayer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id"
+        ]
+      },
+      "QueryMedia": {
+        "type": "object",
+        "properties": {
+          "mediaId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "mediaId"
+        ]
+      },
+      "Media": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bitrate": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "path",
+          "width",
+          "height",
+          "bitrate",
+          "duration"
+        ]
+      },
+      "MediaWithStreams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bitrate": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "streams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaStream"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "path",
+          "width",
+          "height",
+          "bitrate",
+          "duration",
+          "streams"
+        ]
+      },
+      "MediaStream": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "streamIndex": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "audio",
+              "subtitle",
+              "video",
+              "attachment"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "streamIndex",
+          "type"
         ]
       },
       "Library": {
@@ -898,18 +1042,6 @@
           },
           "path": {
             "type": "string"
-          },
-          "shows": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Show"
-            }
-          },
-          "libraryAccesses": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LibraryAccess"
-            }
           }
         },
         "nullable": false,
@@ -917,88 +1049,7 @@
           "id",
           "type",
           "name",
-          "path",
-          "shows",
-          "libraryAccesses"
-        ]
-      },
-      "Show": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "tvmazeId": {
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "overview": {
-            "type": "string",
-            "nullable": true
-          },
-          "images": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "tvmazeId",
-          "name",
-          "path",
-          "overview",
-          "images"
-        ]
-      },
-      "LibraryAccess": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "$ref": "#/components/schemas/User"
-          },
-          "access": {
-            "type": "string",
-            "enum": [
-              "READ",
-              "WRITE"
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "access"
-        ]
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "isOwner": {
-            "type": "boolean"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "email",
-          "password",
-          "isOwner"
+          "path"
         ]
       },
       "CreateLibrary": {
@@ -1130,6 +1181,46 @@
           "data"
         ]
       },
+      "Show": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tvmazeId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "libraryId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "tvmazeId",
+          "name",
+          "path",
+          "overview",
+          "images",
+          "libraryId"
+        ]
+      },
       "LibraryContentMovie": {
         "type": "object",
         "properties": {
@@ -1197,240 +1288,6 @@
           "root"
         ]
       },
-      "QueryMedia": {
-        "type": "object",
-        "properties": {
-          "mediaId": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "mediaId"
-        ]
-      },
-      "Media": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "width": {
-            "type": "number"
-          },
-          "height": {
-            "type": "number"
-          },
-          "bitrate": {
-            "type": "number"
-          },
-          "duration": {
-            "type": "number"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "path",
-          "width",
-          "height",
-          "bitrate",
-          "duration"
-        ]
-      },
-      "MediaWithStreams": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "width": {
-            "type": "number"
-          },
-          "height": {
-            "type": "number"
-          },
-          "bitrate": {
-            "type": "number"
-          },
-          "duration": {
-            "type": "number"
-          },
-          "streams": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MediaStream"
-            }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "path",
-          "width",
-          "height",
-          "bitrate",
-          "duration",
-          "streams"
-        ]
-      },
-      "MediaStream": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "streamIndex": {
-            "type": "number"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "video",
-              "audio",
-              "subtitle",
-              "attachment"
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "name",
-          "streamIndex",
-          "type"
-        ]
-      },
-      "QueryMovie": {
-        "type": "object",
-        "properties": {
-          "movieId": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "movieId"
-        ]
-      },
-      "PlayerSettings": {
-        "type": "object",
-        "properties": {
-          "mediaId": {
-            "type": "string"
-          },
-          "seek": {
-            "type": "number"
-          },
-          "streams": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlayerSettingStream"
-            }
-          },
-          "resolution": {
-            "$ref": "#/components/schemas/PlayerResolution"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "mediaId",
-          "seek",
-          "streams"
-        ]
-      },
-      "PlayerSettingStream": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "video",
-              "audio",
-              "subtitle"
-            ]
-          },
-          "index": {
-            "type": "number"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "index"
-        ]
-      },
-      "PlayerResolution": {
-        "type": "object",
-        "properties": {
-          "width": {
-            "type": "number"
-          },
-          "height": {
-            "type": "number"
-          },
-          "bitrate": {
-            "type": "number"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "width",
-          "height"
-        ]
-      },
-      "StartedPlayerInfos": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "settings": {
-            "$ref": "#/components/schemas/PlayerSettings"
-          },
-          "availableResolutions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlayerResolution"
-            }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "settings",
-          "availableResolutions"
-        ]
-      },
-      "QueryPlayer": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id"
-        ]
-      },
-      "InitServerBody": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "name"
-        ]
-      },
       "QueryShow": {
         "type": "object",
         "properties": {
@@ -1468,6 +1325,9 @@
               "type": "string"
             }
           },
+          "libraryId": {
+            "type": "string"
+          },
           "seasons": {
             "type": "array",
             "items": {
@@ -1483,6 +1343,7 @@
           "path",
           "overview",
           "images",
+          "libraryId",
           "seasons"
         ]
       },
@@ -1615,6 +1476,93 @@
         "nullable": false,
         "required": [
           "episodeId"
+        ]
+      },
+      "QueryMovie": {
+        "type": "object",
+        "properties": {
+          "movieId": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "movieId"
+        ]
+      },
+      "LoginBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "AuthTokens": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "access_token",
+          "refresh_token"
+        ]
+      },
+      "RefreshBody": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "refresh_token"
+        ]
+      },
+      "RegisterBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 8
+          }
+        },
+        "nullable": false,
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "InitServerBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name"
         ]
       }
     },

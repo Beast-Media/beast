@@ -1,30 +1,12 @@
 version: '3'
 services:
-  # beast-server:
-  #   build:
-  #     args:
-  #       - API_PORT=3000
-  #       - API_WS_PORT=3001
-  #     context: .
-  #     dockerfile: beast.Dockerfile
-  #   ports:
-  #     - 1000:80
-  #     - 3000:3000
-  #   env_file: .env.docker
-  #   volumes:
-  #     - ./volumes:/volumes
-  #     - /mnt/libraries:/mnt/libraries
-  beast-api:
+  beast-server:
     build:
       context: .
-      dockerfile: beast-api.Dockerfile
+      dockerfile: beast.Dockerfile
     ports:
-      - 4000:4000
+      - 1000:3000
     env_file: .env.docker
-    environment:
-      TMDB_API_KEY: ${TMDB_API_KEY}
-
-
-volumes:
-  database-volume:
-
+    volumes:
+      - ./volumes:/volumes
+      - /mnt/libraries:/mnt/libraries

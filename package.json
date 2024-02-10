@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev": "dotenv -- pnpm --recursive --parallel dev",
+    "dev": "dotenv -- pnpm --recursive --parallel --filter=!api dev ",
     "build": "dotenv -- pnpm --recursive --parallel --filter './apps/*' build",
-    "swagger": "dotenv -- pnpm --filter './apps/server' swagger && pnpm --filter './apps/front' swagger"
+    "swagger": "dotenv -- pnpm --parallel --filter=server --filter=api swagger && pnpm --filter 'front' swagger"
   },
   "devDependencies": {
     "dotenv": "^16.3.2",

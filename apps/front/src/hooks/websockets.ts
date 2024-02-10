@@ -2,6 +2,7 @@ import { Accessor, createContext, createSignal, onCleanup, onMount, useContext }
 import { OutgoingClientMessage, OutgoingServerMessage, OutgoingServerMessageTypeMap, OutgoingServerMessageTypes, decodeOutgoingServerMessage, encodeOutgoingClientMessage } from '@beast/sockets'
 import { getAuthTokens, logout } from "./auth";
 import { Socket, io } from "socket.io-client";
+import { getWsApiUrl } from "./url";
 
 
 
@@ -41,8 +42,7 @@ export interface SocketInputs {
 
 export function provideWebsockets(): WebsocketContext {
   const [state, setState] = createSignal<WebsocketState>({ status: 'open' });
-  const url = new URL(window.origin);
-  const baseUrl = `ws://${url.hostname}:${__API_WS_PORT__}`;
+  const baseUrl = getWsApiUrl();
   const socket: Socket<SocketInputs> = io(baseUrl, { transports: ['websocket'] });
   const eventlistener = new EventTarget();
 

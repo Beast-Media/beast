@@ -10,7 +10,7 @@ export type PlayerSettingStreamType =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PlayerSettingStreamType = {
-  video: "video",
   audio: "audio",
   subtitle: "subtitle",
+  video: "video",
 } as const;

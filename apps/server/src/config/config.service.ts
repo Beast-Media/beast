@@ -31,8 +31,8 @@ export class ConfigService implements OnModuleInit {
     const variables = [
       'SERVER_DATA_PATH',
       'SERVER_LIBRARIES_ROOT',
-      'SERVER_APP_PATH',
       'API_APP_PATH',
+      'SERVER_PORT',
     ];
 
     for (const variable of variables) {
@@ -48,6 +48,10 @@ export class ConfigService implements OnModuleInit {
     return val;
   }
 
+  getValue(key: string): string | undefined {
+    return process.env[key];
+  }
+
   getAuthJWTSecret() {
     return this.jwtSecret;
   }
@@ -60,10 +64,6 @@ export class ConfigService implements OnModuleInit {
     return join(this.getServerDataPath(), 'transcode');
   }
 
-  getAppPath() {
-    return this.getValueOrThrow('SERVER_APP_PATH');
-  }
-
   getLibrariesRoot() {
     return this.getValueOrThrow('SERVER_LIBRARIES_ROOT');
   }
@@ -74,5 +74,13 @@ export class ConfigService implements OnModuleInit {
 
   getApiAppPath() {
     return this.getValueOrThrow('API_APP_PATH');
+  }
+
+  getFrontDist() {
+    return this.getValue('SERVER_FRONT_DIST');
+  }
+
+  getPort() {
+    return parseInt(this.getValueOrThrow('SERVER_PORT'));
   }
 }

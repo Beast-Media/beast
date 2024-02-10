@@ -39,7 +39,6 @@ yarn-error.log*
 
 
 volumes/
-.env.docker
 package-lock.json
 
 vite.config.ts.timestamp-*.mjs

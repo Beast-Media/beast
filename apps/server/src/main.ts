@@ -6,7 +6,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { HttpException, HttpStatus, ShutdownSignal } from '@nestjs/common';
+import { ShutdownSignal } from '@nestjs/common';
 import { join, resolve } from 'path';
 import { ConfigService } from './config/config.service';
 import { fastifyStatic } from '@fastify/static';
@@ -18,41 +18,64 @@ async function bootstrap() {
   });
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({
+      rewriteUrl: (req) => {
+        return config.getFrontDist() &&
+          !req.url.startsWith('/api') && // this is a big hack, idk what is the correct answer to this yet
+          !req.url.startsWith('/assets') &&
+          req.url !== ''
+          ? '/index.html'
+          : req.url;
+      },
+    }),
     {
       bufferLogs: true,
       cors: {
         credentials: true,
-        origin: (requestOrigin: string, callback) => {
-          if (!requestOrigin || requestOrigin?.includes('localhost'))
-            callback(null, true);
-          else {
-            callback(
-              new HttpException(
-                'Not allowed by CORS ' + requestOrigin,
-                HttpStatus.FORBIDDEN,
-              ),
-              false,
-            );
-          }
-        },
+        origin: true,
       },
     },
   );
 
+  app.setGlobalPrefix('api');
+
   const config = app.get(ConfigService);
+
+  app.register((instance, opts, next) => {
+    instance.register(fastifyStatic, {
+      root: resolve(join(config.getMetadatasPath(), 'images')),
+      prefix: '/api/public/images',
+    });
+    next();
+  });
+
+  app.register((instance, opts, next) => {
+    instance.register(fastifyStatic, {
+      root: resolve(config.getTranscodePath()),
+      prefix: '/api/public/transcodes',
+    });
+    next();
+  });
+
+  const frontDist = config.getFrontDist();
+  if (frontDist) {
+    console.log('serving front dist');
+    const staticDist = resolve(frontDist);
+    app.register((instance, opts, next) => {
+      instance.register(fastifyStatic, {
+        root: join(staticDist),
+        prefix: '/',
+      });
+      next();
+    });
+  }
 
   SwaggerModule.setup(
     '/api',
     app,
     {
       ...(swaggerDocument as any),
-      servers: [
-        {
-          url: config.getAppPath(),
-          description: 'Main Server',
-        },
-      ],
+      servers: [],
     },
     {
       swaggerOptions: {
@@ -65,25 +88,10 @@ async function bootstrap() {
     },
   );
 
-  app.register((instance, opts, next) => {
-    instance.register(fastifyStatic as any, {
-      root: resolve(join(config.getMetadatasPath(), 'images')),
-      prefix: '/public/images',
-    });
-    next();
-  });
-
-  app.register((instance, opts, next) => {
-    instance.register(fastifyStatic as any, {
-      root: resolve(config.getTranscodePath()),
-      prefix: '/public/transcodes',
-    });
-    next();
-  });
-
   initLogger(app);
 
   app.enableShutdownHooks([ShutdownSignal.SIGTERM, ShutdownSignal.SIGINT]);
-  await app.listen(3000, '0.0.0.0');
+  console.log('LISTENING ON ', config.getPort());
+  await app.listen(config.getPort(), '0.0.0.0');
 }
 bootstrap();
