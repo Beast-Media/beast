@@ -13,7 +13,7 @@ This document describes essential knowledge required to contribute to beast.
 
 First, clone the codebase using git in a terminal in the folder you want.
 
-git clone https://github.com/loucass003/beast.
+git clone https://github.com/Beast-Media-Player/beast
 
 ## Building the code
 
