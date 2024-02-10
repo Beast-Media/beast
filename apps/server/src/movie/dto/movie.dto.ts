@@ -1,38 +1,61 @@
+import { AppRelation } from 'src/database/relations.dto';
 import { Library, LibraryEntity } from 'src/library/dto/library.dto';
 import { Media, MediaEntity } from 'src/media/dto/media.dto';
 import {
   BaseEntity,
   Column,
+  Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
+  Unique,
 } from 'typeorm';
 
 export interface Movie {
   id: string;
   name: string;
-  overview?: string;
+  overview: string | null;
   tmdbId: number;
-  media: Media;
-  library?: Library;
+  images: string[];
+  mediaId: string;
 }
 
-export class MovieEntity extends BaseEntity implements Movie {
+export interface MovieRelations {
+  media: AppRelation<Media>;
+  library?: AppRelation<Library>;
+}
+
+@Entity()
+@Unique('unique_tmdbId', ['tmdbId'])
+export class MovieEntity extends BaseEntity implements Movie, MovieRelations {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
-  overview?: string | undefined;
+  @Column({ nullable: true, type: 'text' })
+  overview: string | null;
 
   @Column()
   tmdbId: number;
 
-  @OneToOne(() => MediaEntity, (media) => media.movie)
+  @OneToOne(() => MediaEntity, (media) => media.movie, {
+    nullable: false,
+  })
+  @JoinColumn()
   media: MediaEntity;
 
-  @ManyToOne(() => LibraryEntity)
+  @ManyToOne(() => LibraryEntity, {
+    nullable: false,
+  })
   library?: LibraryEntity;
+
+  @Column({ type: 'simple-array' })
+  images: string[];
+
+  @RelationId((movie: MovieEntity) => movie.media)
+  mediaId: string;
 }

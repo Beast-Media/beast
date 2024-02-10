@@ -1,25 +1,41 @@
+import { AppRelation } from 'src/database/relations.dto';
 import {
   LibraryAccess,
   LibraryAccessEntity,
 } from 'src/library/dto/library.dto';
-import { BaseEntity, Entity, OneToMany } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export interface User {
   id: string;
   email: string;
   password: string;
-  isOwner: string;
+  isOwner: boolean;
+}
 
-  libraryAccesses?: LibraryAccess[];
+export interface UserRelations {
+  libraryAccesses: AppRelation<LibraryAccess[]>;
 }
 
 @Entity()
-export class UserEntity extends BaseEntity implements User {
+export class UserEntity extends BaseEntity implements User, UserRelations {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
   email: string;
+
+  @Column()
   password: string;
-  isOwner: string;
+
+  @Column()
+  isOwner: boolean;
 
   @OneToMany(() => LibraryAccessEntity, (access) => access.user)
-  libraryAccesses?: LibraryAccessEntity[];
+  libraryAccesses: AppRelation<LibraryAccessEntity[]>;
 }

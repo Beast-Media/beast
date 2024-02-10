@@ -5,12 +5,10 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type SeasonWithEpisodesEpisodesItem = {
-  episode_number: number;
+export interface Season {
   id: string;
   images: string[];
-  mediaId: string;
   name: string;
   overview: string | null;
-  seasonId: string | null;
-};
+  season_number: number;
+}

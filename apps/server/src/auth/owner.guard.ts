@@ -3,14 +3,11 @@ import { Reflector } from '@nestjs/core';
 import { OWNER_KEY } from './auth.decorator';
 import { FastifyRequest } from 'fastify';
 import { UserSession } from './dto/session';
-import { ServerDBService } from '@beast/server-db-schemas';
+import { UserEntity } from './dto/user.dto';
 
 @Injectable()
 export class OwnerGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private prisma: ServerDBService,
-  ) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isOwnerDecorator = this.reflector.getAllAndOverride<boolean>(
@@ -27,7 +24,7 @@ export class OwnerGuard implements CanActivate {
 
     if (!request.user) return false;
 
-    const foundUser = await this.prisma.user.findFirst({
+    const foundUser = await UserEntity.findOne({
       where: { id: request.user.id, isOwner: true },
     });
     return !!foundUser;

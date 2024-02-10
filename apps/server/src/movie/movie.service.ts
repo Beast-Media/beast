@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Library, Movie, ServerDBService } from '@beast/server-db-schemas';
 import { ConfigService } from 'src/config/config.service';
-import { MovieDTO } from './dto/movie.query';
 import { mkdir, readdir } from 'fs/promises';
 import { join } from 'path';
 import { TasksService } from 'src/tasks/tasks.service';
@@ -10,19 +8,20 @@ import sharp, { ResizeOptions } from 'sharp';
 import { createHash } from 'crypto';
 import { writeFile } from 'fs/promises';
 import { TMDBService } from '@beast/tmdb';
+import { Movie, MovieEntity } from './dto/movie.dto';
+import { Library } from 'src/library/dto/library.dto';
 
 @Injectable()
 export class MovieService {
   constructor(
-    private prisma: ServerDBService,
     private tmdb: TMDBService,
     private tasksService: TasksService,
     private mediaService: MediaService,
     private configService: ConfigService,
   ) {}
 
-  async getMovie(id: Movie['id']): Promise<MovieDTO> {
-    return this.prisma.movie.findFirstOrThrow({
+  async getMovie(id: Movie['id']): Promise<Movie> {
+    return MovieEntity.findOneOrFail({
       where: { id },
     });
   }
@@ -96,7 +95,8 @@ export class MovieService {
         path: join(moviePath, file),
       });
 
-      const movieData = {
+      await MovieEntity.create({
+        ...(await MovieEntity.findOne({ where: { tmdbId: match } })),
         name: movie.title,
         overview: movie.overview,
         images: await this.storeImage(
@@ -108,18 +108,9 @@ export class MovieService {
           },
         ),
         tmdbId: match,
-        mediaId: media.id,
-        libraryId: library.id,
-      };
-
-      await this.prisma.movie.upsert({
-        where: {
-          mediaId: media.id,
-        },
-        create: movieData,
-        update: movieData,
-      });
-      // console.log(movie);
+        library: { id: library.id },
+        media: { id: media.id },
+      }).save();
     }
   }
 

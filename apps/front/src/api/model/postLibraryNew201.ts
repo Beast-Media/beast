@@ -4,6 +4,6 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
-import type { PostLibraryNew201OneOf } from "./postLibraryNew201OneOf";
+import type { Library } from "./library";
 
-export type PostLibraryNew201 = boolean | PostLibraryNew201OneOf;
+export type PostLibraryNew201 = boolean | Library;

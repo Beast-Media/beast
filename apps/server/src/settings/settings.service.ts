@@ -11,11 +11,9 @@ export class SettingsService {
 
     if (initialized) throw new Error('Server already initialised');
 
-    await ServerEntity.insert(
-      ServerEntity.create({
-        name: init.name,
-      }),
-    );
+    await ServerEntity.create({
+      name: init.name,
+    }).save();
   }
 
   public async isInitialized(): Promise<boolean> {

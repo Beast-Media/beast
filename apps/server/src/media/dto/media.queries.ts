@@ -1,3 +1,4 @@
+import { Library } from '../../../../../packages/server-db-schemas/dist';
 import { Media } from './media.dto';
 
 export interface MediaAndWatchToken {
@@ -5,7 +6,9 @@ export interface MediaAndWatchToken {
   watchToken: string;
 }
 
-export interface IndexingMedia extends Pick<Media, 'path' | 'library'> {}
+export interface IndexingMedia extends Pick<Media, 'path'> {
+  libraryId: Library['id'];
+}
 export interface CreateMedia extends Omit<Media, 'id' | 'createdAt'> {}
 
 export interface QueryMedia {

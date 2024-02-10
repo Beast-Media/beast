@@ -1,15 +1,6 @@
-import { Episode, Season, Show } from './show.dto';
-
-// export interface ShowWithSeasons
-//   extends Prisma.ShowGetPayload<{ include: { seasons: true } }> {}
-
-// export interface ShowWithLibrary
-//   extends Prisma.ShowGetPayload<{ include: { library: true } }> {}
-
-// export interface SeasonWithEpisodes
-//   extends Prisma.SeasonGetPayload<{
-//     include: { episodes: true };
-//   }> {}
+import { Episode } from './episode.dto';
+import { Season } from './season.dto';
+import { Show } from './show.dto';
 
 export interface QueryShow {
   showId: Show['id'];

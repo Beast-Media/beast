@@ -5,13 +5,11 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export interface MediaDTO {
+export interface Media {
   bitrate: number;
-  createdAt: string;
   duration: number;
   height: number;
   id: string;
-  libraryId: string;
   path: string;
   width: number;
 }

@@ -3,16 +3,19 @@ import { Library, LibraryAccess } from './library.dto';
 import { Movie } from 'src/movie/dto/movie.dto';
 import { Show } from 'src/show/dto/show.dto';
 
-export interface CreateLibrary extends Omit<Library, 'id' | 'createdAt'> {}
+export interface CreateLibrary
+  extends Pick<Library, 'name' | 'path' | 'type'> {}
 
 export interface LibraryContentShow {
   type: 'TV_SHOWS';
   data: Show;
 }
+
 export interface LibraryContentMovie {
   type: 'MOVIES';
   data: Movie;
 }
+
 export type LibraryContent = LibraryContentShow[] | LibraryContentMovie[];
 
 export interface QueryLibrary {

@@ -4,10 +4,10 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
-import type { CreateLibraryDTOType } from "./createLibraryDTOType";
+import type { CreateLibraryType } from "./createLibraryType";
 
-export interface CreateLibraryDTO {
+export interface CreateLibrary {
   name: string;
   path: string;
-  type: CreateLibraryDTOType;
+  type: CreateLibraryType;
 }

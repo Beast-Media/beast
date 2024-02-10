@@ -5,12 +5,11 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export interface EpisodeDTO {
+export interface Episode {
   episode_number: number;
   id: string;
   images: string[];
   mediaId: string;
   name: string;
   overview: string | null;
-  seasonId: string | null;
 }

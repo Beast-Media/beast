@@ -5,7 +5,7 @@ import { TypedQuery, TypedRoute } from '@nestia/core';
 import { QueryMedia } from './dto/media.queries';
 import { Authenticated } from 'src/auth/auth.decorator';
 import { HasLibraryAccess } from 'src/library/library-access.decorator';
-import { Media } from './dto/media.dto';
+import { Media, MediaWithStreams } from './dto/media.dto';
 
 /**
  * Controller for the Libraries

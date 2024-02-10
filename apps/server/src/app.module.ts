@@ -14,17 +14,11 @@ import { TasksModule } from './tasks/tasks.module';
 import { OwnerGuard } from './auth/owner.guard';
 import { SettingsModule } from './settings/settings.module';
 import { LibraryAccessGuard } from './library/library-access.guard';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'test',
-      entities: [],
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    DatabaseModule,
     ConfigModule,
     RequestContextModule,
     AppLoggerModule,

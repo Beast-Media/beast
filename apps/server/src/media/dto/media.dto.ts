@@ -1,5 +1,4 @@
 import { Movie, MovieEntity } from 'src/movie/dto/movie.dto';
-import { Episode, EpisodeEntity } from 'src/show/dto/show.dto';
 import {
   BaseEntity,
   Column,
@@ -8,8 +7,11 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { Library, LibraryEntity } from 'src/library/dto/library.dto';
+import { AppRelation } from 'src/database/relations.dto';
+import { Episode, EpisodeEntity } from 'src/show/dto/episode.dto';
 
 export interface Media {
   id: string;
@@ -18,23 +20,37 @@ export interface Media {
   height: number;
   bitrate: number;
   duration: number;
-
-  streams?: MediaStream[];
-
-  library?: Library;
-  movie?: Movie;
-  episode?: Episode;
 }
+
+export interface MediaRelations {
+  streams: AppRelation<MediaStream[]>;
+  library: AppRelation<Library>;
+  movie: AppRelation<Movie>;
+  episode: AppRelation<Episode>;
+}
+
+export interface MediaWithStreams
+  extends Media,
+    Pick<MediaRelations, 'streams'> {}
 
 export interface MediaStream {
   name: string;
   streamIndex: number;
   type: 'video' | 'audio' | 'subtitle' | 'attachment';
-  media: Media;
+}
+
+export interface MediaStreamRelations {
+  media: AppRelation<Media>;
 }
 
 @Entity()
-export class MediaStreamEntity extends BaseEntity implements MediaStream {
+export class MediaStreamEntity
+  extends BaseEntity
+  implements MediaStream, MediaStreamRelations
+{
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @Column()
   name: string;
 
@@ -44,12 +60,15 @@ export class MediaStreamEntity extends BaseEntity implements MediaStream {
   @Column()
   type: 'video' | 'audio' | 'subtitle' | 'attachment';
 
-  @ManyToOne(() => MediaEntity, (media) => media.streams)
+  @ManyToOne(() => MediaEntity, (media) => media.streams, {
+    nullable: false,
+  })
   media: Media;
 }
 
 @Entity()
-export class MediaEntity extends BaseEntity implements Media {
+@Unique('unique_path', ['path'])
+export class MediaEntity extends BaseEntity implements Media, MediaRelations {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -69,14 +88,16 @@ export class MediaEntity extends BaseEntity implements Media {
   duration: number;
 
   @OneToMany(() => MediaStreamEntity, (stream) => stream.media)
-  streams: MediaStream[];
+  streams: AppRelation<MediaStream[]>;
 
-  @ManyToOne(() => LibraryEntity, (library) => library.id)
-  library?: LibraryEntity;
+  @ManyToOne(() => LibraryEntity, (library) => library.id, {
+    nullable: false,
+  })
+  library: AppRelation<LibraryEntity>;
 
   @OneToOne(() => MovieEntity, (movie) => movie.media)
-  movie?: MovieEntity;
+  movie: AppRelation<MovieEntity>;
 
   @OneToOne(() => EpisodeEntity, (episode) => episode.media)
-  episode?: EpisodeEntity;
+  episode: AppRelation<EpisodeEntity>;
 }

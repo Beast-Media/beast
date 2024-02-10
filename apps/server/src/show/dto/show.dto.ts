@@ -5,45 +5,29 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
-import { Media, MediaEntity } from 'src/media/dto/media.dto';
-import { AppRelation, MyCustomBaseEntity } from 'src/database/relations.dto';
-
-export interface Episode {
-  id: string;
-  name: string;
-  episode_number: number;
-  overview?: string;
-
-  media: AppRelation<Media>;
-  season: AppRelation<Season>;
-}
-
-export interface Season {
-  id: string;
-  name: string;
-  season_number: number;
-  overview?: string;
-
-  episodes: AppRelation<Episode[]>;
-  show: AppRelation<Show>;
-}
+import { AppRelation } from 'src/database/relations.dto';
+import { Season, SeasonEntity } from './season.dto';
 
 export interface Show {
   id: string;
   tvmazeId: number;
   name: string;
   path: string;
-  overview?: string;
+  overview: string | null;
+  images: string[];
+}
 
+export interface ShowRelations {
   seasons: AppRelation<Season[]>;
   library: AppRelation<Library>;
 }
 
 @Entity()
-export class ShowEntity extends MyCustomBaseEntity implements Show {
+@Unique('unique_tvmazeId', ['tvmazeId'])
+export class ShowEntity extends BaseEntity implements Show, ShowRelations {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -56,52 +40,22 @@ export class ShowEntity extends MyCustomBaseEntity implements Show {
   @Column()
   path: string;
 
-  @Column()
-  overview?: string;
+  @Column({ nullable: true, type: 'text' })
+  overview: string | null;
 
-  @OneToMany(() => SeasonEntity, (season) => season.show)
+  @OneToMany(() => SeasonEntity, (season) => season.show, {
+    nullable: false,
+  })
   seasons: AppRelation<SeasonEntity[]>;
 
-  @ManyToOne(() => LibraryEntity, (library) => library.shows)
+  @ManyToOne(() => LibraryEntity, (library) => library.shows, {
+    nullable: false,
+  })
   library: AppRelation<LibraryEntity>;
+
+  @Column({ type: 'simple-array' })
+  images: string[];
 }
 
-export class SeasonEntity extends BaseEntity implements Season {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column()
-  name: string;
-
-  @Column()
-  season_number: number;
-
-  @Column()
-  overview?: string;
-
-  @OneToMany(() => EpisodeEntity, (episode) => episode.season)
-  episodes: AppRelation<Episode[]>;
-
-  @ManyToOne(() => ShowEntity, (show) => show.seasons)
-  show: AppRelation<Show>;
-}
-
-export class EpisodeEntity extends BaseEntity implements Episode {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column()
-  name: string;
-
-  @Column()
-  episode_number: number;
-
-  @Column()
-  overview?: string;
-
-  @OneToOne(() => MediaEntity, (media) => media.episode)
-  media: AppRelation<MediaEntity>;
-
-  @ManyToOne(() => SeasonEntity, (season) => season.episodes)
-  season: AppRelation<SeasonEntity>;
-}
+export interface ShowWithSeasons extends Show, Pick<ShowRelations, 'seasons'> {}
+export interface ShowWithLibray extends Show, Pick<ShowRelations, 'library'> {}

@@ -5,12 +5,11 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type LibraryContentMovieData = {
+export interface Movie {
   id: string;
   images: string[];
-  libraryId: string;
   mediaId: string;
   name: string;
   overview: string | null;
   tmdbId: number;
-};
+}

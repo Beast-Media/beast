@@ -15,11 +15,10 @@ import type {
 } from "@tanstack/solid-query";
 import type {
   AuthTokens,
-  CreateLibraryDTO,
+  CreateLibrary,
   DeleteLibraryParams,
   EditLibraryPermissions,
-  EpisodeDTO,
-  GetLibraryAll200Item,
+  Episode,
   GetLibraryContentParams,
   GetLibraryParams,
   GetLibraryScanParams,
@@ -31,12 +30,12 @@ import type {
   GetShowParams,
   GetShowSeasonParams,
   InitServerBody,
+  Library,
   LibraryContent,
-  LibraryDTO,
   LoginBody,
-  MediaDTO,
+  Media,
   MediaWithStreams,
-  MovieDTO,
+  Movie,
   PlayerSettings,
   PostLibraryNew201,
   PostPlayerEndParams,
@@ -282,7 +281,7 @@ export const getLibraryAll = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<GetLibraryAll200Item[]>(
+  return customInstance<Library[]>(
     { url: `http://localhost:3000/library/all`, method: "GET", signal },
     options,
   );
@@ -350,7 +349,7 @@ export const createGetLibraryAll = <
  * create a new library
  */
 export const postLibraryNew = (
-  createLibraryDTO: BodyType<CreateLibraryDTO>,
+  createLibrary: BodyType<CreateLibrary>,
   options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<PostLibraryNew201>(
@@ -358,7 +357,7 @@ export const postLibraryNew = (
       url: `http://localhost:3000/library/new`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: createLibraryDTO,
+      data: createLibrary,
     },
     options,
   );
@@ -371,21 +370,21 @@ export const getPostLibraryNewMutationOptions = <
   mutation?: SolidMutationOptions<
     Awaited<ReturnType<typeof postLibraryNew>>,
     TError,
-    { data: BodyType<CreateLibraryDTO> },
+    { data: BodyType<CreateLibrary> },
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): SolidMutationOptions<
   Awaited<ReturnType<typeof postLibraryNew>>,
   TError,
-  { data: BodyType<CreateLibraryDTO> },
+  { data: BodyType<CreateLibrary> },
   TContext
 > => {
   const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postLibraryNew>>,
-    { data: BodyType<CreateLibraryDTO> }
+    { data: BodyType<CreateLibrary> }
   > = (props) => {
     const { data } = props ?? {};
 
@@ -398,7 +397,7 @@ export const getPostLibraryNewMutationOptions = <
 export type PostLibraryNewMutationResult = NonNullable<
   Awaited<ReturnType<typeof postLibraryNew>>
 >;
-export type PostLibraryNewMutationBody = BodyType<CreateLibraryDTO>;
+export type PostLibraryNewMutationBody = BodyType<CreateLibrary>;
 export type PostLibraryNewMutationError = ErrorType<unknown>;
 
 export const createPostLibraryNew = <
@@ -409,7 +408,7 @@ export const createPostLibraryNew = <
     mutation?: SolidMutationOptions<
       Awaited<ReturnType<typeof postLibraryNew>>,
       TError,
-      { data: BodyType<CreateLibraryDTO> },
+      { data: BodyType<CreateLibrary> },
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -499,7 +498,7 @@ export const getLibrary = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<LibraryDTO>(
+  return customInstance<Library>(
     { url: `http://localhost:3000/library`, method: "GET", params, signal },
     options,
   );
@@ -921,7 +920,7 @@ export const getMedia = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<MediaDTO>(
+  return customInstance<Media>(
     { url: `http://localhost:3000/media`, method: "GET", params, signal },
     options,
   );
@@ -1081,7 +1080,7 @@ export const getMovie = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<MovieDTO>(
+  return customInstance<Movie>(
     { url: `http://localhost:3000/movie`, method: "GET", params, signal },
     options,
   );
@@ -1744,7 +1743,7 @@ export const getShowEpisode = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<EpisodeDTO>(
+  return customInstance<Episode>(
     {
       url: `http://localhost:3000/show/episode`,
       method: "GET",

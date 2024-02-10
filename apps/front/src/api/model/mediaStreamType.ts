@@ -5,10 +5,11 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type StreamType = (typeof StreamType)[keyof typeof StreamType];
+export type MediaStreamType =
+  (typeof MediaStreamType)[keyof typeof MediaStreamType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StreamType = {
+export const MediaStreamType = {
   video: "video",
   audio: "audio",
   subtitle: "subtitle",

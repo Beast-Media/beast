@@ -1,4 +1,5 @@
 import { User, UserEntity } from 'src/auth/dto/user.dto';
+import { AppRelation } from 'src/database/relations.dto';
 import { Show, ShowEntity } from 'src/show/dto/show.dto';
 import {
   BaseEntity,
@@ -7,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 
 export interface Library {
@@ -14,10 +16,11 @@ export interface Library {
   type: 'MOVIES' | 'TV_SHOWS';
   name: string;
   path: string;
+}
 
-  shows: Show[];
-
-  libraryAccesses: LibraryAccess[];
+export interface LibraryRelations {
+  shows: AppRelation<Show[]>;
+  libraryAccesses: AppRelation<LibraryAccess[]>;
 }
 
 export interface LibraryAccess {
@@ -26,6 +29,7 @@ export interface LibraryAccess {
 }
 
 @Entity()
+@Unique('unique_name', ['name'])
 export class LibraryEntity extends BaseEntity implements Library {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -48,11 +52,15 @@ export class LibraryEntity extends BaseEntity implements Library {
 
 @Entity()
 export class LibraryAccessEntity extends BaseEntity implements LibraryAccess {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @ManyToOne(() => UserEntity, (user) => user.libraryAccesses)
   user: UserEntity;
 
   @ManyToOne(() => LibraryEntity, (library) => library.libraryAccesses)
   library: LibraryEntity;
 
+  @Column()
   access: 'READ' | 'WRITE';
 }

@@ -5,11 +5,11 @@
  * OpenAPI spec version: 0.0.1
  */
 
-export type CreateLibraryDTOType =
-  (typeof CreateLibraryDTOType)[keyof typeof CreateLibraryDTOType];
+export type LibraryAccessAccess =
+  (typeof LibraryAccessAccess)[keyof typeof LibraryAccessAccess];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const CreateLibraryDTOType = {
-  MOVIES: "MOVIES",
-  TV_SHOWS: "TV_SHOWS",
+export const LibraryAccessAccess = {
+  READ: "READ",
+  WRITE: "WRITE",
 } as const;

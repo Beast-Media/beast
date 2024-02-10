@@ -4,12 +4,15 @@
  * @beast/server
  * OpenAPI spec version: 0.0.1
  */
+import type { LibraryAccess } from "./libraryAccess";
+import type { Show } from "./show";
 import type { LibraryType } from "./libraryType";
 
-export type GetLibraryAll200Item = {
-  createdAt: string;
+export interface Library {
   id: string;
+  libraryAccesses: LibraryAccess[];
   name: string;
   path: string;
+  shows: Show[];
   type: LibraryType;
-};
+}
