@@ -1,5 +1,7 @@
 import { User, UserEntity } from 'src/auth/dto/user.dto';
 import { AppRelation } from 'src/database/relations.dto';
+import { Media, MediaEntity } from 'src/media/dto/media.dto';
+import { Movie, MovieEntity } from 'src/movie/dto/movie.dto';
 import { Show, ShowEntity } from 'src/show/dto/show.dto';
 import {
   BaseEntity,
@@ -20,6 +22,8 @@ export interface Library {
 
 export interface LibraryRelations {
   shows: AppRelation<Show[]>;
+  movies: AppRelation<Movie[]>;
+  medias: AppRelation<Media[]>;
   libraryAccesses: AppRelation<LibraryAccess[]>;
 }
 
@@ -43,10 +47,24 @@ export class LibraryEntity extends BaseEntity implements Library {
   @Column()
   path: string;
 
-  @OneToMany(() => ShowEntity, (show) => show.library)
+  @OneToMany(() => ShowEntity, (show) => show.library, {
+    cascade: true,
+  })
   shows: ShowEntity[];
 
-  @OneToMany(() => LibraryAccessEntity, (access) => access.library)
+  @OneToMany(() => MovieEntity, (movie) => movie.library, {
+    cascade: true,
+  })
+  movies: MovieEntity[];
+
+  @OneToMany(() => MediaEntity, (media) => media.library, {
+    cascade: true,
+  })
+  medias: Media[];
+
+  @OneToMany(() => LibraryAccessEntity, (access) => access.library, {
+    cascade: true,
+  })
   libraryAccesses: LibraryAccessEntity[];
 }
 
@@ -58,7 +76,9 @@ export class LibraryAccessEntity extends BaseEntity implements LibraryAccess {
   @ManyToOne(() => UserEntity, (user) => user.libraryAccesses)
   user: UserEntity;
 
-  @ManyToOne(() => LibraryEntity, (library) => library.libraryAccesses)
+  @ManyToOne(() => LibraryEntity, (library) => library.libraryAccesses, {
+    onDelete: 'CASCADE',
+  })
   library: LibraryEntity;
 
   @Column()

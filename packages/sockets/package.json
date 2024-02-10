@@ -37,7 +37,6 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
-    "@beast/server-db-schemas": "workspace:*",
     "typia": "^5.3.12"
   }
 }

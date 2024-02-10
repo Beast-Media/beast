@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
   Unique,
 } from 'typeorm';
 import { AppRelation } from 'src/database/relations.dto';
@@ -18,6 +19,7 @@ export interface Show {
   path: string;
   overview: string | null;
   images: string[];
+  libraryId: string;
 }
 
 export interface ShowRelations {
@@ -45,13 +47,19 @@ export class ShowEntity extends BaseEntity implements Show, ShowRelations {
 
   @OneToMany(() => SeasonEntity, (season) => season.show, {
     nullable: false,
+    cascade: true,
+    onDelete: 'CASCADE',
   })
   seasons: AppRelation<SeasonEntity[]>;
 
   @ManyToOne(() => LibraryEntity, (library) => library.shows, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   library: AppRelation<LibraryEntity>;
+
+  @RelationId((show: ShowEntity) => show.library)
+  libraryId: string;
 
   @Column({ type: 'simple-array' })
   images: string[];

@@ -46,9 +46,3 @@ We use ESLint and Prettier to format our code.
 
 ### Updating Swagger / Models
 When changing controllers and DTOs you need to run ``pnpm run swagger`` to update the swagger definition of the backend and also generate the new models of the frontend based on it.
-
-### Updating database schema
-When modifying ``packages/server-db-schemas/prisma/schema.prisma``, you need to run: 
-- ``pnpm run prisma:gen`` -> to update prisma client code and type definitions.
-- ``pnpm run prisma:push`` -> to apply the schema onto the database.
-

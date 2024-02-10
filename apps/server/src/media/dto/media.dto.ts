@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -62,6 +63,7 @@ export class MediaStreamEntity
 
   @ManyToOne(() => MediaEntity, (media) => media.streams, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   media: Media;
 }
@@ -87,17 +89,25 @@ export class MediaEntity extends BaseEntity implements Media, MediaRelations {
   @Column()
   duration: number;
 
-  @OneToMany(() => MediaStreamEntity, (stream) => stream.media)
+  @OneToMany(() => MediaStreamEntity, (stream) => stream.media, {
+    cascade: true,
+  })
+  @JoinColumn()
   streams: AppRelation<MediaStream[]>;
 
   @ManyToOne(() => LibraryEntity, (library) => library.id, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   library: AppRelation<LibraryEntity>;
 
-  @OneToOne(() => MovieEntity, (movie) => movie.media)
+  @OneToOne(() => MovieEntity, (movie) => movie.media, {
+    onDelete: 'CASCADE',
+  })
   movie: AppRelation<MovieEntity>;
 
-  @OneToOne(() => EpisodeEntity, (episode) => episode.media)
+  @OneToOne(() => EpisodeEntity, (episode) => episode.media, {
+    onDelete: 'CASCADE',
+  })
   episode: AppRelation<EpisodeEntity>;
 }

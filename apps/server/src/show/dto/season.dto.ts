@@ -44,11 +44,14 @@ export class SeasonEntity
 
   @OneToMany(() => EpisodeEntity, (episode) => episode.season, {
     nullable: false,
+    cascade: true,
+    onDelete: 'CASCADE',
   })
   episodes: AppRelation<Episode[]>;
 
   @ManyToOne(() => ShowEntity, (show) => show.seasons, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   show: AppRelation<Show>;
 

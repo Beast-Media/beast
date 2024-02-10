@@ -46,12 +46,15 @@ export class EpisodeEntity
 
   @OneToOne(() => MediaEntity, (media) => media.episode, {
     nullable: false,
+    cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn()
   media: AppRelation<MediaEntity>;
 
   @ManyToOne(() => SeasonEntity, (season) => season.episodes, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   season: AppRelation<SeasonEntity>;
 

@@ -36,6 +36,8 @@ export class UserEntity extends BaseEntity implements User, UserRelations {
   @Column()
   isOwner: boolean;
 
-  @OneToMany(() => LibraryAccessEntity, (access) => access.user)
+  @OneToMany(() => LibraryAccessEntity, (access) => access.user, {
+    cascade: true,
+  })
   libraryAccesses: AppRelation<LibraryAccessEntity[]>;
 }

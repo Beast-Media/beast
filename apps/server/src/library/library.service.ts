@@ -5,13 +5,12 @@ import { MovieService } from 'src/movie/movie.service';
 import { join } from 'path';
 import { ConfigService } from 'src/config/config.service';
 import { Library, LibraryAccessEntity, LibraryEntity } from './dto/library.dto';
-import { User } from '../../../../packages/server-db-schemas/dist';
 import {
   CreateLibrary,
   EditLibraryPermissions,
   LibraryContent,
 } from './dto/library.queries';
-import { UserEntity } from 'src/auth/dto/user.dto';
+import { User, UserEntity } from 'src/auth/dto/user.dto';
 import { ShowEntity } from 'src/show/dto/show.dto';
 import { MovieEntity } from 'src/movie/dto/movie.dto';
 
@@ -128,21 +127,6 @@ export class LibraryService {
   }
 
   async deleteLibrary(libraryId: Library['id']) {
-    // await this.prisma.stream.deleteMany({ where: { media: { libraryId } } });
-    // await this.prisma.episode.deleteMany({
-    //   where: { season: { show: { libraryId } } },
-    // });
-    // await this.prisma.season.deleteMany({
-    //   where: { show: { libraryId } },
-    // });
-    // await this.prisma.show.deleteMany({ where: { libraryId } });
-    // await this.prisma.movie.deleteMany({ where: { libraryId } });
-    // await this.prisma.media.deleteMany({ where: { libraryId } });
-    // await this.prisma.libraryAccess.deleteMany({
-    //   where: { libraryId },
-    // });
-    // await this.prisma.library.delete({
-    //   where: { id: libraryId },
-    // });
+    await LibraryEntity.delete({ id: libraryId });
   }
 }

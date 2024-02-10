@@ -1,4 +1,4 @@
-import { Library } from '../../../../../packages/server-db-schemas/dist';
+import { Library } from 'src/library/dto/library.dto';
 import { Media } from './media.dto';
 
 export interface MediaAndWatchToken {
@@ -20,8 +20,3 @@ export interface QueryPlayMedia {
   seek: number;
   watchToken: string;
 }
-
-// export interface MediaWithStreams
-//   extends Prisma.MediaGetPayload<{
-//     include: { streams: true };
-//   }> {}

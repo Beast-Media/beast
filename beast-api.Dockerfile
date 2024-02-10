@@ -11,13 +11,12 @@ RUN set -ex; \
 
 WORKDIR /app
 
-RUN mkdir -p /app/apps/front /app/apps/server /app/packages/tmdb /app/packages/sockets /app/packages/server-db-schemas /app/packages/nestjs-commons
+RUN mkdir -p /app/apps/front /app/apps/server /app/packages/tmdb /app/packages/sockets /app/packages/nestjs-commons
 COPY package*.json /app
 COPY apps/front/package.json /app/apps/front
 COPY apps/server/package.json /app/apps/server
 COPY packages/tmdb/package.json /app/packages/tmdb
 COPY packages/sockets/package.json /app/packages/sockets
-COPY packages/server-db-schemas/package.json /app/packages/server-db-schemas
 COPY packages/nestjs-commons/package.json /app/packages/nestjs-commons
 
 RUN npm ci

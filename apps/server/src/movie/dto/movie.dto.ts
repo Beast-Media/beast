@@ -24,7 +24,7 @@ export interface Movie {
 
 export interface MovieRelations {
   media: AppRelation<Media>;
-  library?: AppRelation<Library>;
+  library: AppRelation<Library>;
 }
 
 @Entity()
@@ -44,12 +44,14 @@ export class MovieEntity extends BaseEntity implements Movie, MovieRelations {
 
   @OneToOne(() => MediaEntity, (media) => media.movie, {
     nullable: false,
+    cascade: true,
   })
   @JoinColumn()
   media: MediaEntity;
 
   @ManyToOne(() => LibraryEntity, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   library?: LibraryEntity;
 
