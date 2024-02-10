@@ -5,7 +5,8 @@ on:
     branches:
       - 'main'
     paths:
-      - apps/api
+      - apps/api/**
+  workflow_dispatch:
 
 jobs:
   docker:
