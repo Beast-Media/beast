@@ -98,10 +98,8 @@ export class MediaService {
         ({ streamIndex }) => streamIndex === stream.index,
       );
 
-      const name = getStreamName(stream);
-
       const newMediaStream = MediaStreamEntity.create({
-        name: name,
+        name: getStreamName(stream),
         streamIndex: stream.index,
         media: { id: mediaDb.id },
         type: stream.codec_type,

@@ -10,7 +10,7 @@ export class ConfigService {
   }
 
   ensureVariables() {
-    const variables = ['TMDB_API_KEY', 'API_APP_PATH'];
+    const variables = ['TMDB_API_KEY'];
 
     for (const variable of variables) {
       this.getValueOrThrow(variable);
@@ -27,9 +27,5 @@ export class ConfigService {
 
   getTMDBApiKey() {
     return this.getValueOrThrow('TMDB_API_KEY');
-  }
-
-  getAppPath() {
-    return this.getValueOrThrow('API_APP_PATH');
   }
 }
