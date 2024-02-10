@@ -65,6 +65,9 @@ importers:
       cache-manager:
         specifier: ^5.3.2
         version: 5.4.0
+      dotenv:
+        specifier: ^16.3.2
+        version: 16.4.1
       fastify:
         specifier: ^4.25.2
         version: 4.26.0
@@ -83,9 +86,6 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
-      sharp:
-        specifier: ^0.33.2
-        version: 0.33.2
       typia:
         specifier: ^5.3.11
         version: 5.4.6(typescript@5.3.3)

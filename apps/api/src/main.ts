@@ -6,8 +6,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { HttpException, HttpStatus, ShutdownSignal } from '@nestjs/common';
-import { ConfigService } from './config/config.service';
+import { ShutdownSignal } from '@nestjs/common';
 import { initLogger } from '@beast/nestjs-commons';
 
 async function bootstrap() {
@@ -21,36 +20,17 @@ async function bootstrap() {
       bufferLogs: true,
       cors: {
         credentials: true,
-        origin: (requestOrigin: string, callback) => {
-          if (!requestOrigin || requestOrigin?.includes('localhost'))
-            callback(null, true);
-          else {
-            callback(
-              new HttpException(
-                'Not allowed by CORS ' + requestOrigin,
-                HttpStatus.FORBIDDEN,
-              ),
-              false,
-            );
-          }
-        },
+        origin: true,
       },
     },
   );
-
-  const config = app.get(ConfigService);
 
   SwaggerModule.setup(
     '/api',
     app,
     {
       ...(swaggerDocument as any),
-      servers: [
-        {
-          url: config.getAppPath(),
-          description: 'Main Server',
-        },
-      ],
+      servers: [],
     },
     {
       swaggerOptions: {

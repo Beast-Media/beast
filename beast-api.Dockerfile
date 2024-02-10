@@ -1,40 +1,17 @@
-FROM node:20-buster
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-RUN set -ex; \
-    apt-get update -y; \
-    apt-get install -y \
-        ffmpeg libx265-dev openssl supervisor nginx postgresql postgresql-client \
-    ; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
-    :
+FROM base AS build
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run -r --filter=api build
+RUN pnpm deploy --filter=api --prod /prod/api
 
-WORKDIR /app
-
-RUN mkdir -p /app/apps/front /app/apps/server /app/packages/tmdb /app/packages/sockets /app/packages/nestjs-commons
-COPY package*.json /app
-COPY apps/front/package.json /app/apps/front
-COPY apps/server/package.json /app/apps/server
-COPY packages/tmdb/package.json /app/packages/tmdb
-COPY packages/sockets/package.json /app/packages/sockets
-COPY packages/nestjs-commons/package.json /app/packages/nestjs-commons
-
-RUN npm ci
-COPY turbo.json /app 
-COPY apps/ /app/apps 
-COPY packages/ /app/packages 
-
-ARG API_PORT
-ENV API_PORT=$API_PORT
-
-ARG API_WS_PORT
-ENV API_WS_PORT=$API_WS_PORT
-
-RUN npm run build
-
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# COPY docker/init.sh /opt/init.sh
-
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+FROM base AS api
+COPY --from=build /prod/api /prod/api
+WORKDIR /prod/api
+EXPOSE 4000
+CMD [ "node", "/prod/api/dist/src/main.js" ]
