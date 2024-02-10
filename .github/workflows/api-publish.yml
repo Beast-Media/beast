@@ -33,4 +33,6 @@ jobs:
           context: .
           file: beast-api.Dockerfile
           push: true
-          tags: beast-media/api:latest
+          tags: |
+            beastmedia/api:${{ github.sha }}
+            beastmedia/api:latest
