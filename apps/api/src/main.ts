@@ -25,8 +25,6 @@ async function bootstrap() {
     },
   );
 
-  app.setGlobalPrefix('api');
-
   SwaggerModule.setup(
     '/api',
     app,
