@@ -74,4 +74,4 @@ Standard Movie Format
 
 This project is still in active developpement and is not usable as is.
 
-Check https://github.com/Beast-Media/beast/projects/1 to see the current progress and roadmap.
+Check https://github.com/orgs/Beast-Media/projects/3 to see the current progress and roadmap.
