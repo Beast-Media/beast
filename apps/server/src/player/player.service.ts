@@ -80,21 +80,21 @@ export class PlayerService
     );
 
     const args = this.ffmpegService.args`
-    -hide_banner
-    -ss ${settings.seek}
-    -threads 2
-    -i "${source}" -crf 16 -preset ultrafast
-    -movflags frag_keyframe+empty_moov
-    -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1:crf=16
-    ${settings.resolution ? `-filter:v:0 scale=w=${settings.resolution.width}:h=${settings.resolution.height}` : ''}
-    ${settings.resolution?.bitrate ? `-maxrate:v:0 ${settings.resolution.bitrate}` : ''}
-    ${videoStream ? `-map 0:${videoStream.index}` : '-vn'} 
-    ${audioStream ? `-c:a aac -ac 2 -map 0:${audioStream.index}` : '-an'} 
-    -master_pl_name "master.m3u8"
-   
-    -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
-    "${join(dest, 'out_%v.m3u8')}"
-  `;
+      -hide_banner
+      -ss ${settings.seek}
+      -threads 2
+      -i "${source}" -crf 16 -preset ultrafast
+      -movflags frag_keyframe+empty_moov
+      -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1:crf=16
+      ${settings.resolution ? `-filter:v:0 scale=w=${settings.resolution.width}:h=${settings.resolution.height}` : ''}
+      ${settings.resolution?.bitrate ? `-maxrate:v:0 ${settings.resolution.bitrate}` : ''}
+      ${videoStream ? `-map 0:${videoStream.index}` : '-vn'} 
+      ${audioStream ? `-c:a aac -ac 2 -map 0:${audioStream.index}` : '-an'} 
+      -master_pl_name "master.m3u8"
+    
+      -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
+      "${join(dest, 'out_%v.m3u8')}"
+    `;
     const ffpmegProcess = spawn('ffmpeg', args);
     console.log(args);
 
