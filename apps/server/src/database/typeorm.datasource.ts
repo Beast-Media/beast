@@ -8,7 +8,9 @@ export const connectionSource = new DataSource({
   type: 'better-sqlite3',
   database: join(process.env.SERVER_DATA_PATH, 'server.db'),
   entities: [__dirname + '/../**/*.dto.{js,ts}'],
-  logging: ['log', 'query'],
+  logging: ['error', 'warn', 'migration'],
   migrationsRun: true,
   migrations: [__dirname + '/../migrations/*.{js,ts}'],
+  enableWAL: true,
+  statementCacheSize: 200,
 });
