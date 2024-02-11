@@ -65,7 +65,7 @@ Anime Episode Format
  -> ``{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full} ID{TvMazeId}ID``
 
 
-## Radarr
+### Radarr
 
 Standard Movie Format
  -> ``{Movie Title} ({Release Year}) {Quality Full} ID{TmdbId}ID``
