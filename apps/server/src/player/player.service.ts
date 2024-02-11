@@ -82,9 +82,9 @@ export class PlayerService
     const args = this.ffmpegService.args`
     -hide_banner
     -ss ${settings.seek}
-    -i "${source}" -crf 24 -preset ultrafast
+    -i "${source}" -crf 16 -preset ultrafast
     -movflags frag_keyframe+empty_moov
-    -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1:crf=24
+    -c:v libx264 -x264-params keyint=60:min-keyint=60:no-scenecut=1:crf=16
     ${settings.resolution ? `-filter:v:0 scale=w=${settings.resolution.width}:h=${settings.resolution.height}` : ''}
     ${settings.resolution?.bitrate ? `-maxrate:v:0 ${settings.resolution.bitrate}` : ''}
     ${videoStream ? `-map 0:${videoStream.index}` : '-vn'} 
