@@ -23,6 +23,7 @@ import type {
   GetLibraryParams,
   GetLibraryScanParams,
   GetLibraryShowFilesystemParams,
+  GetMediaContextParams,
   GetMediaDetailParams,
   GetMediaParams,
   GetMovieParams,
@@ -34,6 +35,7 @@ import type {
   LibraryContent,
   LoginBody,
   Media,
+  MediaWithContext,
   MediaWithStreams,
   Movie,
   PlayerSettings,
@@ -343,6 +345,99 @@ export const createGetMedia = <
   const query = createQuery(() => {
     const opts = options?.() || {};
     return getGetMediaQueryOptions(opts["params"], opts["options"]);
+  }) as CreateQueryResult<TData, TError>;
+
+  return query;
+};
+
+/**
+ * Get a media context information.
+Like Show or Movie related informations
+ * @summary Get a media context information
+ */
+export const getMediaContext = (
+  params: GetMediaContextParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MediaWithContext>(
+    {
+      url: `http://localhost:3000/api/media/context`,
+      method: "GET",
+      params,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetMediaContextQueryKey = (params: GetMediaContextParams) => {
+  return [
+    `http://localhost:3000/api/media/context`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetMediaContextQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMediaContext>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMediaContextParams,
+  options?: {
+    query?: Partial<
+      SolidQueryOptions<
+        Awaited<ReturnType<typeof getMediaContext>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMediaContextQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMediaContext>>> = ({
+    signal,
+  }) => getMediaContext(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as SolidQueryOptions<
+    Awaited<ReturnType<typeof getMediaContext>>,
+    TError,
+    TData
+  > & { initialData?: undefined };
+};
+
+export type GetMediaContextQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMediaContext>>
+>;
+export type GetMediaContextQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get a media context information
+ */
+export const createGetMediaContext = <
+  TData = Awaited<ReturnType<typeof getMediaContext>>,
+  TError = ErrorType<unknown>,
+>(
+  options: () => {
+    params: GetMediaContextParams;
+    options?: {
+      query?: Partial<
+        SolidQueryOptions<
+          Awaited<ReturnType<typeof getMediaContext>>,
+          TError,
+          TData
+        >
+      >;
+      request?: SecondParameter<typeof customInstance>;
+    };
+  },
+): CreateQueryResult<TData, TError> => {
+  const query = createQuery(() => {
+    const opts = options?.() || {};
+    return getGetMediaContextQueryOptions(opts["params"], opts["options"]);
   }) as CreateQueryResult<TData, TError>;
 
   return query;

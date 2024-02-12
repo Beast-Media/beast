@@ -30,6 +30,10 @@ export interface MediaRelations {
   episode: AppRelation<Episode>;
 }
 
+export interface MediaWithLibrary
+  extends Media,
+    Pick<MediaRelations, 'library'> {}
+
 export interface MediaWithStreams
   extends Media,
     Pick<MediaRelations, 'streams'> {}
