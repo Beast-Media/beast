@@ -89,7 +89,7 @@ export class ShowService {
 
   matchTvShowFile(path: string) {
     const match = path.match(
-      /^(?<seriesTitle>.+?) - S(?<season>\d{2})E(?<episode>\d{2}) - (?<episodeTitle>.+?) (?<qualityFull>\S+) ID(?<tvmazeId>\d+)ID\.(mkv|mp4|avi)/,
+      /^(?<seriesTitle>.+?) - S(?<season>\d+)E(?<episode>\d+) - (?<episodeTitle>.+?) (?<qualityFull>\S+) ID(?<tvmazeId>\d+)ID\.(mkv|mp4|avi|webm)/,
     );
     if (!match || !match.groups) return null;
 
