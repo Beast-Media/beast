@@ -26,7 +26,8 @@ interface AudioStream extends BaseStream {
     title?: string;
   };
 }
-interface SubtitleStream extends BaseStream {
+
+export interface SubtitleStream extends BaseStream {
   codec_type: 'subtitle';
   duration?: string;
   tags?: {

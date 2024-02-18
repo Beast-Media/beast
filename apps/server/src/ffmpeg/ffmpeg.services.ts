@@ -6,7 +6,7 @@ import { validateParse } from 'typia/lib/json';
 @Injectable()
 export class FFmpegService {
   async probeFile(path: string): Promise<ProbeData | null> {
-    const { stdout } = await spawn(
+    const { stdout } = spawn(
       `ffprobe`,
       this.args`
         -v quiet
@@ -32,7 +32,7 @@ export class FFmpegService {
     });
   }
 
-  args(strings, ...values) {
+  args(strings: TemplateStringsArray, ...values: any[]) {
     const template = strings.reduce((acc, str, i) => {
       const value = values[i] !== undefined ? String(values[i]) : '';
       // Replace newline characters with spaces in both strings and values
