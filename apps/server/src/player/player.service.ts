@@ -7,6 +7,7 @@ import {
   Player,
   PlayerId,
   PlayerResolution,
+  PlayerSettingStream,
   PlayerSettings,
   StartedPlayerInfos,
 } from './dto/player.dto';
@@ -75,9 +76,10 @@ export class PlayerService
   ) {
     const videoStream = settings.streams.find(({ type }) => type === 'video');
     const audioStream = settings.streams.find(({ type }) => type === 'audio');
-    const subtitleStream = settings.streams.find(
-      ({ type }) => type === 'subtitle',
-    );
+    // const subtitleStream = settings.streams.find(
+    //   ({ type }) => type === 'subtitle',
+    // );
+    const subtitleStream: PlayerSettingStream | undefined = undefined as any;
 
     const args = this.ffmpegService.args`
       -hide_banner

@@ -10,6 +10,7 @@ import {
   ShowEntity,
   ShowWithLibray,
   ShowWithSeasons,
+  ShowWithSeasonsAndEpisodes,
 } from './dto/show.dto';
 import { Library } from 'src/library/dto/library.dto';
 import { Season, SeasonEntity, SeasonWithEpisodes } from './dto/season.dto';
@@ -56,6 +57,13 @@ export class ShowService {
     return ShowEntity.findOneOrFail({
       where: { id },
       relations: { seasons: true },
+    });
+  }
+
+  async getShowFull(id: Show['id']): Promise<ShowWithSeasonsAndEpisodes> {
+    return ShowEntity.findOneOrFail({
+      where: { id },
+      relations: { seasons: { episodes: true } },
     });
   }
 
@@ -167,6 +175,7 @@ export class ShowService {
     const showDb = await ShowEntity.create({
       ...(await ShowEntity.findOne({
         where: { tvmazeId: foundShow.tvmazeId },
+        relations: { seasons: { episodes: true } },
       })),
       path: showPath,
       name: showMeta.name,
@@ -180,12 +189,9 @@ export class ShowService {
 
     for (const matchedSeason of matchedSeasons) {
       const seasonDb = await SeasonEntity.create({
-        ...(await SeasonEntity.findOne({
-          where: {
-            season_number: matchedSeason.meta.number,
-            show: { id: showDb.id },
-          },
-        })),
+        ...showDb.seasons.find(
+          ({ season_number }) => season_number === matchedSeason.meta.number,
+        ),
         show: { id: showDb.id },
         season_number: matchedSeason.meta.number,
         name:
@@ -209,12 +215,9 @@ export class ShowService {
         });
 
         await EpisodeEntity.create({
-          ...(await EpisodeEntity.findOne({
-            where: {
-              season: { id: seasonDb.id },
-              episode_number: episode.meta.number,
-            },
-          })),
+          ...seasonDb.episodes.find(
+            ({ episode_number }) => episode_number === episode.meta.number,
+          ),
           episode_number: episode.meta.number,
           name: episode.meta.name ?? `Episode ${episode.meta.number}`,
           overview: episode.meta.summary,
