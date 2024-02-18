@@ -5,10 +5,12 @@ import { TVMazeModule } from 'src/tvmaze/tvmaze.module';
 import { ConfigModule } from 'src/config/config.module';
 import { MediaModule } from 'src/media/media.module';
 import { TasksModule } from 'src/tasks/tasks.module';
+import { ImageModule } from 'src/image/image.module';
 
 @Module({
   imports: [
     forwardRef(() => TasksModule),
+    ImageModule,
     MediaModule,
     ConfigModule,
     TVMazeModule,

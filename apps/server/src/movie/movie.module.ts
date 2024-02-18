@@ -7,12 +7,14 @@ import { MovieController } from './movie.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigService } from 'src/config/config.service';
 import { TMDBModule } from '@beast/tmdb';
+import { ImageModule } from 'src/image/image.module';
 
 @Module({
   imports: [
     forwardRef(() => TasksModule),
     MediaModule,
     ConfigModule,
+    ImageModule,
     TMDBModule.registerAsync({
       imports: [
         CacheModule.register({

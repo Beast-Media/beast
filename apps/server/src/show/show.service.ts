@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { mkdir, readdir, writeFile } from 'fs/promises';
+import { mkdir, readdir } from 'fs/promises';
 import { assertEquals } from 'typia';
 import { join } from 'path';
 import { TVMazeService } from 'src/tvmaze/tvmaze.service';
 import { ConfigService } from 'src/config/config.service';
-import { createHash } from 'crypto';
 import { TasksService } from 'src/tasks/tasks.service';
-import sharp, { ResizeOptions } from 'sharp';
 import {
   Show,
   ShowEntity,
@@ -18,6 +16,7 @@ import { Season, SeasonEntity, SeasonWithEpisodes } from './dto/season.dto';
 import { Episode, EpisodeEntity } from './dto/episode.dto';
 import { MediaService } from 'src/media/media.service';
 import { TVMazeEpisode, TVMazeSeason } from 'src/tvmaze/tvmaze.dto';
+import { ImageService } from 'src/image/image.service';
 
 interface TvShowMatch {
   seriesTitle: string;
@@ -43,25 +42,6 @@ interface MatchedEpisode {
   meta: TVMazeEpisode;
 }
 
-// type MapValue<T> = T extends Map<any, infer V> ? V : never;
-
-// interface ComposedShow {
-//   show: Omit<Show, 'id'>;
-//   seasons: Map<
-//     number,
-//     {
-//       season: Omit<Season, 'id'>;
-//       episodes: Map<
-//         number,
-//         {
-//           episode: Omit<Episode, 'id' | 'mediaId'>;
-//           media: IndexingMedia;
-//         }
-//       >;
-//     }
-//   >;
-// }
-
 @Injectable()
 export class ShowService {
   constructor(
@@ -69,6 +49,7 @@ export class ShowService {
     private configService: ConfigService,
     private tasksService: TasksService,
     private mediaService: MediaService,
+    private imageService: ImageService,
   ) {}
 
   async getShow(id: Show['id']): Promise<ShowWithSeasons> {
@@ -123,45 +104,23 @@ export class ShowService {
     };
   }
 
-  async storeImage(
-    imageUrl: string,
-    root: string,
-    resizeVariants: Record<string, ResizeOptions>,
-  ): Promise<string[]> {
-    const res = await fetch(imageUrl);
-    const buffer = Buffer.from(await res.arrayBuffer());
+  async saveShowCover(url: string) {
+    const metadataFolder = this.configService.getMetadatasPath();
+    return await this.imageService.downloadAndStore(url, metadataFolder, {
+      medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
+      small: { width: 160, height: 234, fit: 'cover' },
+    });
+  }
 
-    const hashSum = createHash('sha256');
-    hashSum.update(buffer);
-    const hash = hashSum.digest('hex');
-
-    const writeBuffer = async (buffer: Buffer, name: string) => {
-      const filename = `images/${hash}-${name}.jpg`;
-      const path = join(root, filename);
-      await writeFile(path, buffer);
-      return filename;
-    };
-
-    const images = [
-      await sharp(buffer)
-        .jpeg({ progressive: true, quality: 100 })
-        .toBuffer()
-        .then((buffer) => writeBuffer(buffer, 'original')),
-    ];
-
-    for (const [name, resize] of Object.entries(resizeVariants)) {
-      const resizeBuffer = await sharp(buffer)
-        .resize(resize)
-        .jpeg({ progressive: true, quality: 100 })
-        .toBuffer();
-      const path = await writeBuffer(resizeBuffer, name);
-      images.push(path);
-    }
-    return images;
+  async saveEpisodeCover(url: string) {
+    const metadataFolder = this.configService.getMetadatasPath();
+    return await this.imageService.downloadAndStore(url, metadataFolder, {
+      medium: { width: 256 * 2, height: 160 * 2, fit: 'cover' },
+      small: { width: 256, height: 160, fit: 'cover' },
+    });
   }
 
   async scanShow(showPath: string, library: Pick<Library, 'id' | 'path'>) {
-    const metadataFolder = this.configService.getMetadatasPath();
     const files = await readdir(
       join(this.configService.getLibrariesRoot(), showPath),
       { recursive: true },
@@ -214,10 +173,7 @@ export class ShowService {
       tvmazeId: foundShow.tvmazeId,
       overview: showMeta.summary,
       images: showMeta.image?.original
-        ? await this.storeImage(showMeta.image.original, metadataFolder, {
-            medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
-            small: { width: 160, height: 234, fit: 'cover' },
-          })
+        ? await this.saveShowCover(showMeta.image.original)
         : [],
       library: { id: library.id },
     }).save();
@@ -238,14 +194,7 @@ export class ShowService {
             : `Season ${matchedSeason.meta.number}`,
         overview: matchedSeason.meta.summary,
         images: matchedSeason.meta.image?.original
-          ? await this.storeImage(
-              matchedSeason.meta.image.original,
-              metadataFolder,
-              {
-                medium: { width: 160 * 2, height: 234 * 2, fit: 'cover' },
-                small: { width: 160, height: 234, fit: 'cover' },
-              },
-            )
+          ? await this.saveShowCover(matchedSeason.meta.image?.original)
           : [],
       }).save();
 
@@ -270,14 +219,7 @@ export class ShowService {
           name: episode.meta.name ?? `Episode ${episode.meta.number}`,
           overview: episode.meta.summary,
           images: episode.meta.image?.original
-            ? await this.storeImage(
-                episode.meta.image.original,
-                metadataFolder,
-                {
-                  medium: { width: 256 * 2, height: 160 * 2, fit: 'cover' },
-                  small: { width: 256, height: 160, fit: 'cover' },
-                },
-              )
+            ? await this.saveEpisodeCover(episode.meta.image?.original)
             : [],
           media: { id: media.id },
           season: { id: seasonDb.id },
