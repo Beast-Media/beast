@@ -3,13 +3,20 @@ import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
 import { ConfigService } from 'src/config/config.service';
 import { join } from 'path';
-import { CreateMedia, IndexingMedia } from './dto/media.queries';
+import {
+  CreateMedia,
+  IndexingMedia,
+  MediaWithContext,
+} from './dto/media.queries';
 import {
   Media,
   MediaEntity,
   MediaStreamEntity,
+  MediaWithLibrary,
   MediaWithStreams,
 } from './dto/media.dto';
+import { MovieEntity } from 'src/movie/dto/movie.dto';
+import { EpisodeEntity } from 'src/show/dto/episode.dto';
 
 @Injectable()
 export class MediaService {
@@ -29,6 +36,40 @@ export class MediaService {
       where: { id },
       relations: { streams: true },
     });
+  }
+
+  async getMediaContext(id: Media['id']): Promise<MediaWithContext> {
+    const media = (await MediaEntity.findOneOrFail({
+      where: { id },
+      relations: { library: true },
+    })) satisfies MediaWithLibrary;
+
+    if (media.library.type === 'MOVIES') {
+      return {
+        mediaId: media.id,
+        data: {
+          type: 'MOVIES',
+          movie: await MovieEntity.findOneOrFail({
+            where: { media: { id: media.id } },
+          }),
+        },
+      };
+    } else {
+      const episode = await EpisodeEntity.findOneOrFail({
+        where: { media: { id: media.id } },
+        relations: { season: { show: true } },
+      });
+
+      return {
+        mediaId: media.id,
+        data: {
+          type: 'TV_SHOWS',
+          show: episode.season.show,
+          season: episode.season,
+          episode: episode,
+        },
+      };
+    }
   }
 
   async createMediaFromIndexing(media: IndexingMedia): Promise<MediaEntity> {

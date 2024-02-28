@@ -72,13 +72,13 @@ export class AuthController {
     });
     if (foundUser) return false;
 
-    const isFisrtUser = (await UserEntity.count()) === 0;
+    const isFirstUser = (await UserEntity.count()) === 0;
 
     try {
       await UserEntity.create({
         email: body.email,
         password: await hash(body.password),
-        isOwner: isFisrtUser,
+        isOwner: isFirstUser,
       }).save();
 
       return true;

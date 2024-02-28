@@ -10,7 +10,7 @@ import {
   Unique,
 } from 'typeorm';
 import { AppRelation } from 'src/database/relations.dto';
-import { Season, SeasonEntity } from './season.dto';
+import { Season, SeasonEntity, SeasonWithEpisodes } from './season.dto';
 
 export interface Show {
   id: string;
@@ -66,4 +66,8 @@ export class ShowEntity extends BaseEntity implements Show, ShowRelations {
 }
 
 export interface ShowWithSeasons extends Show, Pick<ShowRelations, 'seasons'> {}
+export interface ShowWithSeasonsAndEpisodes extends Show {
+  seasons: SeasonWithEpisodes[];
+}
+
 export interface ShowWithLibray extends Show, Pick<ShowRelations, 'library'> {}

@@ -8,12 +8,13 @@ import {
   onMount,
 } from "solid-js";
 import {
+  getMediaContext,
   getMediaDetail,
   postPlayerEnd,
   postPlayerKeepalive,
   postPlayerStart,
 } from "../../api/endpoints/beast-endpoints";
-import { MediaWithStreams, PlayerResolution, PlayerSettings } from "../../api/model";
+import { MediaWithContext, MediaWithStreams, PlayerResolution, PlayerSettings } from "../../api/model";
 import Hls from "hls.js";
 import { createMutable, modifyMutable, reconcile } from "solid-js/store";
 import { ArrowIcon, PauseIcon, PiPIcon, PlayIcon } from "../commons/Icons";
@@ -25,10 +26,14 @@ import { Slider } from "./PlayerSlider";
 import { debounce } from "@solid-primitives/scheduled";
 import { Logo } from "../commons/Logo";
 import { getApiUrl } from "../../hooks/url";
+import { Button } from "../commons/Button";
+import { useNavigate } from "@solidjs/router";
+import { createMemo } from "solid-js";
 
 interface PlayerStatusBase<T extends string> {
   status: T;
   media: MediaWithStreams;
+  context: MediaWithContext;
   hls: Hls;
   playerId: string;
   settings: PlayerSettings;
@@ -89,6 +94,7 @@ const TogglePlaying: Component<{ togglePlay: () => void; playing: boolean }> = (
 };
 
 export function Player({ mediaId }: { mediaId: string }) {
+  const nav = useNavigate();
   const player = createMutable<PlayerStore>({
     status: "init",
     showControls: true,
@@ -230,6 +236,10 @@ export function Player({ mediaId }: { mediaId: string }) {
     mouseMoving();
   };
 
+  const goBack = () => {
+    nav(-1);
+  }
+
   onMount(async () => {
     video.addEventListener("canplaythrough", whenCanplaythrough);
     video.addEventListener("waiting", whenWaiting);
@@ -250,12 +260,14 @@ export function Player({ mediaId }: { mediaId: string }) {
     // Fetch the media informations
     const media = await getMediaDetail({ mediaId });
     const { start, hls } = await startPlayer({ seek: 0, streams: [] });
-
+    const context = await getMediaContext({ mediaId })
+    
     modifyMutable(
       player,
       reconcile({
         status: "mounted",
         media,
+        context,
         hls,
         playerId: start.id,
         settings: start.settings,
@@ -287,6 +299,17 @@ export function Player({ mediaId }: { mediaId: string }) {
     await endPlayer();
   });
 
+  const playerTitle = createMemo(() => {
+    if (player.status !== 'mounted')
+      return 'Loading';
+    const context = player.context;
+    if (context.data.type === 'MOVIES')
+      return context.data.movie.name;
+    else if (context.data.type === 'TV_SHOWS')
+      return context.data.show.name;
+    return 'Unknown'
+  })
+
   return (
     <div class={clsx("w-full h-screen relative", !player.showControls && 'cursor-none')} onMouseMove={onMouseMove}>
       <video ref={video} class="w-full h-screen bg-black object-contain"></video>
@@ -301,10 +324,10 @@ export function Player({ mediaId }: { mediaId: string }) {
             <Show when={player().showControls}>
               <div class="absolute top-0 left-0 w-full h-screen flex flex-col justify-between pointer-events-none">
                 <div class="flex justify-between h-24 px-4 items-center pointer-events-auto bg-gradient-to-b from-beast-bg">
-                  <div>
+                  <Button variant="icon" onClick={goBack}>
                     <ArrowIcon />
-                  </div>
-                  <div class="text-lg">Title</div>
+                  </Button>
+                  <div class="text-lg">{playerTitle()}</div>
                   <div>{time()}</div>
                 </div>
                 <div class="flex px-4 items-center h-24 gap-4 pointer-events-auto bg-gradient-to-t from-beast-bg">

@@ -7,6 +7,7 @@ import {
   Player,
   PlayerId,
   PlayerResolution,
+  PlayerSettingStream,
   PlayerSettings,
   StartedPlayerInfos,
 } from './dto/player.dto';
@@ -75,9 +76,10 @@ export class PlayerService
   ) {
     const videoStream = settings.streams.find(({ type }) => type === 'video');
     const audioStream = settings.streams.find(({ type }) => type === 'audio');
-    const subtitleStream = settings.streams.find(
-      ({ type }) => type === 'subtitle',
-    );
+    // const subtitleStream = settings.streams.find(
+    //   ({ type }) => type === 'subtitle',
+    // );
+    const subtitleStream: PlayerSettingStream | undefined = undefined as any;
 
     const args = this.ffmpegService.args`
       -hide_banner
@@ -89,8 +91,13 @@ export class PlayerService
       ${settings.resolution?.bitrate ? `-maxrate:v:0 ${settings.resolution.bitrate}` : ''}
       ${videoStream ? `-map 0:${videoStream.index}` : '-vn'} 
       ${audioStream ? `-c:a aac -ac 2 -map 0:${audioStream.index}` : '-an'} 
+      ${subtitleStream ? `-c:s webvtt -muxdelay 0 -map 0:${subtitleStream.index}` : '-sn'}
       -master_pl_name "master.m3u8"
-    
+      ${
+        subtitleStream
+          ? `-var_stream_map "${videoStream ? 'v:0' : ''}${audioStream ? ',a:0' : ''}${subtitleStream ? ',s:0,sgroup:subtitle' : ''}"`
+          : ''
+      }
       -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
       "${join(dest, 'out_%v.m3u8')}"
     `;

@@ -4,12 +4,10 @@ import { mkdir, readdir } from 'fs/promises';
 import { join } from 'path';
 import { TasksService } from 'src/tasks/tasks.service';
 import { MediaService } from 'src/media/media.service';
-import sharp, { ResizeOptions } from 'sharp';
-import { createHash } from 'crypto';
-import { writeFile } from 'fs/promises';
 import { TMDBService } from '@beast/tmdb';
 import { Movie, MovieEntity } from './dto/movie.dto';
 import { Library } from 'src/library/dto/library.dto';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class MovieService {
@@ -18,6 +16,7 @@ export class MovieService {
     private tasksService: TasksService,
     private mediaService: MediaService,
     private configService: ConfigService,
+    private imageService: ImageService,
   ) {}
 
   async getMovie(id: Movie['id']): Promise<Movie> {
@@ -34,43 +33,6 @@ export class MovieService {
 
     if (match.groups.tmdbId) return Number(match.groups.tmdbId);
     else return null;
-  }
-
-  async storeImage(
-    imageUrl: string,
-    root: string,
-    resizeVariants: Record<string, ResizeOptions>,
-  ): Promise<string[]> {
-    const res = await fetch(imageUrl);
-    const buffer = Buffer.from(await res.arrayBuffer());
-
-    const hashSum = createHash('sha256');
-    hashSum.update(buffer);
-    const hash = hashSum.digest('hex');
-
-    const writeBuffer = async (buffer: Buffer, name: string) => {
-      const filename = `images/${hash}-${name}.jpg`;
-      const path = join(root, filename);
-      await writeFile(path, buffer);
-      return filename;
-    };
-
-    const images = [
-      await sharp(buffer)
-        .jpeg({ progressive: true, quality: 100 })
-        .toBuffer()
-        .then((buffer) => writeBuffer(buffer, 'original')),
-    ];
-
-    for (const [name, resize] of Object.entries(resizeVariants)) {
-      const resizeBuffer = await sharp(buffer)
-        .resize(resize)
-        .jpeg({ progressive: true, quality: 100 })
-        .toBuffer();
-      const path = await writeBuffer(resizeBuffer, name);
-      images.push(path);
-    }
-    return images;
   }
 
   async scanMovie(moviePath: string, library: Pick<Library, 'id' | 'path'>) {
@@ -99,7 +61,7 @@ export class MovieService {
         ...(await MovieEntity.findOne({ where: { tmdbId: match } })),
         name: movie.title,
         overview: movie.overview,
-        images: await this.storeImage(
+        images: await this.imageService.downloadAndStore(
           `https://image.tmdb.org/t/p/original${movie.poster_path}`,
           metadataFolder,
           {
