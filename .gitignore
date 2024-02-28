@@ -42,3 +42,5 @@ volumes/
 package-lock.json
 
 vite.config.ts.timestamp-*.mjs
+
+/target/

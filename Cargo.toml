@@ -1,0 +1,6 @@
+[workspace]
+# Use 2021 edition resolver, better resolves crate features.
+resolver = "2"
+
+# A list of all rust crates in the workspace.
+members = ["apps/native"]

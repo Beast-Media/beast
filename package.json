@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev": "dotenv -- pnpm --recursive --parallel --filter=!api dev ",
+    "dev": "dotenv -- pnpm --recursive --parallel --filter=!api dev",
     "build": "dotenv -- pnpm --recursive --parallel --filter './apps/*' build",
+    "native": "pnpm --filter 'native' tauri",
     "swagger": "dotenv -- pnpm --parallel --filter=server --filter=api swagger && pnpm --filter 'front' swagger"
   },
   "devDependencies": {
