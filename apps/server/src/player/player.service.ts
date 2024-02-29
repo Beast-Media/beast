@@ -134,6 +134,7 @@ export class PlayerService
     const playerId = randomUUID();
 
     const media = await this.mediaService.getMediaWithStreams(settings.mediaId);
+    if (!media.streams) throw new Error('invalid state - no media streams');
 
     const defVideo = media.streams.find(({ type }) => type === 'video');
     if (!settings.streams.find(({ type }) => type === 'video')) {

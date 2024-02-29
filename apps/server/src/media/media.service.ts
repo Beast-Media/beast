@@ -44,6 +44,8 @@ export class MediaService {
       relations: { library: true },
     })) satisfies MediaWithLibrary;
 
+    if (!media.library) throw new Error('invalid state - no library relation');
+
     if (media.library.type === 'MOVIES') {
       return {
         mediaId: media.id,
@@ -60,6 +62,10 @@ export class MediaService {
         relations: { season: { show: true } },
       });
 
+      if (!episode.season)
+        throw new Error('invalid state - no season relation');
+      if (!episode.season.show)
+        throw new Error('invalid state - no show relation');
       return {
         mediaId: media.id,
         data: {
