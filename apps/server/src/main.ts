@@ -41,6 +41,8 @@ async function bootstrap() {
 
   const config = app.get(ConfigService);
 
+  console.log(resolve(join(config.getMetadatasPath(), 'images')));
+
   app.register((instance, opts, next) => {
     instance.register(fastifyStatic, {
       root: resolve(join(config.getMetadatasPath(), 'images')),

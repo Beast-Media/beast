@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { join } from 'path/posix';
 import sharp, { ResizeOptions } from 'sharp';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
 import { MediaStream } from 'src/ffmpeg/dto/probe.dto';
 import { ConfigService } from 'src/config/config.service';
-import { join } from 'path';
+import { join } from 'path/posix';
 import {
   CreateMedia,
   IndexingMedia,

@@ -13,7 +13,7 @@ import {
 } from './dto/player.dto';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import { MediaService } from 'src/media/media.service';
-import { join } from 'path';
+import { join } from 'path/posix';
 import { ConfigService } from 'src/config/config.service';
 import { mkdir, rm, readdir } from 'fs/promises';
 import { FFmpegService } from 'src/ffmpeg/ffmpeg.services';
@@ -101,7 +101,7 @@ export class PlayerService
       -hls_time 2 -segment_list_flags +live -hls_playlist_type event -f hls
       "${join(dest, 'out_%v.m3u8')}"
     `;
-    const ffpmegProcess = spawn('ffmpeg', args);
+    const ffpmegProcess = spawn(this.ffmpegService.getFfmpegPath(), args);
     console.log(args);
 
     ffpmegProcess.stderr.on('data', (data) => {

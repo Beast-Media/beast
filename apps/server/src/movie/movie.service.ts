@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from 'src/config/config.service';
 import { mkdir, readdir } from 'fs/promises';
-import { join } from 'path';
+import { join } from 'path/posix';
 import { TasksService } from 'src/tasks/tasks.service';
 import { MediaService } from 'src/media/media.service';
 import { TMDBService } from '@beast/tmdb';

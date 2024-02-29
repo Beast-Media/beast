@@ -2,12 +2,37 @@ import { Injectable } from '@nestjs/common';
 import { ProbeData } from './dto/probe.dto';
 import { spawn } from 'child_process';
 import { validateParse } from 'typia/lib/json';
+import { ConfigService } from 'src/config/config.service';
+import { join } from 'path/posix';
 
 @Injectable()
 export class FFmpegService {
+  constructor(private configService: ConfigService) {}
+
+  getFfprobePath() {
+    const isWin = process.platform === 'win32';
+
+    const binName = isWin ? 'ffprobe.exe' : 'ffprobe';
+    const ffmpegPath = this.configService.getFfmpegPath();
+    if (ffmpegPath) {
+      return join(ffmpegPath, binName);
+    }
+    return binName;
+  }
+
+  getFfmpegPath() {
+    const isWin = process.platform === 'win32';
+    const binName = isWin ? 'ffmpeg.exe' : 'ffmpeg';
+    const ffmpegPath = this.configService.getFfmpegPath();
+    if (ffmpegPath) {
+      return join(ffmpegPath, binName);
+    }
+    return binName;
+  }
+
   async probeFile(path: string): Promise<ProbeData | null> {
     const { stdout } = spawn(
-      `ffprobe`,
+      this.getFfprobePath(),
       this.args`
         -v quiet
         -print_format json

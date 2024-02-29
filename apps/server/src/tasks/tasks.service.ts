@@ -3,7 +3,7 @@ import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { join } from 'path';
+import { join } from 'path/posix';
 import { Worker, isMainThread } from 'worker_threads';
 import { Task } from './dto/tasks.dto';
 

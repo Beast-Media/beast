@@ -180,6 +180,9 @@ importers:
       '@tanstack/solid-query':
         specifier: ^5.17.15
         version: 5.18.1(solid-js@1.8.14)
+      '@tauri-apps/api':
+        specifier: '>=2.0.0-beta.0'
+        version: 2.0.0-beta.3
       axios:
         specifier: ^1.6.5
         version: 1.6.7
@@ -261,13 +264,6 @@ importers:
         version: 2.9.1(solid-js@1.8.14)(vite@5.1.1)
 
   apps/native:
-    dependencies:
-      '@tauri-apps/api':
-        specifier: '>=2.0.0-beta.0'
-        version: 2.0.0-beta.3
-      '@tauri-apps/plugin-shell':
-        specifier: '>=2.0.0-beta.0'
-        version: 2.0.0-beta.1
     devDependencies:
       '@tauri-apps/cli':
         specifier: '>=2.0.0-beta.0'
@@ -3222,11 +3218,6 @@ packages:
       solid-js: 1.8.14
     dev: false
 
-  /@tauri-apps/api@2.0.0-beta.2:
-    resolution: {integrity: sha512-4r1r6kgttzIWxJ3HxkZQH+b7EiUtKhdUCPbi0KSalD+2T3j6klw+v8VyxhKwEdjM/eo60NE+J33v1E/Urq8puw==}
-    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
-    dev: false
-
   /@tauri-apps/api@2.0.0-beta.3:
     resolution: {integrity: sha512-gDSJzKpBs6efXw2ZWqjl9QVNImY5GR5qygXqB7JK4y7prcQInxnTj2ARFR0vD4wuzkrUHGrlIKraiJJPHWJ9vg==}
     engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
@@ -3338,12 +3329,6 @@ packages:
       '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-beta.5
       '@tauri-apps/cli-win32-x64-msvc': 2.0.0-beta.5
     dev: true
-
-  /@tauri-apps/plugin-shell@2.0.0-beta.1:
-    resolution: {integrity: sha512-yMf9CMHCRkGnx0pv420MptEeUdk+bVrXyM5zwFisy75GBhXgvEEtSjAkubTsC0jkzLfn4EInizaW2GER9ub7cQ==}
-    dependencies:
-      '@tauri-apps/api': 2.0.0-beta.2
-    dev: false
 
   /@tootallnate/once@1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -10752,9 +10737,6 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0

@@ -20,7 +20,7 @@ export interface Season {
 }
 
 export interface SeasonRelations {
-  episodes: AppRelation<Episode[]>;
+  episodes?: AppRelation<Episode[]>;
   show: AppRelation<Show>;
 }
 
@@ -47,7 +47,7 @@ export class SeasonEntity
     cascade: true,
     onDelete: 'CASCADE',
   })
-  episodes: AppRelation<Episode[]>;
+  episodes?: AppRelation<Episode[]>;
 
   @ManyToOne(() => ShowEntity, (show) => show.seasons, {
     nullable: false,

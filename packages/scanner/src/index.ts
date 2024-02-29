@@ -1,4 +1,4 @@
-import { parse } from 'path';
+import { parse } from 'path/posix';
 
 export interface PossibleResults {
     title: string[];

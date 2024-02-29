@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { mkdir, readdir } from 'fs/promises';
 import { assertEquals } from 'typia';
-import { join } from 'path';
+import { join } from 'path/posix';
 import { TVMazeService } from 'src/tvmaze/tvmaze.service';
 import { ConfigService } from 'src/config/config.service';
 import { TasksService } from 'src/tasks/tasks.service';
@@ -61,17 +61,25 @@ export class ShowService {
   }
 
   async getShowFull(id: Show['id']): Promise<ShowWithSeasonsAndEpisodes> {
-    return ShowEntity.findOneOrFail({
+    const show = await ShowEntity.findOneOrFail({
       where: { id },
       relations: { seasons: { episodes: true } },
     });
+
+    if (!show.seasons)
+      throw new Error('Invalid state - no seasons in relation');
+    return show as ShowWithSeasonsAndEpisodes;
   }
 
   async getShowWithLibrary(id: Show['id']): Promise<ShowWithLibray> {
-    return ShowEntity.findOneOrFail({
+    const show = await ShowEntity.findOneOrFail({
       where: { id },
       relations: { library: true },
     });
+
+    if (!show.library)
+      throw new Error('Invalid state - no library in relation');
+    return show as ShowWithLibray;
   }
 
   async getSeason(id: Season['id']): Promise<SeasonWithEpisodes> {
@@ -189,7 +197,7 @@ export class ShowService {
 
     for (const matchedSeason of matchedSeasons) {
       const seasonDb = await SeasonEntity.create({
-        ...showDb.seasons.find(
+        ...showDb.seasons?.find(
           ({ season_number }) => season_number === matchedSeason.meta.number,
         ),
         show: { id: showDb.id },
@@ -215,7 +223,7 @@ export class ShowService {
         });
 
         await EpisodeEntity.create({
-          ...seasonDb.episodes.find(
+          ...seasonDb.episodes?.find(
             ({ episode_number }) => episode_number === episode.meta.number,
           ),
           episode_number: episode.meta.number,

@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { join } from 'path';
+import { join } from 'path/posix';
 
 if (!process.env.SERVER_DATA_PATH)
   throw new Error('missing process.env.SERVER_DATA_PATH');

@@ -23,8 +23,8 @@ export interface Show {
 }
 
 export interface ShowRelations {
-  seasons: AppRelation<Season[]>;
-  library: AppRelation<Library>;
+  seasons?: AppRelation<Season[]>;
+  library?: AppRelation<Library>;
 }
 
 @Entity()
@@ -50,13 +50,13 @@ export class ShowEntity extends BaseEntity implements Show, ShowRelations {
     cascade: true,
     onDelete: 'CASCADE',
   })
-  seasons: AppRelation<SeasonEntity[]>;
+  seasons?: AppRelation<SeasonEntity[]> | undefined;
 
   @ManyToOne(() => LibraryEntity, (library) => library.shows, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  library: AppRelation<LibraryEntity>;
+  library?: AppRelation<LibraryEntity>;
 
   @RelationId((show: ShowEntity) => show.library)
   libraryId: string;
@@ -70,4 +70,6 @@ export interface ShowWithSeasonsAndEpisodes extends Show {
   seasons: SeasonWithEpisodes[];
 }
 
-export interface ShowWithLibray extends Show, Pick<ShowRelations, 'library'> {}
+export interface ShowWithLibray
+  extends Show,
+    Required<Pick<ShowRelations, 'library'>> {}

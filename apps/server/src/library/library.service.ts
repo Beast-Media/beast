@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { readdir, stat } from 'fs/promises';
 import { ShowService } from 'src/show/show.service';
 import { MovieService } from 'src/movie/movie.service';
-import { join } from 'path';
+import { join } from 'path/posix';
 import { ConfigService } from 'src/config/config.service';
 import { Library, LibraryAccessEntity, LibraryEntity } from './dto/library.dto';
 import {

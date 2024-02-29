@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import dotenv from 'dotenv';
 import { readFile, stat, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { join } from 'path/posix';
 import crypto from 'crypto';
 
 dotenv.config();
@@ -33,6 +33,7 @@ export class ConfigService implements OnModuleInit {
       'SERVER_LIBRARIES_ROOT',
       'API_APP_PATH',
       'SERVER_PORT',
+      'SERVER_FFMPEG_BIN',
     ];
 
     for (const variable of variables) {
@@ -74,6 +75,10 @@ export class ConfigService implements OnModuleInit {
 
   getApiAppPath() {
     return this.getValueOrThrow('API_APP_PATH');
+  }
+
+  getFfmpegPath() {
+    return this.getValue('SERVER_FFMPEG_BIN');
   }
 
   getFrontDist() {
