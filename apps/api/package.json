@@ -28,7 +28,7 @@
     "@beast/nestjs-commons": "workspace:*",
     "@beast/tmdb": "workspace:*",
     "@fastify/cors": "^8.5.0",
-    "@fastify/static": "^7.0.1",
+    "@fastify/static": "^7.0.2",
     "@nestia/core": "^2.4.5",
     "@nestia/e2e": "^0.4.1",
     "@nestjs/cache-manager": "^2.2.0",
