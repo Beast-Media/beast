@@ -33,8 +33,8 @@ importers:
         specifier: ^8.5.0
         version: 8.5.0
       '@fastify/static':
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^7.0.3
+        version: 7.0.3
       '@fastify/swagger':
         specifier: ^8.14.0
         version: 8.14.0
@@ -55,10 +55,10 @@ importers:
         version: 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
         specifier: ^10.3.0
-        version: 10.3.2(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+        version: 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       '@nestjs/swagger':
         specifier: ^7.2.0
-        version: 7.3.0(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)
+        version: 7.3.0(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)
       argon2:
         specifier: ^0.31.2
         version: 0.31.2
@@ -293,8 +293,8 @@ importers:
         specifier: ^8.5.0
         version: 8.5.0
       '@fastify/static':
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^7.0.3
+        version: 7.0.3
       '@fastify/swagger':
         specifier: ^8.14.0
         version: 8.14.0
@@ -318,10 +318,10 @@ importers:
         version: 10.3.2(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(cache-manager@5.4.0)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
         specifier: ^10.3.1
-        version: 10.3.2(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+        version: 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       '@nestjs/swagger':
         specifier: ^7.2.0
-        version: 7.3.0(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)
+        version: 7.3.0(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)
       '@nestjs/typeorm':
         specifier: ^10.0.2
         version: 10.0.2(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typeorm@0.3.20)
@@ -499,7 +499,7 @@ importers:
         version: 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
         specifier: ^10.3.1
-        version: 10.3.2(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+        version: 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       fastify:
         specifier: ^4.26.0
         version: 4.26.0
@@ -1622,8 +1622,8 @@ packages:
       mime: 3.0.0
     dev: false
 
-  /@fastify/static@7.0.2:
-    resolution: {integrity: sha512-5opbHpZj29EGVBNgELW6gDkueiFWxjLsLVQQCgKencJctq0aqk3vBlkO97z5It4zaSAb3FXOeAxm7KP2tL/hQA==}
+  /@fastify/static@7.0.3:
+    resolution: {integrity: sha512-2tmTdF+uFCykasutaO6k4/wOt7eXyi7m3dGuCPo5micXzv0qt6ttb/nWnDYL/BlXjYGfp1JI4a1gyluTIylvQA==}
     dependencies:
       '@fastify/accept-negotiator': 1.1.0
       '@fastify/send': 2.1.0
@@ -2259,7 +2259,7 @@ packages:
       '@nestjs/common': 10.3.2(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/core': 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-express': 10.3.2(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
-      '@nestjs/platform-fastify': 10.3.2(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+      '@nestjs/platform-fastify': 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       detect-ts-node: 1.0.5
       glob: 7.2.3
       multer: 1.4.5-lts.1
@@ -2568,7 +2568,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@nestjs/platform-fastify@10.3.2(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2):
+  /@nestjs/platform-fastify@10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2):
     resolution: {integrity: sha512-VWxsB2Ew40Tb7Za/5Eo5Fc9vHT/Md34uCuehI3Si5ZU1iDG8ZzSjJuKzpXQiN9B9syyANHHJbZHnY+XXUSpleQ==}
     peerDependencies:
       '@fastify/static': ^6.0.0 || ^7.0.0
@@ -2584,7 +2584,7 @@ packages:
       '@fastify/cors': 9.0.1
       '@fastify/formbody': 7.4.0
       '@fastify/middie': 8.3.0
-      '@fastify/static': 7.0.2
+      '@fastify/static': 7.0.3
       '@nestjs/common': 10.3.2(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/core': 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       fastify: 4.26.0
@@ -2610,7 +2610,7 @@ packages:
       - chokidar
     dev: true
 
-  /@nestjs/swagger@7.3.0(@fastify/static@7.0.2)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14):
+  /@nestjs/swagger@7.3.0(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14):
     resolution: {integrity: sha512-zLkfKZ+ioYsIZ3dfv7Bj8YHnZMNAGWFUmx2ZDuLp/fBE4P8BSjB7hldzDueFXsmwaPL90v7lgyd82P+s7KME1Q==}
     peerDependencies:
       '@fastify/static': ^6.0.0 || ^7.0.0
@@ -2627,7 +2627,7 @@ packages:
       class-validator:
         optional: true
     dependencies:
-      '@fastify/static': 7.0.2
+      '@fastify/static': 7.0.3
       '@microsoft/tsdoc': 0.14.2
       '@nestjs/common': 10.3.2(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/core': 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
