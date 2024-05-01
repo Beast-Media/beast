@@ -326,8 +326,8 @@ importers:
         specifier: ^10.0.2
         version: 10.0.2(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typeorm@0.3.20)
       '@openapitools/openapi-generator-cli':
-        specifier: ^2.8.0
-        version: 2.9.0(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)
+        specifier: ^2.13.4
+        version: 2.13.4(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)
       argon2:
         specifier: ^0.31.2
         version: 0.31.2
@@ -2318,17 +2318,15 @@ packages:
       - typescript
     dev: true
 
-  /@nestjs/axios@3.0.1(@nestjs/common@10.3.0)(axios@1.6.5)(reflect-metadata@0.1.13)(rxjs@7.8.1):
-    resolution: {integrity: sha512-VlOZhAGDmOoFdsmewn8AyClAdGpKXQQaY1+3PGB+g6ceurGIdTxZgRX3VXc1T6Zs60PedWjg3A82TDOB05mrzQ==}
+  /@nestjs/axios@3.0.2(@nestjs/common@10.3.0)(axios@1.6.8)(rxjs@7.8.1):
+    resolution: {integrity: sha512-Z6GuOUdNQjP7FX+OuV2Ybyamse+/e0BFdTWBX5JxpBDKA+YkdLynDgG6HTF04zy6e9zPa19UX0WA2VDoehwhXQ==}
     peerDependencies:
       '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
       axios: ^1.3.1
-      reflect-metadata: ^0.1.12
       rxjs: ^6.0.0 || ^7.0.0
     dependencies:
       '@nestjs/common': 10.3.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      axios: 1.6.5
-      reflect-metadata: 0.1.13
+      axios: 1.6.8
       rxjs: 7.8.1
     dev: false
 
@@ -2725,17 +2723,17 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@openapitools/openapi-generator-cli@2.9.0(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2):
-    resolution: {integrity: sha512-KQpftKeiMoH5aEI/amOVLFGkGeT3DyA7Atj7v7l8xT3O9xnIUpoDmMg0WBTEh+NHxEwEAITQNDzr+JLjkXVaKw==}
+  /@openapitools/openapi-generator-cli@2.13.4(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2):
+    resolution: {integrity: sha512-4JKyrk55ohQK2FcuZbPdNvxdyXD14jjOIvE8hYjJ+E1cHbRbfXQXbYnjTODFE52Gx8eAxz8C9icuhDYDLn7nww==}
     engines: {node: '>=10.0.0'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@nestjs/axios': 3.0.1(@nestjs/common@10.3.0)(axios@1.6.5)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/axios': 3.0.2(@nestjs/common@10.3.0)(axios@1.6.8)(rxjs@7.8.1)
       '@nestjs/common': 10.3.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.3.0(@nestjs/common@10.3.0)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nuxtjs/opencollective': 0.3.2
-      axios: 1.6.5
+      axios: 1.6.8
       chalk: 4.1.2
       commander: 8.3.0
       compare-versions: 4.1.4
@@ -2743,6 +2741,7 @@ packages:
       console.table: 0.10.0
       fs-extra: 10.1.0
       glob: 7.2.3
+      https-proxy-agent: 7.0.4
       inquirer: 8.2.6
       lodash: 4.17.21
       reflect-metadata: 0.1.13
@@ -2756,6 +2755,7 @@ packages:
       - class-validator
       - debug
       - encoding
+      - supports-color
     dev: false
 
   /@otqs/axios@1.0.0:
@@ -3892,6 +3892,15 @@ packages:
       - supports-color
     dev: false
 
+  /agent-base@7.1.1:
+    resolution: {integrity: sha512-H0TSyFNDMomMNJQBn8wFV5YC/2eJ+VXECwOadZJT554xP6cODZHPX3H9QMQECxvrgiSOP1pHjy1sMWQVYJOUOA==}
+    engines: {node: '>= 14'}
+    dependencies:
+      debug: 4.3.4(supports-color@5.5.0)
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /agentkeepalive@4.5.0:
     resolution: {integrity: sha512-5GG/5IbQQpC9FpkRGsSvZI5QYeSCzlJHdpBQntCsuTOxhKD8lqKhrleg2Yi7yvMIf82Ycmmqln9U8V9qwEiJew==}
     engines: {node: '>= 8.0.0'}
@@ -4168,8 +4177,8 @@ packages:
       - supports-color
     dev: false
 
-  /axios@1.6.5:
-    resolution: {integrity: sha512-Ii012v05KEVuUoFWmMW/UQv9aRIc3ZwkWDcM+h5Il8izZCtRVpDUfwpoFf7eOtajT3QiGR4yDUx7lPqHJULgbg==}
+  /axios@1.6.7:
+    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
     dependencies:
       follow-redirects: 1.15.5
       form-data: 4.0.0
@@ -4178,10 +4187,10 @@ packages:
       - debug
     dev: false
 
-  /axios@1.6.7:
-    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
+  /axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
     dependencies:
-      follow-redirects: 1.15.5
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -4688,6 +4697,7 @@ packages:
   /clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
+    requiresBuild: true
 
   /clsx@2.1.0:
     resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
@@ -5062,6 +5072,7 @@ packages:
 
   /defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
+    requiresBuild: true
     dependencies:
       clone: 1.0.4
 
@@ -6025,6 +6036,16 @@ packages:
         optional: true
     dev: false
 
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
+
   /for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
     dependencies:
@@ -6472,6 +6493,16 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       agent-base: 6.0.2
+      debug: 4.3.4(supports-color@5.5.0)
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /https-proxy-agent@7.0.4:
+    resolution: {integrity: sha512-wlwpilI7YdjSkWaQ/7omYBMTliDcmCN8OLihO6I9B86g06lMyAoqgoDpV0XqoaPOKj+0DIdAvnsWfyAAhmimcg==}
+    engines: {node: '>= 14'}
+    dependencies:
+      agent-base: 7.1.1
       debug: 4.3.4(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
