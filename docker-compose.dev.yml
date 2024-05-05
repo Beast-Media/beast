@@ -1,0 +1,17 @@
+version: '3'
+services:
+  beast-api-database:
+    image: "postgres"
+    restart: always
+    environment:
+      POSTGRES_USER: beast
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: beast
+    ports:
+      - 5432:5432
+    volumes:
+      - api-database-volume:/var/lib/postgresql/data
+
+
+volumes:
+  api-database-volume:

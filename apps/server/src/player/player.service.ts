@@ -137,14 +137,13 @@ export class PlayerService
     if (!media.streams) throw new Error('invalid state - no media streams');
 
     const defVideo = media.streams.find(({ type }) => type === 'video');
+    if (!defVideo) throw new Error('No video stream');
     if (!settings.streams.find(({ type }) => type === 'video')) {
-      if (!defVideo) throw new Error('No video stream');
       settings.streams.push({ index: defVideo.streamIndex, type: 'video' });
     }
 
     const defAudio = media.streams.find(({ type }) => type === 'audio');
     if (!settings.streams.find(({ type }) => type === 'audio') && defAudio) {
-      console.log(defAudio);
       settings.streams.push({ index: defAudio.streamIndex, type: 'audio' });
     }
 

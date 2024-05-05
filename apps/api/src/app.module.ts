@@ -6,12 +6,14 @@ import { TMDBModule } from '@beast/tmdb';
 import { ConfigService } from './config/config.service';
 import { TMDBController } from './tmdb.controller';
 import { CacheModule } from '@nestjs/cache-manager';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule,
     RequestContextModule,
     AppLoggerModule,
+    AuthModule,
     TMDBModule.registerAsync({
       imports: [
         CacheModule.register({

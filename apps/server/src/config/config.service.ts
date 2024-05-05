@@ -33,7 +33,6 @@ export class ConfigService implements OnModuleInit {
       'SERVER_LIBRARIES_ROOT',
       'API_APP_PATH',
       'SERVER_PORT',
-      'SERVER_FFMPEG_BIN',
     ];
 
     for (const variable of variables) {
