@@ -15,14 +15,14 @@
     "@modular-forms/solid": "^0.20.0",
     "@solid-primitives/scheduled": "^1.4.2",
     "@solidjs/router": "^0.10.3",
-    "@tanstack/solid-query": "^5.17.15",
+    "@tanstack/solid-query": "^5.24.1",
     "@tauri-apps/api": ">=2.0.0-beta.0",
     "@tauri-apps/plugin-os": "2.0.0-beta.1",
     "axios": "^1.6.5",
     "clsx": "^2.0.0",
-    "dashjs": "^4.7.2",
+    "dashjs": "^4.7.4",
     "dayjs": "^1.11.10",
-    "hls.js": "^1.5.2",
+    "hls.js": "^1.5.7",
     "internal-ip": "^7.0.0",
     "otqs": "^1.0.0",
     "plyr": "^3.7.8",
@@ -39,13 +39,13 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-solid": "^0.13.1",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2",
     "user-agent-data-types": "^0.4.2",
     "vite": "^5.1.1",
-    "vite-plugin-solid": "^2.8.0"
+    "vite-plugin-solid": "^2.10.2"
   }
 }
