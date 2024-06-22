@@ -40,7 +40,7 @@ importers:
         version: 8.14.0
       '@nestia/core':
         specifier: ^2.4.5
-        version: 2.5.4(@nestia/fetcher@2.5.4)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(@nestjs/platform-express@10.3.2)(@nestjs/platform-fastify@10.3.2)(raw-body@2.5.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typia@5.4.6)
+        version: 2.5.4(@nestia/fetcher@2.5.4)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(@nestjs/platform-express@10.3.2)(@nestjs/platform-fastify@10.3.8)(raw-body@2.5.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typia@5.4.6)
       '@nestia/e2e':
         specifier: ^0.4.1
         version: 0.4.1
@@ -54,8 +54,8 @@ importers:
         specifier: ^10.0.0
         version: 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
-        specifier: ^10.3.0
-        version: 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+        specifier: ^10.3.8
+        version: 10.3.8(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       '@nestjs/swagger':
         specifier: ^7.2.0
         version: 7.3.0(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)
@@ -315,7 +315,7 @@ importers:
         version: 8.14.0
       '@nestia/core':
         specifier: ^2.4.5
-        version: 2.5.4(@nestia/fetcher@2.5.4)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(@nestjs/platform-express@10.3.2)(@nestjs/platform-fastify@10.3.2)(raw-body@2.5.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typia@5.4.6)
+        version: 2.5.4(@nestia/fetcher@2.5.4)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(@nestjs/platform-express@10.3.2)(@nestjs/platform-fastify@10.3.8)(raw-body@2.5.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typia@5.4.6)
       '@nestia/e2e':
         specifier: ^0.4.1
         version: 0.4.1
@@ -332,8 +332,8 @@ importers:
         specifier: ^10.3.2
         version: 10.3.2(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(cache-manager@5.4.0)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
-        specifier: ^10.3.1
-        version: 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+        specifier: ^10.3.8
+        version: 10.3.8(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       '@nestjs/swagger':
         specifier: ^7.2.0
         version: 7.3.0(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(reflect-metadata@0.1.14)
@@ -513,8 +513,8 @@ importers:
         specifier: ^10.3.1
         version: 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-fastify':
-        specifier: ^10.3.1
-        version: 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+        specifier: ^10.3.8
+        version: 10.3.8(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       fastify:
         specifier: ^4.26.0
         version: 4.26.0
@@ -2257,7 +2257,7 @@ packages:
       solid-js: 1.8.14
     dev: false
 
-  /@nestia/core@2.5.4(@nestia/fetcher@2.5.4)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(@nestjs/platform-express@10.3.2)(@nestjs/platform-fastify@10.3.2)(raw-body@2.5.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typia@5.4.6):
+  /@nestia/core@2.5.4(@nestia/fetcher@2.5.4)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)(@nestjs/platform-express@10.3.2)(@nestjs/platform-fastify@10.3.8)(raw-body@2.5.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)(typia@5.4.6):
     resolution: {integrity: sha512-/yn9f0QDdetnKLx98CcK0jM22IJRSdJqdE/FLYdJZ1sTd0LJk5USxC+61oRIckbB0Jk5kEvhh7Jx6GD4Wg0bjw==}
     peerDependencies:
       '@nestia/fetcher': '>=2.5.4'
@@ -2274,7 +2274,7 @@ packages:
       '@nestjs/common': 10.3.2(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/core': 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/platform-express': 10.3.2(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
-      '@nestjs/platform-fastify': 10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
+      '@nestjs/platform-fastify': 10.3.8(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2)
       detect-ts-node: 1.0.5
       glob: 7.2.3
       multer: 1.4.5-lts.1
@@ -2581,8 +2581,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@nestjs/platform-fastify@10.3.2(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2):
-    resolution: {integrity: sha512-VWxsB2Ew40Tb7Za/5Eo5Fc9vHT/Md34uCuehI3Si5ZU1iDG8ZzSjJuKzpXQiN9B9syyANHHJbZHnY+XXUSpleQ==}
+  /@nestjs/platform-fastify@10.3.8(@fastify/static@7.0.3)(@nestjs/common@10.3.2)(@nestjs/core@10.3.2):
+    resolution: {integrity: sha512-gWGskBuZRB4LTQJCJWWUZvYwiF05zAJdq0X5oi6SmSZHP6bPIY+sQar+IwPFTsDtCM0Qk9nFm9UUuQdgLZTrTQ==}
     peerDependencies:
       '@fastify/static': ^6.0.0 || ^7.0.0
       '@fastify/view': ^7.0.0 || ^8.0.0
@@ -2600,8 +2600,8 @@ packages:
       '@fastify/static': 7.0.3
       '@nestjs/common': 10.3.2(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/core': 10.3.2(@nestjs/common@10.3.2)(@nestjs/microservices@10.3.2)(@nestjs/platform-express@10.3.2)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      fastify: 4.26.0
-      light-my-request: 5.11.0
+      fastify: 4.26.2
+      light-my-request: 5.13.0
       path-to-regexp: 3.2.0
       tslib: 2.6.2
     transitivePeerDependencies:
@@ -4970,6 +4970,11 @@ packages:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
 
+  /cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
   /cookiejar@2.1.4:
     resolution: {integrity: sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==}
     dev: true
@@ -6003,6 +6008,29 @@ packages:
       fast-json-stringify: 5.12.0
       find-my-way: 8.1.0
       light-my-request: 5.11.0
+      pino: 8.18.0
+      process-warning: 3.0.0
+      proxy-addr: 2.0.7
+      rfdc: 1.3.1
+      secure-json-parse: 2.7.0
+      semver: 7.6.0
+      toad-cache: 3.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /fastify@4.26.2:
+    resolution: {integrity: sha512-90pjTuPGrfVKtdpLeLzND5nyC4woXZN5VadiNQCicj/iJU4viNHKhsAnb7jmv1vu2IzkLXyBiCzdWuzeXgQ5Ug==}
+    dependencies:
+      '@fastify/ajv-compiler': 3.5.0
+      '@fastify/error': 3.4.1
+      '@fastify/fast-json-stringify-compiler': 4.3.0
+      abstract-logging: 2.0.1
+      avvio: 8.3.0
+      fast-content-type-parse: 1.1.0
+      fast-json-stringify: 5.12.0
+      find-my-way: 8.1.0
+      light-my-request: 5.13.0
       pino: 8.18.0
       process-warning: 3.0.0
       proxy-addr: 2.0.7
@@ -7717,6 +7745,14 @@ packages:
     dependencies:
       cookie: 0.5.0
       process-warning: 2.3.2
+      set-cookie-parser: 2.6.0
+    dev: false
+
+  /light-my-request@5.13.0:
+    resolution: {integrity: sha512-9IjUN9ZyCS9pTG+KqTDEQo68Sui2lHsYBrfMyVUTTZ3XhH8PMZq7xO94Kr+eP9dhi/kcKsx4N41p2IXEBil1pQ==}
+    dependencies:
+      cookie: 0.6.0
+      process-warning: 3.0.0
       set-cookie-parser: 2.6.0
     dev: false
 
